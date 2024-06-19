@@ -1,0 +1,43 @@
+<!-- <h1>LMS Video Upload</h1>
+<form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
+    <div>
+        <label for="title">Course Title</label>
+        <input id="title" formControlName="title" required/>
+        <label for="title">Language</label>
+        <input id="title" formControlName="language" required/>
+        <label for="thumbnail">Course Thumbnail url</label>
+        <input id="thumbnail" formControlName="thumbnail" required/>
+        <label for="duration">Course Duration</label>
+        <input id="duration" formControlName="duration" required/>
+    </div>  
+
+    <div formArrayName="chapters">
+        <div *ngFor="let chapter of chapters.controls; let chapterIndex = index">
+            <div [formGroup]="chapter">
+                <label for="chapterTitle">Chapter Title</label>
+                <input id="chapterTitle" formControlName="title" required/>
+
+                <div formArrayName="modules">
+                    <div *ngFor="let module of getModules(chapterIndex).controls; let moduleIndex = index">
+                        <div [formGroup]="module">
+                            <label for="moduleTitle">Module Title</label>
+                            <input id="moduleTitle" formControlName="title" required/>
+                            <label for="moduleContent">Module Content</label>
+                            <input id="moduleContent" formControlName="content" required/>
+                            <label for="moduleDesc">Module Description</label>
+                            <input id="moduleDesc" formControlName="desc" />
+                            <label for="moduleResource">Module Resources</label>
+                            <input id="moduleResource" formControlName="Resource" />
+                            <button type="button" (click)="removeModule(chapterIndex, moduleIndex)">Remove
+                                Module</button>
+                        </div>
+                    </div>
+                    <button type="button" (click)="addModule(chapterIndex)">Add Module</button>
+                </div>
+                <button type="button" (click)="removeChapter(chapterIndex)">Remove Chapter</button>
+            </div>
+        </div>
+    </div>
+    <button type="button" (click)="addChapter()">Add Chapter</button>
+    <button type="submit">Submit</button>
+</form> -->

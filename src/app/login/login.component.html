@@ -1,0 +1,19 @@
+<div style="display: flex; align-items: center; justify-content: center;">
+    <div class="container">
+        <div class="card">
+            <h2>Login</h2>
+            <form #login="ngForm" (ngSubmit)="userLogin(login.value)">
+                <input type="text" id="username" name="username"
+                placeholder="Username"
+                ngModel
+                required>
+                <input type="password" id="password"  name="password" 
+                [type]="passwordFieldType" 
+                placeholder="Password" 
+                [(ngModel)]="password" 
+                required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+</div>
