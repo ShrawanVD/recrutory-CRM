@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class LessonService {
-  private apiUrl = 'https://lms-backend-3nru.onrender.com/api/lessons';
+  private apiUrl = 'https://backendapi-1-nlyi.onrender.com/api/lessons';
   // 'https://lms-backend-3nru.onrender.com/api/courses'
   constructor(private http: HttpClient) { }
 

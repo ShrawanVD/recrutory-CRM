@@ -14,7 +14,12 @@ import { PagesComponent } from './pages/pages.component';
 import { MediaComponent } from './media/media.component';
 import { SettingsComponent } from './settings/settings.component';
 
-import { FormControlName, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControlName,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -27,15 +32,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { BlogFormsComponent } from './blog-forms/blog-forms.component';
 import { LoginComponent } from './login/login.component';
-import { AngularEditorModule } from
-  '@kolkov/angular-editor';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 import { AddLessonComponent } from './components/add-lesson/add-lesson.component';
-import { AfterLoginComponent } from './after-login/after-login.component'
-  ;
-
+import { AfterLoginComponent } from './after-login/after-login.component';
+import { LeadsComponent } from './leads/leads.component';
+import { LeadsFormComponent } from './leads-form/leads-form.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +56,9 @@ import { AfterLoginComponent } from './after-login/after-login.component'
     BlogFormsComponent,
     LoginComponent,
     AddLessonComponent,
-    AfterLoginComponent
+    AfterLoginComponent,
+    LeadsComponent,
+    LeadsFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,9 +80,9 @@ import { AfterLoginComponent } from './after-login/after-login.component'
     MatPaginatorModule,
     AngularEditorModule,
     HttpClientModule,
-    MatExpansionModule
+    MatExpansionModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

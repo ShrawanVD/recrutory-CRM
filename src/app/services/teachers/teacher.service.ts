@@ -8,7 +8,7 @@ export class TeacherService {
   
   constructor(public http:HttpClient) { }
 
-  url = "https://backendapi-1bfa.onrender.com";
+  url = "https://backendapi-1-nlyi.onrender.com";
 
   getAllTeacher(){
     return this.http.get(`${this.url}/api/teachers`);

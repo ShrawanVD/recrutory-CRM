@@ -8,7 +8,7 @@ export class BlogService {
 
   constructor(public http: HttpClient) { }
 
-  url = "https://backendapi-1bfa.onrender.com";
+  url = "https://backendapi-1-nlyi.onrender.com";
 
   getAllCuriotroyBlogs() {
     return this.http.get(`${this.url}/api/blogs`);

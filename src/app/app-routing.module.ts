@@ -10,18 +10,21 @@ import { StatisticsComponent } from './statistics/statistics.component';
 import { LoginComponent } from './login/login.component';
 import { AfterLoginComponent } from './after-login/after-login.component';
 import { AuthGuard } from './guards/auth.guard';
+import { LeadsComponent } from './leads/leads.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'dashboard', component: AfterLoginComponent, children: [
-      { path: 'dash', component: DashboardComponent },
-      { path: 'teachers', component: TeachersComponent },
-      { path: 'lms', component: StatisticsComponent },
+      // { path: 'dash', component: DashboardComponent },
+      // { path: 'lms', component: StatisticsComponent },
       { path: 'blogs', component: BlogsComponent },
-      { path: 'course', component: PagesComponent },
-      { path: 'media', component: MediaComponent },
+      // { path: 'course', component: PagesComponent },
+      // { path: 'client', component: LeadsComponent },
+      { path: 'leads', component: LeadsComponent },
+      // { path: 'media', component: MediaComponent },
+      { path: 'teachers', component: TeachersComponent },
       { path: 'settings', component: SettingsComponent },
     ],
     canActivate: [AuthGuard]

@@ -32,7 +32,7 @@ export class BlogsComponent implements OnInit {
   constructor(private _dialog: MatDialog, private blog: BlogService,private _snackBar: MatSnackBar,private loginService:LoginService) { }
 
   openAddEditEmpForm() {
-    const dialogRef = this._dialog.open(BlogFormsComponent);
+    const dialogRef = this._dialog.open(BlogFormsComponent, {disableClose: true});
     dialogRef.afterClosed().subscribe({
       next: (val) => {
         if (val) {
@@ -69,6 +69,7 @@ export class BlogsComponent implements OnInit {
   openEditForm(data: any) {
         const dialogRef = this._dialog.open(BlogFormsComponent, {
           data,
+          disableClose: true
         });
     
         dialogRef.afterClosed().subscribe({

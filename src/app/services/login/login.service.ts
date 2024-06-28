@@ -9,7 +9,7 @@ import { BehaviorSubject } from 'rxjs';
 export class LoginService {
   private token: string = '';
   isUserLoggedIn = new BehaviorSubject<boolean>(false);
-  url = "https://backendapi-1bfa.onrender.com";
+  url = "https://backendapi-1-nlyi.onrender.com";
 
   constructor(public http:HttpClient,private router: Router) { }
 
@@ -20,7 +20,7 @@ export class LoginService {
       .subscribe((result: any) => {
         localStorage.setItem('token', result.token);
         this.isUserLoggedIn.next(true);
-        this.router.navigate(['/dashboard/dash']);
+        this.router.navigate(['/dashboard/blogs']);
       });
   }
 
