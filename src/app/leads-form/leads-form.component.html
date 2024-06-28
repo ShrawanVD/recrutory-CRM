@@ -10,6 +10,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons"
   </div>
   <div mat-dialog-content>
     <form [formGroup]="leadForm" (ngSubmit)="submitLead()">
+      
       <div class="row">
         <!-- First Name -->
         <mat-form-field appearance="outline" class="input">
@@ -294,6 +295,16 @@ https://fonts.googleapis.com/icon?family=Material+Icons"
             <mat-option value="Not Intrested - Cooling Down Period"
               >Not Intrested - Cooling Down Period</mat-option
             >
+            <mat-option value="Not Intrested - Call Not Recieved"
+              >Not Intrested - Call Not Recieved</mat-option
+            >
+            <mat-option value="Not Intrested - Under Qualified"
+              >Not Intrested - Under Qualified</mat-option
+            >
+            <mat-option value="Not Intrested - already associated with org"
+              >Not Intrested - already associated with org</mat-option
+            >
+            <mat-option value="Rejected">Rejected</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
