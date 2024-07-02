@@ -8,6 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class LoginService {
   private token: string = '';
+  private role: string = '';
   isUserLoggedIn = new BehaviorSubject<boolean>(false);
   url = "https://backendapi-1-nlyi.onrender.com";
 
@@ -18,7 +19,9 @@ export class LoginService {
     return this.http
       .post(`${this.url}/login`, data)
       .subscribe((result: any) => {
+        console.log("result:",result);
         localStorage.setItem('token', result.token);
+        localStorage.setItem('role',result.role)
         this.isUserLoggedIn.next(true);
         this.router.navigate(['/dashboard/blogs']);
       });
@@ -45,5 +48,21 @@ export class LoginService {
   getToken(){
     return this.token || localStorage.getItem('token');
   }
+
+  getRole(){
+    return this.role || localStorage.getItem('role');
+  }
+
+  // isAdmin(): boolean {
+  //   return this.getRole() === 'admin';
+  // }
+  
+  // isTeamLead(): boolean {
+  //   return this.getRole() === 'teamlead';
+  // }
+  
+  // isRecruiter(): boolean {
+  //   return this.getRole() === 'recruiter';
+  // }
 
 }

@@ -99,5 +99,20 @@ td {
   padding: 2rem;
 }
 
+.filterSearchBar{
+  text-align: right;
+  align-items: right;
+  justify-content: center;
+}
+.filterSearchBar input{
+  width: 20%;
+}
+.filter{
+  align-items: center;
+  justify-content: center;
+}
+.filterDropDown{
+  margin-right: 1rem;
+}
 
 

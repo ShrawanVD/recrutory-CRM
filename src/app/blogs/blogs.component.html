@@ -15,38 +15,38 @@
             <table mat-table [dataSource]="dataSource" matSort>
     
                 <ng-container matColumnDef="srno">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10px; background-color: rgb(50, 89, 152)"> SrNo </th>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10px; background-color: #02465b"> SrNo </th>
                   <td mat-cell *matCellDef="let row; let i = index"> {{i + 1}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="views">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="min-width: 200px; background-color: rgb(50, 89, 152)"> Views </th>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="min-width: 200px; background-color: #02465b"> Views </th>
                   <td mat-cell *matCellDef="let row"> {{row.views}}</td>
               </ng-container>
           
                 <ng-container matColumnDef="date">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="min-width: 200px; background-color: rgb(50, 89, 152)"> Date </th>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="min-width: 200px; background-color: #02465b"> Date </th>
                   <td mat-cell *matCellDef="let row"> {{row.date}}</td>
               </ng-container>
           
                 <!-- Progress Column -->
                 <ng-container matColumnDef="title">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="min-width: 500px; background-color: rgb(50, 89, 152)"> Title </th>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="min-width: 500px; background-color: #02465b"> Title </th>
                   <td mat-cell *matCellDef="let row"> {{row.title}}</td>
                 </ng-container>
           
                 <ng-container matColumnDef="content">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="min-width: 1000px; background-color: rgb(50, 89, 152)"> Intro </th>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="min-width: 1000px; background-color: #02465b"> Intro </th>
                   <td mat-cell *matCellDef="let row"> {{row.intro}}</td>
                 </ng-container>
           
                 <ng-container matColumnDef="imageUrl">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="min-width: 300px; background-color: rgb(50, 89, 152)"> Image </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="min-width: 300px; background-color: #02465b"> Image </th>
                     <td mat-cell *matCellDef="let row"> {{row.imageUrl}}</td>
                 </ng-container>
           
                 <ng-container matColumnDef="action">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color: rgb(50, 89, 152)"> Action </th>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color: #02465b"> Action </th>
                   <td mat-cell *matCellDef="let row">
                     <button mat-icon-button color="primary" (click)="openEditForm(row)" *ngIf="isAdmin()">
                       <mat-icon>edit</mat-icon>
