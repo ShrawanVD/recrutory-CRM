@@ -40,6 +40,7 @@ export class LeadsFormComponent implements OnInit {
       qualification: [data?.qualification || '', Validators.required],
       industry: [data?.industry || '', Validators.required],
       domain: [data?.domain || '', Validators.required],
+      exp: [data?.exp || '', Validators.required],
       cLocation: [data?.cLocation || '', Validators.required],
       pLocation: [data?.pLocation || '', Validators.required],
       currentCTC: [data?.currentCTC || '', Validators.required],
