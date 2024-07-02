@@ -62,7 +62,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons"
       <div class="row">
         <!-- process status -->
         <mat-form-field appearance="outline" class="input">
-          <mat-label>Process Status</mat-label>
+          <mat-label>Lead Status</mat-label>
           <mat-select
             placeholder="Interested.."
             required
@@ -148,12 +148,12 @@ https://fonts.googleapis.com/icon?family=Material+Icons"
             <mat-option value="Under Graduate">Under Graduate</mat-option>
             <mat-option value="Post Graduate">Post Graduate</mat-option>
             <mat-option value="PHD">PHD</mat-option>
-            <mat-option value="Professional Certificate"
+            <!-- <mat-option value="Professional Certificate"
               >Professional Certificate</mat-option
             >
             <mat-option value="Vocational Training"
               >Vocational Training</mat-option
-            >
+            > -->
             <mat-option value="Vocational Training">Other</mat-option>
           </mat-select>
         </mat-form-field>
@@ -182,6 +182,23 @@ https://fonts.googleapis.com/icon?family=Material+Icons"
           />
         </mat-form-field>
 
+         <!-- experience -->
+         <mat-form-field appearance="outline" class="input">
+          <mat-label>Experience</mat-label>
+          <mat-select formControlName="exp">
+            <mat-option value="0-1">0-1 Year</mat-option>
+            <mat-option value="1-2">1-2 Years</mat-option>
+            <mat-option value="2-4">2-4 Years</mat-option>
+            <mat-option value="4-8">4-8 Years</mat-option>
+            <mat-option value="8-12">8-12 Years</mat-option>
+            <mat-option value="12+">12+ Years</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+
+      <div class="row">
+
         <!-- current location -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Current Location</mat-label>
@@ -192,9 +209,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons"
             formControlName="cLocation"
           />
         </mat-form-field>
-      </div>
 
-      <div class="row">
         <!-- preferred location -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Preferred Location</mat-label>
@@ -206,6 +221,10 @@ https://fonts.googleapis.com/icon?family=Material+Icons"
           />
         </mat-form-field>
 
+      </div>
+
+      <div class="row">
+
         <!-- currentCTC -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Current CTC</mat-label>
@@ -216,9 +235,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons"
             formControlName="currentCTC"
           />
         </mat-form-field>
-      </div>
 
-      <div class="row">
         <!-- expectedCTC -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Expected CTC</mat-label>
@@ -229,6 +246,10 @@ https://fonts.googleapis.com/icon?family=Material+Icons"
             formControlName="expectedCTC"
           />
         </mat-form-field>
+
+      </div>
+
+      <div class="row">
 
         <!-- noticePeriod -->
         <mat-form-field appearance="outline" class="input">
@@ -241,9 +262,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons"
             <mat-option value="90+">90+ Days</mat-option>
           </mat-select>
         </mat-form-field>
-      </div>
 
-      <div class="row">
         <!-- Mode -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Mode</mat-label>
@@ -253,6 +272,10 @@ https://fonts.googleapis.com/icon?family=Material+Icons"
             <mat-option value="Hybrid">Hybrid</mat-option>
           </mat-select>
         </mat-form-field>
+
+      </div>
+
+      <div class="row">
 
         <!-- resumeLink -->
         <mat-form-field appearance="outline" class="input">
@@ -264,9 +287,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons"
             formControlName="resumeLink"
           />
         </mat-form-field>
-      </div>
 
-      <div class="row">
         <!-- linkedinLink -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Linkedin Profile</mat-label>
@@ -278,36 +299,38 @@ https://fonts.googleapis.com/icon?family=Material+Icons"
           />
         </mat-form-field>
 
-        <!-- feedback -->
-        <mat-form-field appearance="outline" class="input">
-          <mat-label>Feedback</mat-label>
-          <mat-select required formControlName="feedback">
-            <mat-option value="Interested">Interested</mat-option>
-            <mat-option value="Not Intrested - CTC Not Matching"
-              >Not Intrested - CTC Not Matching</mat-option
-            >
-            <mat-option value="Not Intrested - Relocation Issue"
-              >Not Intrested - Relocation Issue</mat-option
-            >
-            <mat-option value="Not Intrested - Notice Period"
-              >Not Intrested - Notice Period</mat-option
-            >
-            <mat-option value="Not Intrested - Cooling Down Period"
-              >Not Intrested - Cooling Down Period</mat-option
-            >
-            <mat-option value="Not Intrested - Call Not Recieved"
-              >Not Intrested - Call Not Recieved</mat-option
-            >
-            <mat-option value="Not Intrested - Under Qualified"
-              >Not Intrested - Under Qualified</mat-option
-            >
-            <mat-option value="Not Intrested - already associated with org"
-              >Not Intrested - already associated with org</mat-option
-            >
-            <mat-option value="Rejected">Rejected</mat-option>
-          </mat-select>
-        </mat-form-field>
+        
       </div>
+
+      <!-- feedback -->
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Feedback</mat-label>
+        <mat-select required formControlName="feedback">
+          <mat-option value="Interested">Interested</mat-option>
+          <mat-option value="Not Intrested - CTC Not Matching"
+            >Not Intrested - CTC Not Matching</mat-option
+          >
+          <mat-option value="Not Intrested - Relocation Issue"
+            >Not Intrested - Relocation Issue</mat-option
+          >
+          <mat-option value="Not Intrested - Notice Period"
+            >Not Intrested - Notice Period</mat-option
+          >
+          <mat-option value="Not Intrested - Cooling Down Period"
+            >Not Intrested - Cooling Down Period</mat-option
+          >
+          <mat-option value="Not Intrested - Call Not Recieved"
+            >Not Intrested - Call Not Recieved</mat-option
+          >
+          <mat-option value="Not Intrested - Under Qualified"
+            >Not Intrested - Under Qualified</mat-option
+          >
+          <mat-option value="Not Intrested - already associated with org"
+            >Not Intrested - already associated with org</mat-option
+          >
+          <mat-option value="Rejected">Rejected</mat-option>
+        </mat-select>
+      </mat-form-field>
 
       <!-- Remark -->
       <mat-form-field appearance="outline" class="full">
