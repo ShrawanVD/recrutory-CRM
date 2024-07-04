@@ -4,15 +4,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BodyComponent } from './body/body.component';
-import { SidenavComponent } from './sidenav/sidenav.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { TeachersComponent } from './teachers/teachers.component';
-import { StatisticsComponent } from './statistics/statistics.component';
-import { BlogsComponent } from './blogs/blogs.component';
-import { PagesComponent } from './pages/pages.component';
-import { MediaComponent } from './media/media.component';
-import { SettingsComponent } from './settings/settings.component';
+import { BodyComponent } from './components/body/body.component';
+import { SidenavComponent } from './components/sidenav/sidenav.component';
+import { SettingsComponent } from './pages/settings/settings.component';
 
 import {
   FormControlName,
@@ -34,32 +28,30 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox'
-import { BlogFormsComponent } from './blog-forms/blog-forms.component';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './pages/login/login.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
-import { AddLessonComponent } from './components/add-lesson/add-lesson.component';
-import { AfterLoginComponent } from './after-login/after-login.component';
-import { LeadsComponent } from './leads/leads.component';
-import { LeadsFormComponent } from './leads-form/leads-form.component';
+import { AfterLoginComponent } from './components/after-login/after-login.component';
+import { SelectedSheetComponent } from './pages/selected-sheet/selected-sheet.component';
+import { ClientSheetComponent } from './pages/client/client-sheet/client-sheet.component';
+import { ClientSheetFormComponent } from './pages/client/client-sheet-form/client-sheet-form.component';
+import { MasterSheetComponent } from './pages/master/master-sheet/master-sheet.component';
+import { MasterSheetFormComponent } from './pages/master/master-sheet-form/master-sheet-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BodyComponent,
     SidenavComponent,
-    DashboardComponent,
-    TeachersComponent,
-    StatisticsComponent,
-    BlogsComponent,
-    PagesComponent,
-    MediaComponent,
     SettingsComponent,
-    BlogFormsComponent,
     LoginComponent,
-    AddLessonComponent,
     AfterLoginComponent,
-    LeadsComponent,
-    LeadsFormComponent,
+    MasterSheetComponent,
+    MasterSheetFormComponent,
+    SelectedSheetComponent,
+    ClientSheetComponent,
+    ClientSheetFormComponent,
+    MasterSheetComponent,
+    MasterSheetFormComponent,
   ],
   imports: [
     BrowserModule,

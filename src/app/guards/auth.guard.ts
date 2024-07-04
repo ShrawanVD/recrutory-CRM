@@ -12,11 +12,9 @@ export class AuthGuard implements CanActivate {
 
       const token = localStorage.getItem('token');
       if (token) {
-        console.log("Calling true")
         return true;
       } else {
         // router.navigate(['/']);
-        console.log("calling false")
         return false;
       }
   }

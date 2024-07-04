@@ -23,7 +23,7 @@ export class LoginService {
         localStorage.setItem('token', result.token);
         localStorage.setItem('role',result.role)
         this.isUserLoggedIn.next(true);
-        this.router.navigate(['/dashboard/blogs']);
+        this.router.navigate(['/dashboard/master']);
       });
   }
 
