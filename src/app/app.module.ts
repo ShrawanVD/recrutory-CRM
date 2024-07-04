@@ -33,6 +33,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatCheckboxModule } from '@angular/material/checkbox'
 import { BlogFormsComponent } from './blog-forms/blog-forms.component';
 import { LoginComponent } from './login/login.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
@@ -81,6 +82,7 @@ import { LeadsFormComponent } from './leads-form/leads-form.component';
     AngularEditorModule,
     HttpClientModule,
     MatExpansionModule,
+    MatCheckboxModule
   ],
   providers: [],
   bootstrap: [AppComponent],
