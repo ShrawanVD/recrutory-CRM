@@ -11,27 +11,27 @@ export class LeadsService {
 
   getAllLeads(){
     // return this.http.get('http://localhost:4000/lead/leads');
-    return this.http.get('https://lms-backend-3nru.onrender.com/lead/leads');
+    return this.http.get('https://recrutory-crm-backend.onrender.com/api/crm/leads');
   }
 
   getLeadById(id:any){
     // return this.http.get(`hhttp://localhost:4000/lead/leads/${id}`);
-    return this.http.get(`https://lms-backend-3nru.onrender.com/lead/leads/${id}`);
+    return this.http.get(`https://recrutory-crm-backend.onrender.com/api/crm/leads/${id}`);
   }
 
   createLead(data:any){
     // return this.http.post("http://localhost:4000/lead/create",data);
-    return this.http.post("https://lms-backend-3nru.onrender.com/lead/create",data);
+    return this.http.post("https://recrutory-crm-backend.onrender.com/api/crm/create",data);
   }
 
   deleteLeadById(id:any){
     // return this.http.delete(`http://localhost:4000/lead/leads/${id}`);
-    return this.http.delete(`https://lms-backend-3nru.onrender.com/lead/leads/${id}`);
+    return this.http.delete(`https://recrutory-crm-backend.onrender.com/api/crm/leads/${id}`);
   }
 
   updateLeadById(id: any, data: any) {
     // return this.http.put(`http://localhost:4000/lead/leads/${id}`, data);
-    return this.http.put(`https://lms-backend-3nru.onrender.com/lead/leads/${id}`, data);
+    return this.http.put(`https://recrutory-crm-backend.onrender.com/api/crm/leads/${id}`, data);
   }
   
   // updateLeadById(id:any){

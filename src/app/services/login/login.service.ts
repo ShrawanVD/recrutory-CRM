@@ -10,7 +10,7 @@ export class LoginService {
   private token: string = '';
   private role: string = '';
   isUserLoggedIn = new BehaviorSubject<boolean>(false);
-  url = "https://backendapi-1-nlyi.onrender.com";
+  url = "https://recrutory-crm-backend.onrender.com/api";
 
   constructor(public http:HttpClient,private router: Router) { }
 
