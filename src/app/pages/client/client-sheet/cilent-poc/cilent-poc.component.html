@@ -1,0 +1,21 @@
+<div class="poc">
+    <mat-dialog-actions class="dialogAction">
+        <button mat-icon-button class="close-button" [mat-dialog-close]="true">
+            <mat-icon class="close-icon" color="warn">close</mat-icon>
+        </button>
+    </mat-dialog-actions>
+    <mat-dialog-content>
+        <div class="pocContainer">
+            <h1>Cilent Point Of Contact</h1>
+            <div class="contacts">
+                <div *ngFor="let person of persons" class="contact-card">
+                    <h3>{{ person.clientPocName }}</h3>
+                    <p><strong>Designation:</strong> {{ person.clientPocDesg }}</p>
+                    <p><strong>Phone:</strong> {{ person.clientPocNumber }}</p>
+                    <p><strong>Email:</strong> <a href="mailto:{{ person.clientPocEmail }}">{{ person.clientPocEmail }}</a></p>
+                    <p><strong>LinkedIn:</strong> <a href="{{ person.clientPocLinkedin }}" target="_blank">{{ person.clientPocLinkedin }}</a></p>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+</div>

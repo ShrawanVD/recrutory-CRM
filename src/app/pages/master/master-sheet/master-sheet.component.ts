@@ -6,8 +6,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LeadsService } from '../../../services/leads/leads.service';
 import { MasterSheetFormComponent } from '../master-sheet-form/master-sheet-form.component';
-// import { BlogService } from '../services/blogs/blog.service';
-// import { BlogFormsComponent } from '../blog-forms/blog-forms.component';
 import { LoginService } from '../../../services/login/login.service';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
@@ -15,7 +13,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 
 
 interface Lead {
-  fName: string;
+  name: string;
   lName: string;
   email: string;
   phone: string;
@@ -89,7 +87,7 @@ export class MasterSheetComponent implements OnInit {
   ];
 
   dataSource!: MatTableDataSource<any>;
-
+  selection = new SelectionModel<Lead>(true, []);
   filterValues: any = {};
 
   selectedLanguage: string | null = null;
@@ -103,9 +101,9 @@ export class MasterSheetComponent implements OnInit {
   selectedexp: string | null = null;
 
   languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese','Chinese','Nepalese']; // replace with actual statuses
-  proficiencyLevels = ['A1', 'A2','B1', 'B2','C1', 'C2']; // replace with actual language types
-  jobStatuses = ['Working', 'Job Seeking', 'Teacher']; // replace with actual job statuses
-  qualifications = ['SSC', 'HSC', 'Under Graduate', 'Post Graduate', 'PHD']; // replace with actual qualifications
+  proficiencyLevels = ['A1', 'A2','B1', 'B2','C1', 'C2']; 
+  jobStatuses = ['Working', 'Job Seeking', 'Teacher']; 
+  qualifications = ['SSC', 'HSC', 'Under Graduate', 'Post Graduate', 'PHD']; 
   modes = ['WFH', 'WHO','Hybrid'];
   feedbacks = ['Not Intrested - CTC Not Matching', 'Not Intrested - Relocation Issue','Not Intrested - Notice Period', 'Not Intrested - Cooling Down Period','Not Intrested - Call Not Recieved', 'Not Intrested - Under Qualified"'];
   noticePeriods = ['15', '30','60', '90','90+'];
@@ -123,9 +121,16 @@ export class MasterSheetComponent implements OnInit {
   ) {}
 
   exportExcel() {
-    const formattedData = this.dataSource.data.map((lead) => {
+    const selectedLeads = this.selection.selected; // Get selected rows
+  
+    if (selectedLeads.length === 0) {
+      alert('No rows selected for export');
+      return;
+    }
+  
+    const formattedData = selectedLeads.map((lead) => {
       return {
-        'Name of Candidate': lead.fName + ' ' + lead.lName,
+        'Name of Candidate': lead.name,
         'Email ID': lead.email,
         'Contact Number': lead.phone,
         'Process Status': lead.status,
@@ -152,12 +157,12 @@ export class MasterSheetComponent implements OnInit {
         Organisation: lead.company,
         'Voice / non voice': lead.voiceNonVoice,
         Source: lead.source,
-        'Placed by Recrutory': lead.placedBy,
+        'Placed by Recruiter': lead.placedBy,
       };
     });
-
+  
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(formattedData);
-
+  
     // Make header bold
     const wscols = [  
       { wch: 20 },
@@ -185,12 +190,12 @@ export class MasterSheetComponent implements OnInit {
       { wch: 20 },
     ];
     ws['!cols'] = wscols;
-
+  
     const wsrows = [
       { hpt: 12, hpx: 16 }, // row height
     ];
     ws['!rows'] = wsrows;
-
+  
     // Apply bold style to the header row
     const headerCells = Object.keys(formattedData[0]);
     headerCells.forEach((key, index) => {
@@ -198,10 +203,10 @@ export class MasterSheetComponent implements OnInit {
       if (!ws[cellAddress]) ws[cellAddress] = { t: 's', v: key };
       ws[cellAddress].s = { font: { bold: true } };
     });
-
+  
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Leads');
-
+  
     const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     this.saveAsExcelFile(wbout, 'leads');
   }
@@ -265,7 +270,6 @@ export class MasterSheetComponent implements OnInit {
   }
 
 // for selecting the multiple option  
-selection = new SelectionModel<any>(true, []);
 
 toggleSelection(row: any) {
   this.selection.toggle(row);

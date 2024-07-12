@@ -1,0 +1,21 @@
+<div class="poc">
+    <mat-dialog-actions class="dialogAction">
+        <button mat-icon-button class="close-button" [mat-dialog-close]="true">
+            <mat-icon class="close-icon" color="warn">close</mat-icon>
+        </button>
+    </mat-dialog-actions>
+    <mat-dialog-content>
+        <div class="pocContainer">
+            <h1>Process Point Of Contact</h1>
+            <div class="contacts">
+                <div *ngFor="let person of persons" class="contact-card">
+                    <h3>{{ person.clientProcessPocName }}</h3>
+                    <p><strong>Designation:</strong> {{ person.clientProcessPocDesg }}</p>
+                    <p><strong>Phone:</strong> {{ person.clientProcessPocNumber }}</p>
+                    <p><strong>Email:</strong> <a href="mailto:{{ person.clientProcessPocEmail }}">{{ person.clientProcessPocEmail }}</a></p>
+                    <p><strong>LinkedIn:</strong> <a href="{{ person.clientProcessPocLinkedin }}" target="_blank">{{ person.clientProcessPocLinkedin }}</a></p>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+</div>

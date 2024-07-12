@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,10 @@ export class LeadsService {
   updateLeadById(id: any, data: any) {
     // return this.http.put(`http://localhost:4000/lead/leads/${id}`, data);
     return this.http.put(`https://recrutory-crm-backend.onrender.com/api/crm/leads/${id}`, data);
+  }
+
+  updateLead(lead:any): Observable<any> {
+    return this.http.put<any>(`https://recrutory-crm-backend.onrender.com/api/crm/leads/${lead.id}`, lead);
   }
   
   // updateLeadById(id:any){

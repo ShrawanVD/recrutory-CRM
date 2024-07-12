@@ -31,11 +31,19 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
 import { LoginComponent } from './pages/login/login.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { AfterLoginComponent } from './components/after-login/after-login.component';
-import { SelectedSheetComponent } from './pages/selected-sheet/selected-sheet.component';
+import { SelectedSheetComponent } from './pages/selected/selected-sheet/selected-sheet.component';
 import { ClientSheetComponent } from './pages/client/client-sheet/client-sheet.component';
 import { ClientSheetFormComponent } from './pages/client/client-sheet-form/client-sheet-form.component';
 import { MasterSheetComponent } from './pages/master/master-sheet/master-sheet.component';
 import { MasterSheetFormComponent } from './pages/master/master-sheet-form/master-sheet-form.component';
+import { ProcessSheetComponent } from './pages/client/process-sheet/process-sheet.component';
+import { ProcessSheetFormComponent } from './pages/client/process-sheet-form/process-sheet-form.component';
+import { InterestedSheetComponent } from './pages/client/interested-sheet/interested-sheet.component';
+import { InterestedSheetFormComponent } from './pages/client/interested-sheet-form/interested-sheet-form.component';
+import { CilentPocComponent } from './pages/client/client-sheet/cilent-poc/cilent-poc.component';
+import { ProcessPocComponent } from './pages/client/process-sheet/process-poc/process-poc.component';
+import { SelectedProcessSheetComponent } from './pages/selected/selected-process-sheet/selected-process-sheet.component';
+import { FinalSelectedSheetComponent } from './pages/selected/final-selected-sheet/final-selected-sheet.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +60,14 @@ import { MasterSheetFormComponent } from './pages/master/master-sheet-form/maste
     ClientSheetFormComponent,
     MasterSheetComponent,
     MasterSheetFormComponent,
+    ProcessSheetComponent,
+    ProcessSheetFormComponent,
+    InterestedSheetComponent,
+    InterestedSheetFormComponent,
+    CilentPocComponent,
+    ProcessPocComponent,
+    SelectedProcessSheetComponent,
+    FinalSelectedSheetComponent,
   ],
   imports: [
     BrowserModule,

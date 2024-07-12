@@ -1,1 +1,94 @@
-<p>client-sheet-form works!</p>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+<div class="dialog-box">
+  <mat-dialog-actions class="dialogAction">
+    <button mat-icon-button class="close-button" [mat-dialog-close]="true">
+      <mat-icon class="close-icon" color="warn">close</mat-icon>
+    </button>
+  </mat-dialog-actions>
+  <div mat-dialog-title>
+    <h1>Client Form</h1>
+  </div>
+  <div mat-dialog-content>
+    <form [formGroup]="clientForm" (ngSubmit)="submitLead()">
+
+      <div class="row">
+        <!-- Client Name -->
+        <mat-form-field appearance="outline" class="input">
+          <mat-label>Client Name</mat-label>
+          <input matInput placeholder="Suhas" required formControlName="clientName" />
+        </mat-form-field>
+
+        <!-- Vertical -->
+        <mat-form-field appearance="outline" class="input">
+          <mat-label>Vertical</mat-label>
+          <input matInput placeholder="Vertical" formControlName="clientVertical" />
+        </mat-form-field>
+      </div>
+
+      <div formArrayName="clientPoc">
+        <h2>Point of contact</h2>
+        <div *ngFor="let poc of clientPoc.controls; let i = index">
+          <div [formGroupName]="i">
+
+            <div class="row">
+              <!-- POC Name -->
+              <mat-form-field appearance="outline" class="input">
+                <mat-label>POC Name</mat-label>
+                <input matInput formControlName="clientPocName" />
+              </mat-form-field>
+
+              <!-- POC Designation -->
+              <mat-form-field appearance="outline" class="input">
+                <mat-label>POC Designation</mat-label>
+                <input matInput formControlName="clientPocDesg" />
+              </mat-form-field>
+            </div>
+
+            <div class="row">
+              <!-- POC Phone Number -->
+              <mat-form-field appearance="outline" class="input">
+                <mat-label>POC Phone Number</mat-label>
+                <input matInput formControlName="clientPocNumber" />
+              </mat-form-field>
+
+              <!-- POC Email -->
+              <mat-form-field appearance="outline" class="input">
+                <mat-label>POC Email</mat-label>
+                <input matInput formControlName="clientPocEmail" />
+              </mat-form-field>
+            </div>
+
+
+            <div class="row">
+              <!-- POC LinkedIn -->
+              <mat-form-field appearance="outline" class="input">
+                <mat-label>POC LinkedIn</mat-label>
+                <input matInput formControlName="clientPocLinkedin" />
+              </mat-form-field>
+              <button mat-icon-button color="warn" (click)="removePoc(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+
+            <hr />
+
+          </div>
+        </div>
+        <button mat-raised-button color="primary" type="button" (click)="addPoc()" style="margin: 1rem 0rem;">
+          Add POC
+        </button>
+      </div>
+
+      <!-- action -->
+      <div mat-dialog-actions class="action">
+        <button mat-raised-button type="button" [mat-dialog-close]="false">
+          Cancel
+        </button>
+        <button mat-raised-button color="primary" type="submit">
+          {{ data ? "Update" : "Create" }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
