@@ -80,27 +80,27 @@ export class ProcessSheetFormComponent {
      if (this.processForm.valid) {
        // Update existing lead
        if (this.data?._id) {
-        //  this.clientService
-        //    .updateLeadById(this.data._id, this.processForm.value)
-        //    .subscribe({
-        //      next: (val) => {
-        //        this._snackBar.open('Lead updated successfully', 'Close', {
-        //          duration: 3000,
-        //        });
-        //        this._dialogRef.close(true);
-        //      },
-        //      error: (err) => {
-        //        console.error(err);
-        //        this._snackBar.open('Failed to update lead', 'Close', {
-        //          duration: 3000,
-        //        });
-        //      },
-        //    });
+         this.clientService
+           .updateProcess(this.clientId,this.data._id, this.processForm.value)
+           .subscribe({
+             next: (val) => {
+               this._snackBar.open('Process updated successfully', 'Close', {
+                 duration: 3000,
+               });
+               this._dialogRef.close(true);
+             },
+             error: (err) => {
+               console.error(err);
+               this._snackBar.open('Failed to update lead', 'Close', {
+                 duration: 3000,
+               });
+             },
+           });
        } else {
          // Create new lead
          this.clientService.addProcess(this.clientId, this.processForm.value).subscribe({
           next: (val: any) => {
-            this._snackBar.open('Form Submitted Successfully', 'Close', {
+            this._snackBar.open('New Process Added Successfully', 'Close', {
               duration: 3000,
             });
             this._dialogRef.close(true);

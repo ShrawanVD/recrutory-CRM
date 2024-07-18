@@ -10,6 +10,11 @@ export const navbarData = [
     label: 'Master-Sheet'
   },
   {
+    routeLink: 'todays-task',
+    icon: 'fas fa-tasks',
+    label: 'Todays-Task'
+  },
+  {
     routeLink: 'selected',
     icon: 'fas fa-check',
     label: 'Selected-Sheet'

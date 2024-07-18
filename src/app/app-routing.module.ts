@@ -7,10 +7,12 @@ import { AuthGuard } from './guards/auth.guard';
 import { MasterSheetComponent } from './pages/master/master-sheet/master-sheet.component';
 import { ClientSheetComponent } from './pages/client/client-sheet/client-sheet.component';
 import { ProcessSheetComponent } from './pages/client/process-sheet/process-sheet.component';
-import { InterestedSheetComponent } from './pages/client/interested-sheet/interested-sheet.component';
+import { FilteredSheetComponent } from './pages/client/filtered-sheet/filtered-sheet.component';
 import { SelectedSheetComponent } from './pages/selected/selected-sheet/selected-sheet.component';
 import { SelectedProcessSheetComponent } from './pages/selected/selected-process-sheet/selected-process-sheet.component';
 import { FinalSelectedSheetComponent } from './pages/selected/final-selected-sheet/final-selected-sheet.component';
+import { InterestedSheetComponent } from './pages/client/interested-sheet/interested-sheet.component';
+import { TodaysTaskComponent } from './pages/recruiter/todays-task/todays-task.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -21,11 +23,13 @@ const routes: Routes = [
       { path: 'settings', component: SettingsComponent },
       { path: 'client', component: ClientSheetComponent },
       { path: 'client/:id', component: ProcessSheetComponent },
-      { path: 'client/:id/process/:processId', component: InterestedSheetComponent },
+      { path: 'client/:id/process/:processId', component: FilteredSheetComponent },
+      { path: 'client/:id/process/:processId/interested', component: InterestedSheetComponent },
       { path: 'selected', component: SelectedSheetComponent },
       { path: 'selected/:id', component: SelectedProcessSheetComponent },
       { path: 'selected/:id/process/:processId', component: FinalSelectedSheetComponent },
-      
+      { path: 'todays-task', component: TodaysTaskComponent },
+
     ],
     canActivate: [AuthGuard]
   }

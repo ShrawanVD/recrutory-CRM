@@ -7,21 +7,20 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FilteredSheetFormComponent } from '../filtered-sheet-form/filtered-sheet-form.component';
 import { CilentService } from 'src/app/services/cilent/cilent.service';
-import { Location } from '@angular/common';
-
 @Component({
-  selector: 'app-interested-sheet',
-  templateUrl: './interested-sheet.component.html',
-  styleUrls: ['./interested-sheet.component.scss']
+  selector: 'app-filtered-sheet',
+  templateUrl: './filtered-sheet.component.html',
+  styleUrls: ['./filtered-sheet.component.scss']
 })
-export class InterestedSheetComponent {
+export class FilteredSheetComponent {
   processId: string | null = null;
   clientId: string | null = null;
   recruiters: any = {};
   updatedInterestedCandidate: any;
   selectedRows: string[] = [];
 
-  displayedColumns1: string[] = [
+  displayedColumns: string[] = [
+    'select',
     'SrNo',
     'name',
     'email',
@@ -48,10 +47,9 @@ export class InterestedSheetComponent {
     'voiceNonVoice',
     'source',
     'assignedRecruiter',
-    'round',
-    // 'action'
+    'action',
   ];
-
+ 
   dataSource!: MatTableDataSource<any>;
 
   filterValues: any = {};
@@ -83,7 +81,7 @@ export class InterestedSheetComponent {
     private _dialog: MatDialog,
     private clientService: CilentService,
     private _snackBar: MatSnackBar,
-    private location: Location,
+    private router: Router,
     private route: ActivatedRoute
   ) { }
   // for creating lead
@@ -102,6 +100,7 @@ export class InterestedSheetComponent {
     this.clientId = this.route.snapshot.paramMap.get('id');
     this.processId = this.route.snapshot.paramMap.get('processId');
     this.getCuriotoryLeads();
+    this.getRecruitersList();
   }
 
   getCuriotoryLeads() {
@@ -116,6 +115,47 @@ export class InterestedSheetComponent {
     });
   }
 
+  getRecruitersList(): void {
+    this.clientService.getRecruiter('recruiter').subscribe({
+      next: (res) => {
+        this.recruiters = res;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+  getRecruiterIds(): string[] {
+    return Object.keys(this.recruiters);
+  }
+
+  // code for handling select 
+  isAllSelected() {
+    const numSelected = this.selectedRows.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  isSomeSelected() {
+    return this.selectedRows.length > 0 && !this.isAllSelected();
+  }
+
+  masterToggle() {
+    if (this.isAllSelected()) {
+      this.selectedRows = [];
+    } else {
+      this.selectedRows = this.dataSource.data.map(row => row._id);
+    }
+  }
+
+  toggleSelection(rowId: string): void {
+    const index = this.selectedRows.indexOf(rowId);
+    if (index === -1) {
+      this.selectedRows.push(rowId);
+    } else {
+      this.selectedRows.splice(index, 1);
+    }
+  }
 
   // filter for interested candidate
   applyDropdownFilter(value: string, column: string) {
@@ -162,6 +202,27 @@ export class InterestedSheetComponent {
     this.selectedexp = null;
   }
 
+  // open edit form for updating candidate information
+  openEditForm(data: any) {
+    const dialogRef = this._dialog.open(FilteredSheetFormComponent, {
+      data: {
+        ...data,
+        clientId: this.clientId,
+        processId: this.processId
+      },
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe({
+      next: (val) => {
+        if (val) {
+          this.getCuriotoryLeads();
+        }
+      },
+    });
+  }
+
+
   updateInterested(lead: any, status: boolean): void {
     lead.interested = status;
     // this.clientService.updateLead(lead).subscribe();
@@ -171,9 +232,41 @@ export class InterestedSheetComponent {
     // this.clientService.updateLead(lead).subscribe();
   }
 
-  // open filter component
-  openFilter(){
-    this.location.back();
+  // remaining: to update the recruiter for one and for all
+  updateRecruiter(leadId: string, lead: any): void {
+    const payload = {
+      ids: this.selectedRows,
+      recruiterId: lead.assignedRecruiter,
+      newAssignedRecruiter: this.recruiters[lead.assignedRecruiter]
+    };
+    if (payload.ids.length == 0) {
+      alert("Please select the checkbox to assign recruiter");
+      this.getCuriotoryLeads();
+    } else {
+      const confirmAssignRecruiter = window.confirm(`Do you want to assign these candidates to ${this.recruiters[lead.assignedRecruiter]}, Please Comfirm`)
+      if (confirmAssignRecruiter) {
+        this.clientService.updateMultipleRecruiter(this.clientId, this.processId, payload).subscribe({
+          next: (res) => {
+            this._snackBar.open('Recriuter Assigned Successfully', 'Close', {
+              duration: 4000,
+            });
+            this.getCuriotoryLeads();
+          },
+          error: (err) => {
+            console.log(err);
+            this._snackBar.open('Failed To  Assigned Recriuter', 'Close', {
+              duration: 4000,
+            });
+          }
+        })
+      }
+    }
+
+  }
+
+  // open interested candidates
+  openInterestedCan(){
+    this.router.navigate(['interested'],{ relativeTo: this.route });
   }
 
   getRole(): any {
@@ -183,5 +276,4 @@ export class InterestedSheetComponent {
   isAdmin(): boolean {
     return this.getRole() === 'admin';
   }
-
 }

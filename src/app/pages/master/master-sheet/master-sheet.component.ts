@@ -11,13 +11,14 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { SelectionModel } from '@angular/cdk/collections';
 
-
 interface Lead {
   name: string;
-  lName: string;
   email: string;
   phone: string;
-  status: string;
+  // status: string;
+  // assignProcess: string;
+  // interested: Boolean;
+  // assignRecruitor: string;
   lType: string;
   language: Array<string>;
   proficiencyLevel: string;
@@ -39,7 +40,6 @@ interface Lead {
   company: string;
   voiceNonVoice: string;
   source: string;
-  placedBy: string;
 }
 
 
@@ -50,17 +50,14 @@ interface Lead {
 })
 export class MasterSheetComponent implements OnInit {
 
-
-  
+  assignProcesslist: any;
+  selectedRows: string[] = [];
   displayedColumns: string[] = [
     'select',
     'SrNo',
-    // 'fName',
-    // 'lName',
     'name',
     'email',
     'phone',
-    'status',
     'lType',
     'language',
     'proficiencyLevel',
@@ -82,8 +79,8 @@ export class MasterSheetComponent implements OnInit {
     'company',
     'voiceNonVoice',
     'source',
-    'placedBy',
-    'action', 
+    'assignProcess',
+    'action',
   ];
 
   dataSource!: MatTableDataSource<any>;
@@ -100,15 +97,15 @@ export class MasterSheetComponent implements OnInit {
   selectedsource: string | null = null;
   selectedexp: string | null = null;
 
-  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese','Chinese','Nepalese']; // replace with actual statuses
-  proficiencyLevels = ['A1', 'A2','B1', 'B2','C1', 'C2']; 
-  jobStatuses = ['Working', 'Job Seeking', 'Teacher']; 
-  qualifications = ['SSC', 'HSC', 'Under Graduate', 'Post Graduate', 'PHD']; 
-  modes = ['WFH', 'WHO','Hybrid'];
-  feedbacks = ['Not Intrested - CTC Not Matching', 'Not Intrested - Relocation Issue','Not Intrested - Notice Period', 'Not Intrested - Cooling Down Period','Not Intrested - Call Not Recieved', 'Not Intrested - Under Qualified"'];
-  noticePeriods = ['15', '30','60', '90','90+'];
-  sources = ['Linkedin', 'Naukri','Meta', 'Google','Instagram', 'Website','App','Email','Reference'];
-  exps = ['0-1', '1-2','2-4', '4-8','8-12','12+'];
+  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Chinese', 'Nepalese']; // replace with actual statuses
+  proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+  jobStatuses = ['Working', 'Job Seeking', 'Teacher'];
+  qualifications = ['SSC', 'HSC', 'Under Graduate', 'Post Graduate', 'PHD'];
+  modes = ['WFH', 'WHO', 'Hybrid'];
+  feedbacks = ['Not Intrested - CTC Not Matching', 'Not Intrested - Relocation Issue', 'Not Intrested - Notice Period', 'Not Intrested - Cooling Down Period', 'Not Intrested - Call Not Recieved', 'Not Intrested - Under Qualified"'];
+  noticePeriods = ['15', '30', '60', '90', '90+'];
+  sources = ['Linkedin', 'Naukri', 'Meta', 'Google', 'Instagram', 'Website', 'App', 'Email', 'Reference'];
+  exps = ['0-1', '1-2', '2-4', '4-8', '8-12', '12+'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -118,22 +115,24 @@ export class MasterSheetComponent implements OnInit {
     private _dialog: MatDialog,
     private leadService: LeadsService,
     private _snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   exportExcel() {
-    const selectedLeads = this.selection.selected; // Get selected rows
-  
+    // Get selected rows or all rows if no rows are selected
+    const selectedLeads = this.selectedRows.length > 0 ?
+      this.dataSource.data.filter(row => this.selectedRows.includes(row._id)) :
+      this.dataSource.data;
+
     if (selectedLeads.length === 0) {
-      alert('No rows selected for export');
+      alert('No rows available for export');
       return;
     }
-  
+
     const formattedData = selectedLeads.map((lead) => {
       return {
         'Name of Candidate': lead.name,
         'Email ID': lead.email,
         'Contact Number': lead.phone,
-        'Process Status': lead.status,
         'Language Type': lead.lType,
         Language: lead.language.join(', '), // Join array elements into a string
         'Proficiency Level': lead.proficiencyLevel,
@@ -157,14 +156,13 @@ export class MasterSheetComponent implements OnInit {
         Organisation: lead.company,
         'Voice / non voice': lead.voiceNonVoice,
         Source: lead.source,
-        'Placed by Recruiter': lead.placedBy,
       };
     });
-  
+
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(formattedData);
-  
+
     // Make header bold
-    const wscols = [  
+    const wscols = [
       { wch: 20 },
       { wch: 20 },
       { wch: 20 },
@@ -190,12 +188,12 @@ export class MasterSheetComponent implements OnInit {
       { wch: 20 },
     ];
     ws['!cols'] = wscols;
-  
+
     const wsrows = [
       { hpt: 12, hpx: 16 }, // row height
     ];
     ws['!rows'] = wsrows;
-  
+
     // Apply bold style to the header row
     const headerCells = Object.keys(formattedData[0]);
     headerCells.forEach((key, index) => {
@@ -203,10 +201,10 @@ export class MasterSheetComponent implements OnInit {
       if (!ws[cellAddress]) ws[cellAddress] = { t: 's', v: key };
       ws[cellAddress].s = { font: { bold: true } };
     });
-  
+
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Leads');
-  
+
     const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     this.saveAsExcelFile(wbout, 'leads');
   }
@@ -255,7 +253,7 @@ export class MasterSheetComponent implements OnInit {
 
   // for creating lead
   openAddEditEmpForm() {
-    const dialogRef = this._dialog.open(MasterSheetFormComponent, {disableClose: true});
+    const dialogRef = this._dialog.open(MasterSheetFormComponent, { disableClose: true });
     dialogRef.afterClosed().subscribe({
       next: (val) => {
         if (val) {
@@ -267,39 +265,87 @@ export class MasterSheetComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCuriotoryLeads();
+    this.getAllProcessList();
   }
 
-// for selecting the multiple option  
-
-toggleSelection(row: any) {
-  this.selection.toggle(row);
-}
-
-isAllSelected() {
-  const numSelected = this.selection.selected.length;
-  const numRows = this.dataSource.data.length;
-  return numSelected === numRows;
-}
-
-isSomeSelected() {
-  const numSelected = this.selection.selected.length;
-  return numSelected > 0 && numSelected < this.dataSource.data.length;
-}
-
-masterToggle() {
-  if (this.isAllSelected()) {
-    this.selection.clear();
-  } else {
-    this.dataSource.data.forEach((row) => this.selection.select(row));
+  // getting the list of all process
+  getAllProcessList() {
+    this.leadService.getProcessList().subscribe({
+      next: (res) => {
+        this.assignProcesslist = res;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
-}
 
-changeStatusToInterested() {
-  this.selection.selected.forEach((row) => {
-    row.status = 'Interested';
-  });
-  this.selection.clear();
-}
+  // updating multiple  process at a time
+  updateAssignProcess(assignProcess: string): void {
+    const payload = {
+      ids: this.selectedRows,
+      newAssignProcess: assignProcess
+    };
+    if (payload.ids.length == 0) {
+      alert("Please select the checkbox to assign process");
+      this.getCuriotoryLeads();
+
+    } else {
+      const assignProcessAlert = window.confirm(
+        `Do you want to assign these candidates to this ${assignProcess}, Please Comfirm`
+      );
+      if (assignProcessAlert) {
+        this.leadService.addProcessMultipleCandidate(payload).subscribe({
+          next: (res) => {
+            this._snackBar.open(`Candidates are assign to ${assignProcess} process`, 'Close', {
+              duration: 4000,
+            });
+            this.getCuriotoryLeads();
+
+          },
+          error: (err) => {
+            console.log("API not working", err);
+          }
+        })
+      }
+    }
+  }
+
+  // for selecting the multiple option  
+
+  toggleSelection(rowId: string): void {
+    const index = this.selectedRows.indexOf(rowId);
+    if (index === -1) {
+      this.selectedRows.push(rowId);
+    } else {
+      this.selectedRows.splice(index, 1);
+    }
+  }
+
+  isAllSelected() {
+    const numSelected = this.selectedRows.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  isSomeSelected() {
+    return this.selectedRows.length > 0 && !this.isAllSelected();
+  }
+
+  masterToggle() {
+    if (this.isAllSelected()) {
+      this.selectedRows = [];
+    } else {
+      this.selectedRows = this.dataSource.data.map(row => row._id);
+    }
+  }
+
+  // changeStatusToInterested() {
+  //   this.selection.selected.forEach((row) => {
+  //     row.status = 'Interested';
+  //   });
+  //   this.selection.clear();
+  // }
 
   getCuriotoryLeads() {
     this.leadService.getAllLeads().subscribe({
@@ -356,7 +402,6 @@ changeStatusToInterested() {
   clearFilters() {
     this.filterValues = {};
     this.dataSource.filter = "";
-
     this.selectedLanguage = null;
     this.selectedproficiencyLevel = null;
     this.selectedJobStatus = null;
@@ -415,5 +460,5 @@ changeStatusToInterested() {
 }
 
 const EXCEL_TYPE =
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-  const EXCEL_EXTENSION = '.xlsx';
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+const EXCEL_EXTENSION = '.xlsx';

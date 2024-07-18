@@ -1,119 +1,118 @@
 .card-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* used to provide the horizontal scroller functionality */
+.table-container {
+  min-width: 10rem;
+  height: 34.5rem;
+  overflow: auto;
+}
+
+/* for giving borders */
+
+table {
+  border: 1px solid black;
+
+  border-collapse: separate;
+  border-spacing: 0px;
+}
+
+th {
+  position: sticky;
+  top: 0px;
+  font-weight: 500;
+}
+
+th,
+td {
+  min-width: 150px;
+  border: 1px solid black;
+  text-align: justify;
+  color: black;
+}
+
+/* --------------- */
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.main-body {
+  padding-top: 20px;
+  margin: 0 auto;
+  max-width: 1348px;
+  mat-form-field {
+    width: 100%;
   }
-  
-  /* used to provide the horizontal scroller functionality */
-  .table-container {
-    min-width: 10rem;
-    height: 34.5rem;
-    overflow: auto;
-  }
-  
-  /* for giving borders */
-  
-  table {
-    border: 1px solid black;
-  
-    border-collapse: separate;
-    border-spacing: 0px;
-  }
-  
-  th {
-    position: sticky;
-    top: 0px;
-    font-weight: 500;
-  }
-  
-  th,
-  td {
-    min-width: 150px;
-    border: 1px solid black;
-    text-align: justify;
-    color: black;
-  }
-  
-  /* --------------- */
-  
-  .example-spacer {
-    flex: 1 1 auto;
-  }
-  
-  .main-body {
-    padding-top: 20px;
-    margin: 0 auto;
-    max-width: 1348px;
-    mat-form-field {
-      width: 100%;
-    }
-  }
-  
-  .action {
-    display: flex;
-    gap: 5px;
-  }
-  
-  .logo {
-    height: 2.5rem;
-    margin-right: 2rem;
-    width: auto;
-  }
-  
-  .limited-lines {
-    max-height: auto; /* Adjust this value as needed to fit two lines */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 9;
-    -webkit-box-orient: vertical;
-  }
-  
-  .table-container {
-    overflow-x: auto;
-    max-width: 100%;
-    height: 35.4rem;
-  }
-  
-  .paginator {
-    width: auto;
-  }
-  
-  .cell-head {
-    text-align: center;
-  }
-  
-  .cell-width {
-    min-width: 100px;
-    text-align: center;
-  }
-  .content-dialog {
-    padding: 1rem 0rem;
-  }
-  .content-dialog form {
-    padding: 1rem;
-    width: 80%;
-  }
-  
-  .remark-dialog {
-    padding: 2rem;
-  }
-  
-  .filterSearchBar{
-    text-align: right;
-    align-items: right;
-    justify-content: center;
-  }
-  .filterSearchBar input{
-    width: 20%;
-  }
-  .filter{
-    align-items: center;
-    justify-content: center;
-  }
-  .filterDropDown{
-    margin-right: 1rem;
-  }
-  
-  
-  
+}
+
+.action {
+  display: flex;
+  gap: 5px;
+}
+
+.logo {
+  height: 2.5rem;
+  margin-right: 2rem;
+  width: auto;
+}
+
+.limited-lines {
+  max-height: auto; /* Adjust this value as needed to fit two lines */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 9;
+  -webkit-box-orient: vertical;
+}
+
+.table-container {
+  overflow-x: auto;
+  max-width: 100%;
+  height: 35.4rem;
+}
+
+.paginator {
+  width: auto;
+}
+
+.cell-head {
+  text-align: center;
+}
+
+.cell-width {
+  min-width: 100px;
+  text-align: center;
+}
+.content-dialog {
+  padding: 1rem 0rem;
+}
+.content-dialog form {
+  padding: 1rem;
+  width: 80%;
+}
+
+.remark-dialog {
+  padding: 2rem;
+}
+
+.filterSearchBar{
+  text-align: right;
+  align-items: right;
+  justify-content: center;
+}
+.filterSearchBar input{
+  width: 20%;
+}
+.filter{
+  align-items: center;
+  justify-content: center;
+}
+.filterDropDown{
+  margin-right: 1rem;
+}
+
+

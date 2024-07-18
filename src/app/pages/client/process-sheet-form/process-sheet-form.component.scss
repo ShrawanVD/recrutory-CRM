@@ -1,10 +1,10 @@
 .dialog-box {
     text-align: center;
+    width: 70vw;
   }
   .container-box {
     padding-top: 3rem;
   }
-
   
   .dialogAction{
     display: flex;
@@ -32,7 +32,6 @@
     margin: 0rem 10rem 5rem;
     padding: 2rem 0rem 2rem;
     text-decoration: wavy;
-  
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 2px 4px #507577;

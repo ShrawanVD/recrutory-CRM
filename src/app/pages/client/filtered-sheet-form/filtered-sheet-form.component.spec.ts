@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InterestedSheetFormComponent } from './interested-sheet-form.component';
+import { InterestedSheetFormComponent } from './filtered-sheet-form.component';
 
 describe('InterestedSheetFormComponent', () => {
   let component: InterestedSheetFormComponent;

@@ -38,12 +38,14 @@ import { MasterSheetComponent } from './pages/master/master-sheet/master-sheet.c
 import { MasterSheetFormComponent } from './pages/master/master-sheet-form/master-sheet-form.component';
 import { ProcessSheetComponent } from './pages/client/process-sheet/process-sheet.component';
 import { ProcessSheetFormComponent } from './pages/client/process-sheet-form/process-sheet-form.component';
-import { InterestedSheetComponent } from './pages/client/interested-sheet/interested-sheet.component';
-import { InterestedSheetFormComponent } from './pages/client/interested-sheet-form/interested-sheet-form.component';
+import { FilteredSheetComponent } from './pages/client/filtered-sheet/filtered-sheet.component';
+import { FilteredSheetFormComponent } from './pages/client/filtered-sheet-form/filtered-sheet-form.component';
 import { CilentPocComponent } from './pages/client/client-sheet/cilent-poc/cilent-poc.component';
 import { ProcessPocComponent } from './pages/client/process-sheet/process-poc/process-poc.component';
 import { SelectedProcessSheetComponent } from './pages/selected/selected-process-sheet/selected-process-sheet.component';
 import { FinalSelectedSheetComponent } from './pages/selected/final-selected-sheet/final-selected-sheet.component';
+import { InterestedSheetComponent } from './pages/client/interested-sheet/interested-sheet.component';
+import { TodaysTaskComponent } from './pages/recruiter/todays-task/todays-task.component';
 
 @NgModule({
   declarations: [
@@ -62,12 +64,14 @@ import { FinalSelectedSheetComponent } from './pages/selected/final-selected-she
     MasterSheetFormComponent,
     ProcessSheetComponent,
     ProcessSheetFormComponent,
-    InterestedSheetComponent,
-    InterestedSheetFormComponent,
+    FilteredSheetComponent,
+    FilteredSheetFormComponent,
     CilentPocComponent,
     ProcessPocComponent,
     SelectedProcessSheetComponent,
     FinalSelectedSheetComponent,
+    InterestedSheetComponent,
+    TodaysTaskComponent,
   ],
   imports: [
     BrowserModule,

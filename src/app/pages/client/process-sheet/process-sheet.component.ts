@@ -115,17 +115,17 @@ export class ProcessSheetComponent implements OnInit {
   // update client
   openEditForm(data: any) {
     const dialogRef = this._dialog.open(ProcessSheetFormComponent, {
-      data,
-      disableClose: true
+      data:{
+        ...data,
+        clientId: this.clientId
+      },
+      disableClose: true,
     });
 
     dialogRef.afterClosed().subscribe({
       next: (val) => {
         if (val) {
           this.getAllProcess();
-          this._snackBar.open('Process Updated Successfully', 'Close', {
-            duration: 4000,
-          });
         }
       },
     });

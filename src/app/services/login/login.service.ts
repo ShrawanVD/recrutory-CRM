@@ -65,4 +65,9 @@ export class LoginService {
   //   return this.getRole() === 'recruiter';
   // }
 
+  //Role specific api  Recruiter
+  getCandidatByRecruiterId(){
+    return this.http.get('https://recrutory-crm-backend.onrender.com/api/assigned-candidates?recruiterId=66868b4a82d622656abd3873');
+  }
+
 }

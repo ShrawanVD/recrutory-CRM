@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LeadsService } from '../../../services/leads/leads.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-master-sheet-form',
@@ -28,11 +27,9 @@ export class MasterSheetFormComponent implements OnInit {
       @Inject(MAT_DIALOG_DATA) public data: any
     ) {
       this.leadForm = this._formBuilder.group({
-        fName: [data?.fName || '', Validators.required],
-        lName: [data?.lName || '', Validators.required],
+        name: [data?.name || '', Validators.required],
         email: [data?.email || '', [Validators.required, Validators.email]],
         phone: [data?.phone || '', Validators.required],
-        status: [data?.status || '', Validators.required],
         lType: [data?.lType || '', Validators.required],
         language: [data?.language || [], Validators.required],
         proficiencyLevel: [data?.proficiencyLevel || '', Validators.required],
@@ -49,12 +46,11 @@ export class MasterSheetFormComponent implements OnInit {
         wfh: [data?.wfh || '', Validators.required],
         resumeLink: [data?.resumeLink || '', Validators.required],
         linkedinLink: [data?.linkedinLink || '', Validators.required],
-        feedback: [data?.feedback || '', Validators.required],
-        remark: [data?.remark || '', Validators.required],
+        feedback: [data?.feedback || ''],
+        remark: [data?.remark || ''],
         company: [data?.company || '', Validators.required],
         voiceNonVoice: [data?.voiceNonVoice || '', Validators.required],
         source: [data?.source || '', Validators.required],
-        placedBy: [data?.placedBy || '', Validators.required],
       });
     }
   

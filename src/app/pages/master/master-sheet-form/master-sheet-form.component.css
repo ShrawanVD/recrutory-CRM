@@ -4,7 +4,12 @@
   .container-box {
     padding-top: 3rem;
   }
-  
+  .dialogAction{
+    display: flex;
+    align-items: right;
+    justify-content: right;
+    text-align: right;
+  }
   h1 {
     margin: 1rem 0 0;
     font-size: 2rem;
