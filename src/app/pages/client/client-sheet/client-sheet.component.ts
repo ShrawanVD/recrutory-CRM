@@ -21,6 +21,8 @@ interface Lead {
   styleUrls: ['./client-sheet.component.scss']
 })
 export class ClientSheetComponent implements OnInit {
+  filterValues: any = {};
+
   displayedColumns: string[] = [
     'SrNo',
     'clientName',
@@ -53,6 +55,37 @@ export class ClientSheetComponent implements OnInit {
     });
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.filterValues['global'] = filterValue;
+    this.dataSource.filter = JSON.stringify(this.filterValues);
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  createFilter(): (data: any, filter: string) => boolean {
+    let filterFunction = (data: any, filter: string): boolean => {
+      let searchTerms = JSON.parse(filter);
+      let isMatch = true;
+
+      if (searchTerms['global']) {
+        isMatch = JSON.stringify(data).toLowerCase().includes(searchTerms['global']);
+      } else {
+        for (let key in searchTerms) {
+          if (searchTerms[key] && (!data[key] || !data[key].toString().toLowerCase().includes(searchTerms[key].toLowerCase()))) {
+            isMatch = false;
+            break;
+          }
+        }
+      }
+
+      return isMatch;
+    };
+    return filterFunction;
+  }
+
   ngOnInit(): void {
     this.getCilents();
   }
@@ -61,6 +94,7 @@ export class ClientSheetComponent implements OnInit {
     this.clientService.getAllClient().subscribe({
       next: (res: any) => {
         this.dataSource = new MatTableDataSource(res);
+        this.dataSource.filterPredicate = this.createFilter();
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
       },

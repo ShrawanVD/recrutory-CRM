@@ -1,15 +1,6 @@
 <div class="card topp">
     <div class="card-head">
       <h1 style="font-weight: bold">Master Sheet</h1>
-      
-      <!-- <button
-        style="background: #2196f3; color: white; margin-left: 10px"
-        mat-raised-button
-        (click)="fileInput.click()"
-      >
-        IMPORT FROM EXCEL
-      </button> -->
-     
       <input type="file" #fileInput style="display: none" (change)="onFileChange($event)" />
     </div>
     <div class="card-body">
@@ -106,7 +97,7 @@
         <button mat-raised-button style="background: #02465b;color: white;" (click)="clearFilters()" class="filterDropDown">Clear Filters</button>
       </div>
   
-      <div class="table-container" style="overflow-x: auto; overflow-y: auto; max-height: 450px">
+      <div class="table-container" style="overflow-x: auto; overflow-y: auto; max-height: 550px">
         <table mat-table [dataSource]="dataSource" matSort>
   
           <ng-container matColumnDef="select">

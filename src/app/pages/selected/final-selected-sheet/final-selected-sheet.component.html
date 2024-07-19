@@ -90,10 +90,10 @@
               }}</mat-option>
           </mat-select>
         </mat-form-field>
-        <button mat-raised-button style="background: #02465b;color: white;" (click)="clearFilters()" class="filterDropDown">Clear Filters</button>
+        <button mat-raised-button style="background: #02465b;color: white; margin-bottom: 1rem;" (click)="clearFilters()" class="filterDropDown">Clear Filters</button>
       </div>
 
-      <div class="table-container" style="overflow-x: auto; overflow-y: auto; max-height: 450px">
+      <div class="table-container" style="overflow-x: auto; overflow-y: auto; max-height: 550px">
         <table mat-table [dataSource]="dataSource" matSort>
   
           <ng-container matColumnDef="SrNo">

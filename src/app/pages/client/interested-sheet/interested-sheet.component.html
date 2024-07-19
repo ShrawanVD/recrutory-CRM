@@ -8,10 +8,14 @@
         <button style="background: #02465b; color: white;margin-right: 10px; padding: 10px; margin-bottom: 1rem;" mat-raised-button (click)="openFilterDiv()">
           FILTER
         </button>
-        <button style="background: #02465b; color: white; padding: 10px; margin-bottom: 1rem;" mat-raised-button
+        <button style="background: #02465b; color: white;margin-right: 10px; padding: 10px; margin-bottom: 1rem;" mat-raised-button
           (click)="openFilter()">
           FLITERED LIST
         </button>
+        <mat-form-field >
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event)" #input />
+        </mat-form-field>
         <!-- <button style="background: #02465b; color: white; padding: 10px; margin-bottom: 1rem;" mat-raised-button
           (click)="openAddEditEmpForm()">
           ADD INTERESTED CANDIDATE
@@ -92,7 +96,7 @@
       </div>
   
   
-      <div class="table-container" style="overflow-x: auto; overflow-y: auto; max-height: 450px">
+      <div class="table-container" style="overflow-x: auto; overflow-y: auto; max-height: 550px">
         <table mat-table [dataSource]="dataSource" matSort>
   
           <ng-container matColumnDef="SrNo">

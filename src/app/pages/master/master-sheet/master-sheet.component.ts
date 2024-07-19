@@ -15,10 +15,6 @@ interface Lead {
   name: string;
   email: string;
   phone: string;
-  // status: string;
-  // assignProcess: string;
-  // interested: Boolean;
-  // assignRecruitor: string;
   lType: string;
   language: Array<string>;
   proficiencyLevel: string;

@@ -108,7 +108,6 @@ export class InterestedSheetComponent {
     this.clientService.getProcessById(this.clientId, this.processId).subscribe({
       next: (res: any) => {
         const filteredCandidates = res.interestedCandidates.filter((candidate: any) => candidate.interested === "interested");
-      
         this.dataSource = new MatTableDataSource(filteredCandidates);
         this.dataSource.filterPredicate = this.createFilter();
         this.dataSource.sort = this.sort;
@@ -120,6 +119,16 @@ export class InterestedSheetComponent {
 
 
   // filter for interested candidate
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.filterValues['global'] = filterValue;
+    this.dataSource.filter = JSON.stringify(this.filterValues);
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
   applyDropdownFilter(value: string, column: string) {
     this.filterValues[column] = value;
     this.dataSource.filter = JSON.stringify(this.filterValues);

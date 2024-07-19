@@ -19,7 +19,8 @@ export class FilteredSheetComponent {
   updatedInterestedCandidate: any;
   selectedRows: string[] = [];
   openFilters: boolean = false;
-  
+  filterValues: any = {};
+
   displayedColumns: string[] = [
     'select',
     'SrNo',
@@ -52,8 +53,6 @@ export class FilteredSheetComponent {
   ];
  
   dataSource!: MatTableDataSource<any>;
-
-  filterValues: any = {};
 
   selectedLanguage: string | null = null;
   selectedproficiencyLevel: string | null = null;
@@ -159,6 +158,16 @@ export class FilteredSheetComponent {
   }
 
   // filter for interested candidate
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.filterValues['global'] = filterValue;
+    this.dataSource.filter = JSON.stringify(this.filterValues);
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+  
   applyDropdownFilter(value: string, column: string) {
     this.filterValues[column] = value;
     this.dataSource.filter = JSON.stringify(this.filterValues);

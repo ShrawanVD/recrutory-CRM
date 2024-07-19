@@ -7,7 +7,7 @@
 /* used to provide the horizontal scroller functionality */
 .table-container {
   min-width: 10rem;
-  max-height: 450px; /* Updated to match inline style */
+  max-height: 550px; /* Updated to match inline style */
   overflow: auto;
 }
 
@@ -103,12 +103,13 @@ td {
 
 .filterSearchBar {
   text-align: right;
-  align-items: right;
-  justify-content: center;
+  justify-content: right;
+  display: flex;
+  flex-direction: row;
 }
 
-.filterSearchBar input {
-  width: 20%;
+.filterSearchBar mat-form-field input {
+  width: 40%;
 }
 
 .filter {
