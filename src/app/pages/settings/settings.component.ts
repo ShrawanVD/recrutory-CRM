@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-settings',
@@ -8,20 +9,20 @@ import { Router } from '@angular/router';
 })
 export class SettingsComponent implements OnInit {
 
-  constructor(private router:Router) { }
+  constructor(private router: Router, private snackBar: MatSnackBar) { }
 
-  ngOnInit(): void {
-  }
-
-
+  ngOnInit(): void { }
 
   employeeName: string = 'John Doe';
   employeeEmail: string = 'john.doe@example.com';
   employeeRole: string = 'Admin';
 
-  logout(){
+  logout(): void {
     localStorage.removeItem("token");
-    this.router.navigate(['/login'])
+    this.router.navigate(['/login']);
+    this.snackBar.open('Logged out successfully ...', 'Close', {
+      duration: 1000,
+      panelClass: ['logout-snackbar']
+    });
   }
-
 }
