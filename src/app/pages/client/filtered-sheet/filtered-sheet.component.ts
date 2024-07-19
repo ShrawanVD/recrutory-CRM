@@ -18,7 +18,8 @@ export class FilteredSheetComponent {
   recruiters: any = {};
   updatedInterestedCandidate: any;
   selectedRows: string[] = [];
-
+  openFilters: boolean = false;
+  
   displayedColumns: string[] = [
     'select',
     'SrNo',
@@ -246,15 +247,22 @@ export class FilteredSheetComponent {
       const confirmAssignRecruiter = window.confirm(`Do you want to assign these candidates to ${this.recruiters[lead.assignedRecruiter]}, Please Comfirm`)
       if (confirmAssignRecruiter) {
         this.clientService.updateMultipleRecruiter(this.clientId, this.processId, payload).subscribe({
-          next: (res) => {
-            this._snackBar.open('Recriuter Assigned Successfully', 'Close', {
-              duration: 4000,
-            });
+          next: (res:any) => {
+            if(res.alreadyAssignedCandidates && res.alreadyAssignedCandidates.length > 0){
+              this._snackBar.open(`Some candidates are already assign to ${this.recruiters[lead.assignedRecruiter]}`, 'Close', {
+                duration: 4000,
+              });
+            }
+            else{
+              this._snackBar.open('Recriuter Assigned Successfully', 'Close', {
+                duration: 4000,
+              });
+            }
             this.getCuriotoryLeads();
           },
           error: (err) => {
             console.log(err);
-            this._snackBar.open('Failed To  Assigned Recriuter', 'Close', {
+            this._snackBar.open(`some error has been occured`, 'Close', {
               duration: 4000,
             });
           }
@@ -267,6 +275,12 @@ export class FilteredSheetComponent {
   // open interested candidates
   openInterestedCan(){
     this.router.navigate(['interested'],{ relativeTo: this.route });
+  }
+
+  
+  // open filter div
+  openFilterDiv(){
+    this.openFilters = !this.openFilters;
   }
 
   getRole(): any {

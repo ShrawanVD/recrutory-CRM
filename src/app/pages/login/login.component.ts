@@ -12,6 +12,10 @@ export class LoginComponent {
 
   constructor(private loginService: LoginService){}
 
+  togglePasswordVisibility(): void {
+    this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
+  }
+
   userLogin(data:any){
     this.loginService.login(data);
   }

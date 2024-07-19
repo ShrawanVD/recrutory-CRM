@@ -65,4 +65,9 @@ export class CilentService {
     return this.http.put(`https://recrutory-crm-backend.onrender.com/api/client/clients/${clientId}/processes/${processId}/candidates/${candidateId}`,data);
   } 
 
+  // get for selected candidate sheet
+  getSelectCandidate(){
+    return this.http.get('https://recrutory-crm-backend.onrender.com/api/client/selected-candidates');
+  }
+
 }

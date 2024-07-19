@@ -31,7 +31,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
 import { LoginComponent } from './pages/login/login.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { AfterLoginComponent } from './components/after-login/after-login.component';
-import { SelectedSheetComponent } from './pages/selected/selected-sheet/selected-sheet.component';
 import { ClientSheetComponent } from './pages/client/client-sheet/client-sheet.component';
 import { ClientSheetFormComponent } from './pages/client/client-sheet-form/client-sheet-form.component';
 import { MasterSheetComponent } from './pages/master/master-sheet/master-sheet.component';
@@ -42,7 +41,6 @@ import { FilteredSheetComponent } from './pages/client/filtered-sheet/filtered-s
 import { FilteredSheetFormComponent } from './pages/client/filtered-sheet-form/filtered-sheet-form.component';
 import { CilentPocComponent } from './pages/client/client-sheet/cilent-poc/cilent-poc.component';
 import { ProcessPocComponent } from './pages/client/process-sheet/process-poc/process-poc.component';
-import { SelectedProcessSheetComponent } from './pages/selected/selected-process-sheet/selected-process-sheet.component';
 import { FinalSelectedSheetComponent } from './pages/selected/final-selected-sheet/final-selected-sheet.component';
 import { InterestedSheetComponent } from './pages/client/interested-sheet/interested-sheet.component';
 import { TodaysTaskComponent } from './pages/recruiter/todays-task/todays-task.component';
@@ -57,7 +55,6 @@ import { TodaysTaskComponent } from './pages/recruiter/todays-task/todays-task.c
     AfterLoginComponent,
     MasterSheetComponent,
     MasterSheetFormComponent,
-    SelectedSheetComponent,
     ClientSheetComponent,
     ClientSheetFormComponent,
     MasterSheetComponent,
@@ -68,7 +65,6 @@ import { TodaysTaskComponent } from './pages/recruiter/todays-task/todays-task.c
     FilteredSheetFormComponent,
     CilentPocComponent,
     ProcessPocComponent,
-    SelectedProcessSheetComponent,
     FinalSelectedSheetComponent,
     InterestedSheetComponent,
     TodaysTaskComponent,

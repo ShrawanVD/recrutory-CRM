@@ -95,9 +95,6 @@ export class ClientSheetComponent implements OnInit {
       next: (val) => {
         if (val) {
           this.getCilents();
-          this._snackBar.open('Client Updated Successfully', 'Close', {
-            duration: 4000,
-          });
         }
       },
     });

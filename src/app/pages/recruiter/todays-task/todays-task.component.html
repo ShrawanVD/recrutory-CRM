@@ -5,13 +5,17 @@
     </div>
     <div class="card-body">
       <div class="filterSearchBar">
+        <button style="background: #02465b; color: white; padding: 10px; margin-bottom: 1rem;" mat-raised-button
+        (click)="openFilterDiv()">
+        FILTERS
+      </button>
         <!-- <button style="background: #02465b; color: white; padding: 10px; margin-bottom: 1rem;" mat-raised-button
             (click)="openAddEditEmpForm()">
             ADD INTERESTED CANDIDATE
           </button> -->
       </div>
   
-      <div class="filters">
+      <div class="filters" *ngIf="openFilters">
         <mat-form-field appearance="fill" class="filterDropDown">
           <mat-label>Languages</mat-label>
           <mat-select [(value)]="selectedLanguage" (selectionChange)="applyDropdownFilter($event.value, 'language')">
@@ -87,19 +91,6 @@
   
       <div class="table-container" style="overflow-x: auto; overflow-y: auto; max-height: 450px">
         <table mat-table [dataSource]="dataSource" matSort>
-  
-          <ng-container matColumnDef="select">
-            <th mat-header-cell *matHeaderCellDef  style="background: #02465b;color: white; min-width: fit-content">
-              <mat-checkbox
-                (change)="$event ? masterToggle() : null"
-                [checked]="isAllSelected()"
-                [indeterminate]="isSomeSelected()">
-              </mat-checkbox>
-            </th>
-            <td mat-cell *matCellDef="let row">
-              <mat-checkbox (change)="toggleSelection(row._id)" [checked]="selectedRows.includes(row._id)"></mat-checkbox>
-            </td>
-          </ng-container>
   
           <ng-container matColumnDef="SrNo">
             <th mat-header-cell *matHeaderCellDef mat-sort-header
@@ -282,18 +273,30 @@
             </th>
             <td mat-cell *matCellDef="let lead">{{ lead.source }}</td>
           </ng-container>
+
+          <ng-container matColumnDef="assignedProcess">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+              Process Name
+            </th>
+            <td mat-cell *matCellDef="let lead">{{ lead.assignedProcess }}</td>
+          </ng-container>
   
           <ng-container matColumnDef="interested">
             <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
               Interested
             </th>
             <td mat-cell *matCellDef="let lead">
-              <mat-icon [ngClass]="{'selected': lead.interested === true}" (click)="updateInterested(lead, true)"
-                style="cursor: pointer; color:green;">
+              <mat-icon 
+                [ngClass]="{'selected': lead.interested === 'interested'}"
+                (click)="lead.interested !== 'interested' && updateInterestedStatus(lead, 'interested')"
+                [ngStyle]="{'cursor': lead.interested === 'interested' ? 'default' : 'pointer', 'color': 'green'}"
+                [attr.disabled]="lead.interested === 'interested' ? true : null">
                 check
               </mat-icon>
-              <mat-icon [ngClass]="{'selected': lead.interested === false}" (click)="updateInterested(lead, false)"
-                style="cursor: pointer; color:red;">
+              <mat-icon 
+                [ngClass]="{'selected': lead.interested === 'not interested'}"
+                (click)="updateInterestedStatus(lead, 'not interested')"
+                [ngStyle]="{'cursor': lead.interested === 'not interested' ? 'default' : 'pointer', 'color': 'red'}">
                 close
               </mat-icon>
             </td>

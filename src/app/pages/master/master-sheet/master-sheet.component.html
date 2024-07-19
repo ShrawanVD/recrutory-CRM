@@ -14,7 +14,10 @@
     </div>
     <div class="card-body">
       <div class="filterSearchBar">
-        <button style="background: #02465b; color: white; padding: 10px" mat-raised-button (click)="openAddEditEmpForm()">
+        <button style="background: #02465b; color: white; padding: 10px" mat-raised-button (click)="openFilterDiv()">
+          FILTER
+        </button>
+        <button style="background: #02465b; color: white; margin-left: 10px; padding: 10px" mat-raised-button (click)="openAddEditEmpForm()">
           CREATE A NEW LEAD
         </button>
         <button
@@ -30,7 +33,7 @@
         </mat-form-field>
       </div>
   
-      <div class="filters">
+      <div class="filters" *ngIf="openFilters">
         <mat-form-field appearance="fill" class="filterDropDown">
           <mat-label>Languages</mat-label>
           <mat-select [(value)]="selectedLanguage" (selectionChange)="applyDropdownFilter($event.value, 'language')">

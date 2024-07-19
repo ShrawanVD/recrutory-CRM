@@ -3,15 +3,17 @@
         <div class="card">
             <h2>Login</h2>
             <form #login="ngForm" (ngSubmit)="userLogin(login.value)">
-                <input type="text" id="username" name="username"
-                placeholder="Username"
-                ngModel
-                required>
-                <input type="password" id="password"  name="password" 
-                [type]="passwordFieldType" 
-                placeholder="Password" 
-                [(ngModel)]="password" 
-                required>
+                <input type="text" id="username" name="username" placeholder="Username" ngModel required>
+                <div class="password-container">
+                    <input type="password" id="password" name="password"
+                           [type]="passwordFieldType"
+                           placeholder="Password"
+                           [(ngModel)]="password"
+                           required>
+                    <mat-icon class="password-icon" (click)="togglePasswordVisibility()">
+                        {{passwordFieldType === 'password' ? 'visibility_off' : 'visibility'}}
+                    </mat-icon>
+                </div>
                 <button type="submit">Login</button>
             </form>
         </div>

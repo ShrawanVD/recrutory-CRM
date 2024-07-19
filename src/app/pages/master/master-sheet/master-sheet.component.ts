@@ -52,6 +52,7 @@ export class MasterSheetComponent implements OnInit {
 
   assignProcesslist: any;
   selectedRows: string[] = [];
+  openFilters: boolean = false;
   displayedColumns: string[] = [
     'select',
     'SrNo',
@@ -289,19 +290,23 @@ export class MasterSheetComponent implements OnInit {
     if (payload.ids.length == 0) {
       alert("Please select the checkbox to assign process");
       this.getCuriotoryLeads();
-
     } else {
       const assignProcessAlert = window.confirm(
         `Do you want to assign these candidates to this ${assignProcess}, Please Comfirm`
       );
       if (assignProcessAlert) {
         this.leadService.addProcessMultipleCandidate(payload).subscribe({
-          next: (res) => {
-            this._snackBar.open(`Candidates are assign to ${assignProcess} process`, 'Close', {
-              duration: 4000,
-            });
+          next: (res:any) => {
+            if(res.duplicateCandidates && res.duplicateCandidates.length > 0){
+              this._snackBar.open(`Some candidates are already assign to ${assignProcess} process`, 'Close', {
+                duration: 4000,
+              });
+            }else{
+              this._snackBar.open(`Candidates are assign to ${assignProcess} process`, 'Close', {
+                duration: 4000,
+              });
+            }
             this.getCuriotoryLeads();
-
           },
           error: (err) => {
             console.log("API not working", err);
@@ -357,6 +362,11 @@ export class MasterSheetComponent implements OnInit {
       },
       error: console.log,
     });
+  }
+
+  // open filter div
+  openFilterDiv(){
+    this.openFilters = !this.openFilters;
   }
 
   applyFilter(event: Event) {

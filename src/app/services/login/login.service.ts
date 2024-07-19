@@ -70,4 +70,9 @@ export class LoginService {
     return this.http.get('https://recrutory-crm-backend.onrender.com/api/assigned-candidates?recruiterId=66868b4a82d622656abd3873');
   }
 
+  // update status of interested or not interested
+  updateInterested(data: any){
+    return this.http.put('https://recrutory-crm-backend.onrender.com/api/update-status',data)
+  }
+
 }

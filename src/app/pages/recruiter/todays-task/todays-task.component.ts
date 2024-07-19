@@ -19,9 +19,9 @@ export class TodaysTaskComponent {
   recruiters: any = {};
   updatedInterestedCandidate: any;
   selectedRows: string[] = [];
-
+  openFilters: boolean = false;
+  
   displayedColumns: string[] = [
-    'select',
     'SrNo',
     'name',
     'email',
@@ -47,10 +47,11 @@ export class TodaysTaskComponent {
     'company',
     'voiceNonVoice',
     'source',
+    'assignedProcess',
     'interested',
     'action',
   ];
- 
+
   dataSource!: MatTableDataSource<any>;
 
   filterValues: any = {};
@@ -84,7 +85,6 @@ export class TodaysTaskComponent {
     private clientService: CilentService,
     private _snackBar: MatSnackBar,
     private router: Router,
-    private route: ActivatedRoute
   ) { }
   // for creating lead
   openAddEditEmpForm() {
@@ -105,7 +105,6 @@ export class TodaysTaskComponent {
   getCandidatesByRecruiterId() {
     this.loginService.getCandidatByRecruiterId().subscribe({
       next: (res: any) => {
-        console.log(res);
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.filterPredicate = this.createFilter();
         this.dataSource.sort = this.sort;
@@ -209,10 +208,39 @@ export class TodaysTaskComponent {
   }
 
 
-  updateInterested(lead: any, status: boolean): void {
-    lead.interested = status;
-    // this.clientService.updateLead(lead).subscribe();
+  updateInterestedStatus(lead: any, status: any): void {
+    const payload = {
+      clientId: lead.clientId,
+      clientProcessId: lead.clientProcessId,
+      candidateId: lead._id,
+      interestedStatus: status
+    };
+    const comfirminterested = window.confirm(`Do you want to assign this candidate as ${status} status,you cannot change it further Please Comfirm`)
+    if (comfirminterested) {
+      this.loginService.updateInterested(payload).subscribe({
+        next: (res) => {
+          this._snackBar.open(`Candidate is assigned as ${status} status Successfully`, 'Close', {
+            duration: 4000,
+          });
+          this.getCandidatesByRecruiterId();
+        },
+        error: (err) => {
+          if (status === 'not interested') {
+            alert("Before Changing the the status to not interested. please fill the feedback and remark");
+          }
+          else{
+            console.log(err);
+          }
+        }
+      })
+
+    }
   }
+    // open filter div
+    openFilterDiv(){
+      this.openFilters = !this.openFilters;
+    }
+  
 
   getRole(): any {
     return localStorage.getItem('role');

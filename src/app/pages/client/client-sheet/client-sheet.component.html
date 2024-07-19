@@ -25,10 +25,10 @@
         </ng-container>
 
         <ng-container matColumnDef="clientName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;" >
             Client Name
           </th>
-          <td mat-cell *matCellDef="let lead" style="color: darkblue;cursor: pointer;" (click)="openProcess(lead._id)">
+          <td mat-cell *matCellDef="let lead" style="color: darkblue;cursor: pointer;" (click)="openProcess(lead._id)" class="Name" >
             {{ lead.clientName }}</td>
         </ng-container>
 

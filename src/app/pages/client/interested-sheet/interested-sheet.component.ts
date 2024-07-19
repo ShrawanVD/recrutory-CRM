@@ -20,7 +20,7 @@ export class InterestedSheetComponent {
   recruiters: any = {};
   updatedInterestedCandidate: any;
   selectedRows: string[] = [];
-
+  openFilters: boolean = false;
   displayedColumns1: string[] = [
     'SrNo',
     'name',
@@ -48,7 +48,7 @@ export class InterestedSheetComponent {
     'voiceNonVoice',
     'source',
     'assignedRecruiter',
-    'round',
+    'status',
     // 'action'
   ];
 
@@ -107,7 +107,9 @@ export class InterestedSheetComponent {
   getCuriotoryLeads() {
     this.clientService.getProcessById(this.clientId, this.processId).subscribe({
       next: (res: any) => {
-        this.dataSource = new MatTableDataSource(res.interestedCandidates);
+        const filteredCandidates = res.interestedCandidates.filter((candidate: any) => candidate.interested === "interested");
+      
+        this.dataSource = new MatTableDataSource(filteredCandidates);
         this.dataSource.filterPredicate = this.createFilter();
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -166,9 +168,25 @@ export class InterestedSheetComponent {
     lead.interested = status;
     // this.clientService.updateLead(lead).subscribe();
   }
+    // open filter div
+    openFilterDiv(){
+      this.openFilters = !this.openFilters;
+    }
 
   updateRound(lead: any): void {
-    // this.clientService.updateLead(lead).subscribe();
+    this.clientService.updateFilteredCandidate(this.clientId,this.processId,lead._id,lead).subscribe({
+      next: (val) => {
+        this._snackBar.open('Candidate status updated successfully', 'Close', {
+          duration: 3000,
+        });
+      },
+      error: (err) => {
+        console.error(err);
+        this._snackBar.open('Failed to update status candidate data', 'Close', {
+          duration: 3000,
+        });
+      },
+    });
   }
 
   // open filter component

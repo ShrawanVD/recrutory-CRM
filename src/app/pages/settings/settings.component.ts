@@ -13,6 +13,12 @@ export class SettingsComponent implements OnInit {
   ngOnInit(): void {
   }
 
+
+
+  employeeName: string = 'John Doe';
+  employeeEmail: string = 'john.doe@example.com';
+  employeeRole: string = 'Admin';
+
   logout(){
     localStorage.removeItem("token");
     this.router.navigate(['/login'])
