@@ -18,9 +18,20 @@
             ADD INTERESTED CANDIDATE
           </button> -->
       </div>
-  
       <div class="filters" *ngIf="openFilters">
+
         <mat-form-field appearance="fill" class="filterDropDown">
+          <mat-label>Select Date</mat-label>
+          <input matInput placeholder="22-July-2024" [matDatepicker]="picker" [formControl]="dateControl" (dateChange)="applyDateFilter($event)">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker>
+            <mat-datepicker-actions>
+              <button mat-button matDatepickerCancel>Cancel</button>
+              <button mat-raised-button matDatepickerApply>Apply</button>
+            </mat-datepicker-actions>
+          </mat-datepicker>
+        </mat-form-field>
+          <mat-form-field appearance="fill" class="filterDropDown">
           <mat-label>Languages</mat-label>
           <mat-select [(value)]="selectedLanguage" (selectionChange)="applyDropdownFilter($event.value, 'language')">
             <mat-option [value]="null">None</mat-option>

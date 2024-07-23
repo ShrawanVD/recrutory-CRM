@@ -15,6 +15,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
@@ -44,6 +45,9 @@ import { ProcessPocComponent } from './pages/client/process-sheet/process-poc/pr
 import { FinalSelectedSheetComponent } from './pages/selected/final-selected-sheet/final-selected-sheet.component';
 import { InterestedSheetComponent } from './pages/client/interested-sheet/interested-sheet.component';
 import { TodaysTaskComponent } from './pages/recruiter/todays-task/todays-task.component';
+
+import { MatNativeDateModule } from '@angular/material/core';
+
 
 @NgModule({
   declarations: [
@@ -90,7 +94,9 @@ import { TodaysTaskComponent } from './pages/recruiter/todays-task/todays-task.c
     AngularEditorModule,
     HttpClientModule,
     MatExpansionModule,
-    MatCheckboxModule
+    MatDatepickerModule,
+    MatCheckboxModule,
+    MatNativeDateModule
   ],
   providers: [],
   bootstrap: [AppComponent],
