@@ -72,7 +72,10 @@
     min-width: 47%;
   
   }
-  
+  .adjustThree{
+    min-width: 29%;
+  }
+
   .full{
     width: 73.5vw;
     margin: 1rem;

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LeadsService } from '../../../services/leads/leads.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -30,9 +30,9 @@ export class MasterSheetFormComponent implements OnInit {
         name: [data?.name || '', Validators.required],
         email: [data?.email || '', [Validators.required, Validators.email]],
         phone: [data?.phone || '', Validators.required],
-        lType: [data?.lType || '', Validators.required],
-        language: [data?.language || [], Validators.required],
-        proficiencyLevel: [data?.proficiencyLevel || '', Validators.required],
+        // lType: [data?.lType || '', Validators.required],
+        language: this._formBuilder.array([this.createLanguageGroup()]),
+        // proficiencyLevel: [data?.proficiencyLevel || '', Validators.required],
         jbStatus: [data?.jbStatus || '', Validators.required],
         qualification: [data?.qualification || '', Validators.required],
         industry: [data?.industry || '', Validators.required],
@@ -77,9 +77,27 @@ export class MasterSheetFormComponent implements OnInit {
         this.filteredLanguages = [];
       }
     }
+
+    // for taking lang type, lang, proficiency 
+    createLanguageGroup(): FormGroup {
+      return this._formBuilder.group({
+        lType: ['', Validators.required],
+        lang: ['', Validators.required],
+        proficiencyLevel: ['', Validators.required]
+      });
+    }
+    
+    get languages(): FormArray {
+      return this.leadForm.get('language') as FormArray;
+    }
+    
+    addLanguage() {
+      this.languages.push(this.createLanguageGroup());
+    }
   
     // Add and update function
     submitLead() {
+      console.log(this.leadForm.value);
       // Check if the form is valid
       if (this.leadForm.valid) {
         // Update existing lead

@@ -4,6 +4,9 @@
   </div>
   <div class="card-body">
     <div class="filterSearchBar">
+      <button style="background: #02465b; color: white; padding: 10px;margin-right: 10px;" mat-raised-button (click)="openFilterDiv()">
+        FILTER
+      </button>
       <button style="background: #02465b; color: white; padding: 10px;margin-right: 10px; margin-bottom: 1rem;" mat-raised-button
         (click)="openAddEditEmpForm()">
         CREATE A NEW PROCESS
@@ -12,6 +15,39 @@
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyFilter($event)" #input />
       </mat-form-field>
+    </div>
+
+    <div class="filters" *ngIf="openFilters">
+      <mat-form-field appearance="fill" class="filterDropDown">
+        <mat-label>Languages</mat-label>
+        <mat-select [(value)]="selectedLanguage" (selectionChange)="applyDropdownFilter($event.value, 'clientProcessLanguage')">
+          <mat-option [value]="null">None</mat-option>
+          <mat-option *ngFor="let language of languages" [value]="language">{{ language }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="filterDropDown">
+        <mat-label>Location</mat-label>
+        <mat-select [(value)]="selectedlocation" (selectionChange)="applyDropdownFilter($event.value, 'clientProcessLocation')">
+          <mat-option [value]="null">None</mat-option>
+          <mat-option *ngFor="let location of locations" [value]="location">{{ location }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="filterDropDown">
+        <mat-label>Package (in Lakhs)</mat-label>
+        <mat-select [(value)]="selectedPackage"  (selectionChange)="applyDropdownFilter($event.value, 'clientProcessPckg')">
+          <mat-option [value]="null">None</mat-option>
+          <mat-option *ngFor="let package of packages" [value]="package">{{ package }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="filterDropDown">
+        <mat-label>Job Description</mat-label>
+        <mat-select [(value)]="selectedJd" (selectionChange)="applyDropdownFilter($event.value, 'clientProcessJobDesc')">
+          <mat-option [value]="null">None</mat-option>
+          <mat-option *ngFor="let jobDesc of jobDescs" [value]="jobDesc">{{ jobDesc
+            }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button style="background: #02465b;color: white;" (click)="clearFilters()" class="filterDropDown">Clear Filters</button>
     </div>
 
 

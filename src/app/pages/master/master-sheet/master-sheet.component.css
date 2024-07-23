@@ -18,13 +18,25 @@ table {
   border-spacing: 0px;
 }
 
+/* .selectHeader{
+  height: 4.4rem;
+  border: 1px solid black;
+  position:sticky;
+  top: 0px;
+  z-index: 1;
+}
+.selectCell{
+  height: 6rem;
+  border: 1px solid black;
+} */
+
 th {
   position: sticky;
   top: 0px;
   font-weight: 500;
   background: #02465b; /* Ensures the background color of sticky header */
   color: white; /* Ensures the text color of sticky header */
-  z-index: 1; /* Ensures the header stays above the table rows */
+  z-index: 2; /* Ensures the header stays above the table rows */
 }
 
 th,
@@ -129,4 +141,9 @@ th:nth-child(2),
 td:nth-child(2) {
   min-width: 40px;
   width: 40px;
+}
+th:nth-child(6),
+td:nth-child(6) {
+  min-width: 220px;
+  width: 220px;
 }

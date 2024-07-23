@@ -17,7 +17,7 @@ import { CilentService } from 'src/app/services/cilent/cilent.service';
 })
 export class ProcessSheetComponent implements OnInit {
   clientId: string | null = null;
-
+  openFilters: boolean = false;
   displayedColumns: string[] = [
     'SrNo',
     'clientProcessName',
@@ -38,24 +38,15 @@ export class ProcessSheetComponent implements OnInit {
   filterValues: any = {};
 
   selectedLanguage: string | null = null;
-  selectedproficiencyLevel: string | null = null;
-  selectedJobStatus: string | null = null;
-  selectedQualification: string | null = null;
-  selectedmode: string | null = null;
-  selectedfeedback: string | null = null;
-  selectednoticePeriod: string | null = null;
-  selectedsource: string | null = null;
-  selectedexp: string | null = null;
+  selectedlocation: string | null = null;
+  selectedPackage: string | null = null;
+  selectedJd: string | null = null;
 
-  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Chinese', 'Nepalese']; // replace with actual statuses
-  proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
-  jobStatuses = ['Working', 'Job Seeking', 'Teacher'];
-  qualifications = ['SSC', 'HSC', 'Under Graduate', 'Post Graduate', 'PHD'];
-  modes = ['WFH', 'WHO', 'Hybrid'];
-  feedbacks = ['Not Intrested - CTC Not Matching', 'Not Intrested - Relocation Issue', 'Not Intrested - Notice Period', 'Not Intrested - Cooling Down Period', 'Not Intrested - Call Not Recieved', 'Not Intrested - Under Qualified"'];
-  noticePeriods = ['15', '30', '60', '90', '90+'];
-  sources = ['Linkedin', 'Naukri', 'Meta', 'Google', 'Instagram', 'Website', 'App', 'Email', 'Reference'];
-  exps = ['0-1', '1-2', '2-4', '4-8', '8-12', '12+'];
+  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japenese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Chinese', 'Nepalese']; // replace with actual statuses
+  locations: any;
+  // 'Pune', 'New York', 'Mumbai'
+  packages = ['1', '2', '3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'];
+  jobDescs: any;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -91,9 +82,21 @@ export class ProcessSheetComponent implements OnInit {
         this.dataSource.filterPredicate = this.createFilter();
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
+        this.locations = this.getUniqueLocations(res.clientProcess);
+        this.jobDescs = this.getUniqueJobdescr(res.clientProcess);
       },
       error: console.log,
     });
+  }
+
+  getUniqueLocations(clientProcesses: any[]): string[] {
+    const allLocations = clientProcesses.map(process => process.clientProcessLocation);
+    return Array.from(new Set(allLocations));
+  }
+
+  getUniqueJobdescr(clientProcesses: any[]): string[] {
+    const alljd = clientProcesses.map(process => process.clientProcessJobDesc);
+    return Array.from(new Set(alljd));
   }
 
   openInterested(processId: any) {
@@ -113,9 +116,23 @@ export class ProcessSheetComponent implements OnInit {
     });
   }
 
+    // open filter div
+    openFilterDiv() {
+      this.openFilters = !this.openFilters;
+    }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.filterValues['global'] = filterValue;
+    this.dataSource.filter = JSON.stringify(this.filterValues);
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  applyDropdownFilter(value: string, column: string) {
+    this.filterValues[column] = value;
     this.dataSource.filter = JSON.stringify(this.filterValues);
 
     if (this.dataSource.paginator) {
@@ -142,6 +159,15 @@ export class ProcessSheetComponent implements OnInit {
       return isMatch;
     };
     return filterFunction;
+  }
+
+  clearFilters() {
+    this.filterValues = {};
+    this.dataSource.filter = "";
+    this.selectedLanguage = null;
+    this.selectedlocation = null;
+    this.selectedPackage = null;
+    this.selectedJd = null;
   }
 
   // update client

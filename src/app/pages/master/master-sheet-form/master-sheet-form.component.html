@@ -36,14 +36,16 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
           <input matInput placeholder="98XXXXXXXX.." required formControlName="phone" />
         </mat-form-field>
 
-        <!-- languages type -->
+        <!-- jobStatus -->
         <mat-form-field appearance="outline" class="input">
-          <mat-label>Language Type</mat-label>
-          <mat-select placeholder="Foreign, Regional.." required formControlName="lType">
-            <mat-option value="Foreign">Foreign</mat-option>
-            <mat-option value="Regional">Regional</mat-option>
+          <mat-label>Job Status</mat-label>
+          <mat-select formControlName="jbStatus">
+            <mat-option value="Working">Working</mat-option>
+            <mat-option value="Job Seeking">Job Seeking</mat-option>
+            <mat-option value="Teacher">Teacher</mat-option>
           </mat-select>
         </mat-form-field>
+
       </div>
 
       <!-- <mat-form-field appearance="outline" class="input">
@@ -67,48 +69,56 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         </mat-form-field> -->
 
 
-      <!-- languages -->
-      <mat-form-field appearance="outline" class="full">
-        <mat-label>Languages</mat-label>
-        <mat-select formControlName="language" multiple>
-          <mat-option value="French">French</mat-option>
-          <mat-option value="German">German</mat-option>
-          <mat-option value="Spanish">Spanish</mat-option>
-          <mat-option value="English">English</mat-option>
-          <mat-option value="Arabic">Arabic</mat-option>
-          <mat-option value="Japanese">Japanese</mat-option>
-          <mat-option value="Italian">Italian</mat-option>
-          <mat-option value="Bahasa">Bahasa</mat-option>
-          <mat-option value="Vietnamese">Vietnamese</mat-option>
-          <mat-option value="Chinese">Chinese</mat-option>
-          <mat-option value="Nepalese">Nepalese</mat-option>
-        </mat-select>
-      </mat-form-field>
 
-      <div class="row">
-        <!-- proficiencyLevel -->
-        <mat-form-field appearance="outline" class="input">
-          <mat-label>Proficiency</mat-label>
-          <mat-select formControlName="proficiencyLevel">
-            <mat-option value="A1">A1</mat-option>
-            <mat-option value="A2">A2</mat-option>
-            <mat-option value="B1">B1</mat-option>
-            <mat-option value="B2">B2</mat-option>
-            <mat-option value="C1">C1</mat-option>
-            <mat-option value="C2">C2</mat-option>
-          </mat-select>
-        </mat-form-field>
 
-        <!-- jobStatus -->
-        <mat-form-field appearance="outline" class="input">
-          <mat-label>Job Status</mat-label>
-          <mat-select formControlName="jbStatus">
-            <mat-option value="Working">Working</mat-option>
-            <mat-option value="Job Seeking">Job Seeking</mat-option>
-            <mat-option value="Teacher">Teacher</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+        <div formArrayName="language">
+          <div *ngFor="let languageGroup of languages.controls; let i = index" [formGroupName]="i">
+            <div class="row">
+              <!-- Language Type -->
+              <mat-form-field appearance="outline" class="adjustThree">
+                <mat-label>Language Type</mat-label>
+                <mat-select placeholder="Foreign, Regional.." formControlName="lType">
+                  <mat-option value="Foreign">Foreign</mat-option>
+                  <mat-option value="Regional">Regional</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Languages -->
+              <mat-form-field appearance="outline" class="adjustThree">
+                <mat-label>Languages</mat-label>
+                <mat-select formControlName="lang">
+                  <mat-option value="French">French</mat-option>
+                  <mat-option value="German">German</mat-option>
+                  <mat-option value="Spanish">Spanish</mat-option>
+                  <mat-option value="English">English</mat-option>
+                  <mat-option value="Arabic">Arabic</mat-option>
+                  <mat-option value="Japanese">Japanese</mat-option>
+                  <mat-option value="Italian">Italian</mat-option>
+                  <mat-option value="Bahasa">Bahasa</mat-option>
+                  <mat-option value="Vietnamese">Vietnamese</mat-option>
+                  <mat-option value="Chinese">Chinese</mat-option>
+                  <mat-option value="Nepalese">Nepalese</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Proficiency Level -->
+              <mat-form-field appearance="outline" class="adjustThree">
+                <mat-label>Proficiency</mat-label>
+                <mat-select formControlName="proficiencyLevel">
+                  <mat-option value="A1">A1</mat-option>
+                  <mat-option value="A2">A2</mat-option>
+                  <mat-option value="B1">B1</mat-option>
+                  <mat-option value="B2">B2</mat-option>
+                  <mat-option value="C1">C1</mat-option>
+                  <mat-option value="C2">C2</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <button type="button" mat-raised-button color="primary" (click)="addLanguage()">+</button>
+            </div>
+          </div>
+        </div>
+        
 
       <div class="row">
         <!-- qualification -->

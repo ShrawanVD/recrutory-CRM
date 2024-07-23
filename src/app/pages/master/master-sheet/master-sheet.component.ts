@@ -10,14 +10,14 @@ import { LoginService } from '../../../services/login/login.service';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { SelectionModel } from '@angular/cdk/collections';
+import * as FileSaver from 'file-saver';
 
 interface Lead {
+  _id: any,
   name: string;
   email: string;
   phone: string;
-  lType: string;
   language: Array<string>;
-  proficiencyLevel: string;
   jbStatus: string;
   qualification: string;
   industry: string;
@@ -55,9 +55,7 @@ export class MasterSheetComponent implements OnInit {
     'name',
     'email',
     'phone',
-    'lType',
     'language',
-    'proficiencyLevel',
     'jbStatus',
     'qualification',
     'industry',
@@ -115,24 +113,21 @@ export class MasterSheetComponent implements OnInit {
   ) { }
 
   exportExcel() {
-    // Get selected rows or all rows if no rows are selected
-    const selectedLeads = this.selectedRows.length > 0 ?
-      this.dataSource.data.filter(row => this.selectedRows.includes(row._id)) :
-      this.dataSource.data;
-
+    const selectedLeads = this.selection.selected.length > 0 ?
+    this.selection.selected :
+    this.dataSource.filteredData;
+  
     if (selectedLeads.length === 0) {
       alert('No rows available for export');
       return;
     }
-
+  
     const formattedData = selectedLeads.map((lead) => {
       return {
         'Name of Candidate': lead.name,
         'Email ID': lead.email,
         'Contact Number': lead.phone,
-        'Language Type': lead.lType,
         Language: lead.language.join(', '), // Join array elements into a string
-        'Proficiency Level': lead.proficiencyLevel,
         'Job Status': lead.jbStatus,
         'Educational Qualification': lead.qualification,
         Industry: lead.industry,
@@ -155,9 +150,9 @@ export class MasterSheetComponent implements OnInit {
         Source: lead.source,
       };
     });
-
+  
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(formattedData);
-
+  
     // Make header bold
     const wscols = [
       { wch: 20 },
@@ -185,12 +180,12 @@ export class MasterSheetComponent implements OnInit {
       { wch: 20 },
     ];
     ws['!cols'] = wscols;
-
+  
     const wsrows = [
       { hpt: 12, hpx: 16 }, // row height
     ];
     ws['!rows'] = wsrows;
-
+  
     // Apply bold style to the header row
     const headerCells = Object.keys(formattedData[0]);
     headerCells.forEach((key, index) => {
@@ -198,20 +193,17 @@ export class MasterSheetComponent implements OnInit {
       if (!ws[cellAddress]) ws[cellAddress] = { t: 's', v: key };
       ws[cellAddress].s = { font: { bold: true } };
     });
-
+  
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Leads');
-
+  
     const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     this.saveAsExcelFile(wbout, 'leads');
   }
 
   saveAsExcelFile(buffer: any, fileName: string): void {
     const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
-    saveAs(
-      data,
-      fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION
-    );
+    FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
   }
 
   importExcel(event: any) {
@@ -279,52 +271,50 @@ export class MasterSheetComponent implements OnInit {
 
   // updating multiple  process at a time
   updateAssignProcess(assignProcess: string): void {
+    if (this.selectedRows.length === 0) {
+      alert("Please select the checkbox to assign process");
+      return;
+    }
+
     const payload = {
       ids: this.selectedRows,
       newAssignProcess: assignProcess
     };
-    if (payload.ids.length == 0) {
-      alert("Please select the checkbox to assign process");
-      this.getCuriotoryLeads();
-    } else {
-      const assignProcessAlert = window.confirm(
-        `Do you want to assign these candidates to this ${assignProcess}, Please Comfirm`
-      );
-      if (assignProcessAlert) {
-        this.leadService.addProcessMultipleCandidate(payload).subscribe({
-          next: (res:any) => {
-            if(res.duplicateCandidates && res.duplicateCandidates.length > 0){
-              this._snackBar.open(`Some candidates are already assign to ${assignProcess} process`, 'Close', {
-                duration: 4000,
-              });
-            }else{
-              this._snackBar.open(`Candidates are assign to ${assignProcess} process`, 'Close', {
-                duration: 4000,
-              });
-            }
-            this.getCuriotoryLeads();
-          },
-          error: (err) => {
-            console.log("API not working", err);
+
+    const assignProcessAlert = window.confirm(
+      `Do you want to assign these candidates to this ${assignProcess}, Please Confirm`
+    );
+
+    if (assignProcessAlert) {
+      this.leadService.addProcessMultipleCandidate(payload).subscribe({
+        next: (res: any) => {
+          if (res.duplicateCandidates && res.duplicateCandidates.length > 0) {
+            this._snackBar.open(`Some candidates are already assigned to ${assignProcess} process`, 'Close', {
+              duration: 4000,
+            });
+          } else {
+            this._snackBar.open(`Candidates are assigned to ${assignProcess} process`, 'Close', {
+              duration: 4000,
+            });
           }
-        })
-      }
+          this.getCuriotoryLeads();
+        },
+        error: (err) => {
+          console.log("API not working", err);
+        }
+      });
     }
   }
 
   // for selecting the multiple option  
 
-  toggleSelection(rowId: string): void {
-    const index = this.selectedRows.indexOf(rowId);
-    if (index === -1) {
-      this.selectedRows.push(rowId);
-    } else {
-      this.selectedRows.splice(index, 1);
-    }
+  toggleSelection(rowId: any): void {
+    this.selection.toggle(rowId);
+    this.updateSelectedRows();
   }
 
   isAllSelected() {
-    const numSelected = this.selectedRows.length;
+    const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
@@ -334,11 +324,14 @@ export class MasterSheetComponent implements OnInit {
   }
 
   masterToggle() {
-    if (this.isAllSelected()) {
-      this.selectedRows = [];
-    } else {
-      this.selectedRows = this.dataSource.data.map(row => row._id);
-    }
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.filteredData.forEach(row => this.selection.select(row));
+    this.updateSelectedRows();
+  }
+
+  updateSelectedRows() {
+    this.selectedRows = this.selection.selected.map(row => row._id);
   }
 
   // changeStatusToInterested() {
@@ -361,15 +354,13 @@ export class MasterSheetComponent implements OnInit {
   }
 
   // open filter div
-  openFilterDiv(){
+  openFilterDiv() {
     this.openFilters = !this.openFilters;
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.filterValues['global'] = filterValue;
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
