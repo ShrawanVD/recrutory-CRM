@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
+// import {provideNativeDateAdapter} from '@angular/material/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -8,12 +9,22 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CilentService } from 'src/app/services/cilent/cilent.service';
 import { FilteredSheetFormComponent } from '../../client/filtered-sheet-form/filtered-sheet-form.component';
 import { LoginService } from 'src/app/services/login/login.service';
+import { FormControl } from '@angular/forms';
+
+
 @Component({
   selector: 'app-todays-task',
   templateUrl: './todays-task.component.html',
   styleUrls: ['./todays-task.component.scss']
 })
+
 export class TodaysTaskComponent {
+
+
+// FormControl for the date picker
+dateControl = new FormControl();
+
+
   processId: string | null = null;
   clientId: string | null = null;
   recruiters: any = {};
@@ -86,6 +97,7 @@ export class TodaysTaskComponent {
     private _snackBar: MatSnackBar,
     private router: Router,
   ) { }
+
   // for creating lead
   openAddEditEmpForm() {
     const dialogRef = this._dialog.open(FilteredSheetFormComponent, { disableClose: true });
@@ -112,6 +124,30 @@ export class TodaysTaskComponent {
       },
       error: console.log,
     });
+  }
+
+  applyDateFilter(event: any) {
+    const selectedDate = event.value;
+    if (selectedDate) {
+      const formattedDate = this.formatDate(selectedDate);
+      this.filterValues['assignedRecruiterDate'] = formattedDate;
+      this.dataSource.filter = JSON.stringify(this.filterValues);
+      if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
+      }
+    }
+  }
+
+  formatDate(date: Date): string {
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
   }
 
   // code for handling select 
@@ -195,6 +231,9 @@ export class TodaysTaskComponent {
     this.selectednoticePeriod = null;
     this.selectedsource = null;
     this.selectedexp = null;
+
+    // Clear the date filter
+    this.dateControl.reset();
   }
 
   // open edit form for updating candidate information
@@ -216,7 +255,6 @@ export class TodaysTaskComponent {
       },
     });
   }
-
 
   updateInterestedStatus(lead: any, status: any): void {
     const payload = {
@@ -260,3 +298,5 @@ export class TodaysTaskComponent {
     return this.getRole() === 'admin';
   }
 }
+
+
