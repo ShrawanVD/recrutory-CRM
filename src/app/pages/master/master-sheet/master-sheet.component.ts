@@ -82,8 +82,8 @@ export class MasterSheetComponent implements OnInit {
   selection = new SelectionModel<Lead>(true, []);
   filterValues: any = {};
 
-  selectedLanguage: string | null = null;
-  selectedproficiencyLevel: string | null = null;
+  selectedLanguage: any ="";
+  selectedproficiencyLevel: any = "";
   selectedJobStatus: string | null = null;
   selectedQualification: string | null = null;
   selectedmode: string | null = null;
@@ -114,14 +114,14 @@ export class MasterSheetComponent implements OnInit {
 
   exportExcel() {
     const selectedLeads = this.selection.selected.length > 0 ?
-    this.selection.selected :
-    this.dataSource.filteredData;
-  
+      this.selection.selected :
+      this.dataSource.filteredData;
+
     if (selectedLeads.length === 0) {
       alert('No rows available for export');
       return;
     }
-  
+
     const formattedData = selectedLeads.map((lead) => {
       return {
         'Name of Candidate': lead.name,
@@ -150,9 +150,9 @@ export class MasterSheetComponent implements OnInit {
         Source: lead.source,
       };
     });
-  
+
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(formattedData);
-  
+
     // Make header bold
     const wscols = [
       { wch: 20 },
@@ -180,12 +180,12 @@ export class MasterSheetComponent implements OnInit {
       { wch: 20 },
     ];
     ws['!cols'] = wscols;
-  
+
     const wsrows = [
       { hpt: 12, hpx: 16 }, // row height
     ];
     ws['!rows'] = wsrows;
-  
+
     // Apply bold style to the header row
     const headerCells = Object.keys(formattedData[0]);
     headerCells.forEach((key, index) => {
@@ -193,10 +193,10 @@ export class MasterSheetComponent implements OnInit {
       if (!ws[cellAddress]) ws[cellAddress] = { t: 's', v: key };
       ws[cellAddress].s = { font: { bold: true } };
     });
-  
+
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Leads');
-  
+
     const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     this.saveAsExcelFile(wbout, 'leads');
   }
@@ -255,6 +255,7 @@ export class MasterSheetComponent implements OnInit {
   ngOnInit(): void {
     this.getCuriotoryLeads();
     this.getAllProcessList();
+    this.clearFilters();
   }
 
   // getting the list of all process
@@ -358,6 +359,43 @@ export class MasterSheetComponent implements OnInit {
     this.openFilters = !this.openFilters;
   }
 
+  filterLang(value: any){
+    this.selectedLanguage = value;
+    this.filterLangProf();
+  }
+
+  filterProfi(value: any){
+    this.selectedproficiencyLevel = value;
+    this.filterLangProf();
+  }
+
+  // apply filter for lang and proficiency
+  filterLangProf() {
+    this.leadService.langFilter(this.selectedLanguage, this.selectedproficiencyLevel).subscribe({
+      next: (res: any) => {
+        let filteredData = res;
+  
+        // Apply existing local filters to the data received from the API
+        Object.keys(this.filterValues).forEach(key => {
+          if (this.filterValues[key]) {
+            filteredData = filteredData.filter((item: any) => 
+              item[key] && item[key].toString().toLowerCase().includes(this.filterValues[key].toLowerCase())
+            );
+          }
+        });
+  
+        this.dataSource = new MatTableDataSource(filteredData);
+        this.dataSource.filterPredicate = this.createFilter();
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+  
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -368,10 +406,16 @@ export class MasterSheetComponent implements OnInit {
 
   applyDropdownFilter(value: string, column: string) {
     this.filterValues[column] = value;
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+  
+    // Check if language or proficiency filter is applied
+    if (column === 'language' || column === 'proficiencyLevel') {
+      this.filterLangProf();
+    } else {
+      this.dataSource.filter = JSON.stringify(this.filterValues);
+  
+      if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
+      }
     }
   }
 
@@ -379,7 +423,7 @@ export class MasterSheetComponent implements OnInit {
     let filterFunction = (data: any, filter: string): boolean => {
       let searchTerms = JSON.parse(filter);
       let isMatch = true;
-
+  
       if (searchTerms['global']) {
         isMatch = JSON.stringify(data).toLowerCase().includes(searchTerms['global']);
       } else {
@@ -390,7 +434,7 @@ export class MasterSheetComponent implements OnInit {
           }
         }
       }
-
+  
       return isMatch;
     };
     return filterFunction;
@@ -408,6 +452,8 @@ export class MasterSheetComponent implements OnInit {
     this.selectednoticePeriod = null;
     this.selectedsource = null;
     this.selectedexp = null;
+
+    this.getCuriotoryLeads();
   }
 
   // for editing lead
