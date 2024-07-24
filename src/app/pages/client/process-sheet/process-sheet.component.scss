@@ -123,3 +123,39 @@ td {
 .Name:hover{
   background-color: rgb(225, 222, 222);
 }
+
+th:nth-child(1),
+td:nth-child(1) {
+  min-width: 40px;
+  width: 40px;
+}
+th:nth-child(2),
+td:nth-child(2) {
+  min-width: 200px;
+  width: 200px;
+}
+th:nth-child(3),
+td:nth-child(3) {
+  min-width: 220px;
+  width: 220px;
+}
+th:nth-child(4),
+td:nth-child(4) {
+  min-width: 220px;
+  width: 220px;
+}
+th:nth-child(7),
+td:nth-child(7) {
+  min-width: 220px;
+  width: 220px;
+}
+th:nth-child(9),
+td:nth-child(9) {
+  min-width: 300px;
+  width: 300px;
+}
+th:nth-child(10),
+td:nth-child(10) {
+  min-width: 340px;
+  width: 340px;
+}

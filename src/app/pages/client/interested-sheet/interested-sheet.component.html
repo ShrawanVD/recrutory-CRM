@@ -1,19 +1,19 @@
 <!-- interested data div -->
 <div class="card topp" >
     <div class="card-head">
-      <h1 style="font-weight: bold">INTERESTED CANDIDATE DATA</h1>
+      <h1 style="font-weight: bold">INTERESTED CANDIDATES</h1>
     </div>
     <div class="card-body">
       <div class="filterSearchBar">
         <button style="background: #02465b; color: white;margin-right: 10px; padding: 10px; margin-bottom: 1rem;" mat-raised-button (click)="openFilterDiv()">
           FILTER
         </button>
-        <button style="background: #02465b; color: white;margin-right: 10px; padding: 10px; margin-bottom: 1rem;" mat-raised-button
+        <button style="background: #02465b; color: white;margin-right: 10px; padding: 10px; margin-bottom: 1rem;" mat-raised-button 
           (click)="openFilter()">
-          FLITERED LIST
+          FLITERED CANDIDATES
         </button>
-        <mat-form-field >
-          <mat-label>Filter</mat-label>
+        <mat-form-field>
+          <mat-label>Search</mat-label>
           <input matInput (keyup)="applyFilter($event)" #input />
         </mat-form-field>
         <!-- <button style="background: #02465b; color: white; padding: 10px; margin-bottom: 1rem;" mat-raised-button

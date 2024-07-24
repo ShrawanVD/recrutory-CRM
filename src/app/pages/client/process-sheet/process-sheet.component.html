@@ -12,12 +12,36 @@
         CREATE A NEW PROCESS
       </button>
       <mat-form-field >
-        <mat-label>Filter</mat-label>
+        <mat-label>Search</mat-label>
         <input matInput (keyup)="applyFilter($event)" #input />
       </mat-form-field>
     </div>
 
     <div class="filters" *ngIf="openFilters">
+
+      <mat-form-field appearance="fill" class="filterDropDown">
+        <mat-label>Deadline</mat-label>
+        <input matInput [matDatepicker]="deadlinePicker" (dateChange)="applyDateFilter($event.value, 'clientProcessDeadline')" />
+        <mat-datepicker-toggle matIconSuffix [for]="deadlinePicker"></mat-datepicker-toggle>
+        <mat-datepicker #deadlinePicker>
+          <mat-datepicker-actions>
+            <button mat-button matDatepickerCancel>Cancel</button>
+            <button mat-raised-button matDatepickerApply>Apply</button>
+          </mat-datepicker-actions>
+        </mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="filterDropDown">
+        <mat-label>Joining Date</mat-label>
+        <input matInput [matDatepicker]="joiningPicker" (dateChange)="applyDateFilter($event.value, 'clientProcessJoining')" />
+        <mat-datepicker-toggle matIconSuffix [for]="joiningPicker"></mat-datepicker-toggle>
+        <mat-datepicker #joiningPicker>
+          <mat-datepicker-actions>
+            <button mat-button matDatepickerCancel>Cancel</button>
+            <button mat-raised-button matDatepickerApply>Apply</button>
+          </mat-datepicker-actions>
+        </mat-datepicker>
+      </mat-form-field>
+
       <mat-form-field appearance="fill" class="filterDropDown">
         <mat-label>Languages</mat-label>
         <mat-select [(value)]="selectedLanguage" (selectionChange)="applyDropdownFilter($event.value, 'clientProcessLanguage')">
@@ -81,7 +105,7 @@
 
         <ng-container matColumnDef="clientProcessCandReq">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
-            Candidate Required
+            Candidates Required
           </th>
           <td mat-cell *matCellDef="let lead">{{ lead.clientProcessCandReq }}</td>
         </ng-container>
@@ -95,7 +119,7 @@
 
         <ng-container matColumnDef="clientProcessPckg">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
-            Package(in LPA)
+            Package (in LPA)
           </th>
           <td mat-cell *matCellDef="let lead">{{ lead.clientProcessPckg }}</td>
         </ng-container>

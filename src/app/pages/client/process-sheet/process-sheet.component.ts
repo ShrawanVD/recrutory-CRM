@@ -4,9 +4,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { LeadsService } from 'src/app/services/leads/leads.service';
-import { ProcessSheetFormComponent } from '../process-sheet-form/process-sheet-form.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
+
+import { ProcessSheetFormComponent } from '../process-sheet-form/process-sheet-form.component';
 import { ProcessPocComponent } from './process-poc/process-poc.component';
 import { CilentService } from 'src/app/services/cilent/cilent.service';
 
@@ -42,11 +43,16 @@ export class ProcessSheetComponent implements OnInit {
   selectedPackage: string | null = null;
   selectedJd: string | null = null;
 
-  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japenese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Chinese', 'Nepalese']; // replace with actual statuses
+  selectedDeadline: Date | null = null;
+  selectedJoiningDate: Date | null = null;
+
+  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Chinese', 'Nepalese'];
   locations: any;
-  // 'Pune', 'New York', 'Mumbai'
-  packages = ['1', '2', '3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'];
+  packages = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'];
   jobDescs: any;
+
+  processes: any[] = [];  // Store all processes
+  filteredProcesses: any[] = [];  // Store filtered processes
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -58,17 +64,6 @@ export class ProcessSheetComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) { }
-  // for creating lead
-  openAddEditEmpForm() {
-    const dialogRef = this._dialog.open(ProcessSheetFormComponent, { disableClose: true,data: { clientId: this.clientId} });
-    dialogRef.afterClosed().subscribe({
-      next: (val) => {
-        if (val) {
-          this.getAllProcess();
-        }
-      },
-    });
-  }
 
   ngOnInit(): void {
     this.clientId = this.route.snapshot.paramMap.get('id');
@@ -78,7 +73,9 @@ export class ProcessSheetComponent implements OnInit {
   getAllProcess() {
     this.clientService.getClientById(this.clientId).subscribe({
       next: (res: any) => {
-        this.dataSource = new MatTableDataSource(res.clientProcess);
+        this.processes = res.clientProcess;
+        this.filteredProcesses = this.processes;
+        this.dataSource = new MatTableDataSource(this.filteredProcesses);
         this.dataSource.filterPredicate = this.createFilter();
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -101,7 +98,7 @@ export class ProcessSheetComponent implements OnInit {
 
   openInterested(processId: any) {
     if (this.clientId) {
-      this.router.navigate(['process', processId], { relativeTo: this.route })
+      this.router.navigate(['process', processId], { relativeTo: this.route });
     }
   }
 
@@ -116,10 +113,9 @@ export class ProcessSheetComponent implements OnInit {
     });
   }
 
-    // open filter div
-    openFilterDiv() {
-      this.openFilters = !this.openFilters;
-    }
+  openFilterDiv() {
+    this.openFilters = !this.openFilters;
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
@@ -134,6 +130,48 @@ export class ProcessSheetComponent implements OnInit {
   applyDropdownFilter(value: string, column: string) {
     this.filterValues[column] = value;
     this.dataSource.filter = JSON.stringify(this.filterValues);
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  applyDateFilter(value: Date, field: string) {
+    if (field === 'clientProcessDeadline') {
+      this.selectedDeadline = value;
+    } else if (field === 'clientProcessJoining') {
+      this.selectedJoiningDate = value;
+    }
+
+    this.filterProcesses();
+  }
+
+  filterProcesses() {
+    this.filteredProcesses = this.processes.filter(process => {
+      let isMatch = true;
+
+      if (this.selectedDeadline) {
+        const selectedDate = moment(this.selectedDeadline);
+        const startDate = selectedDate.clone().subtract(5, 'months');
+        const processDate = moment(process.clientProcessDeadline);
+        if (!processDate.isBetween(startDate, selectedDate, undefined, '[]')) {
+          isMatch = false;
+        }
+      }
+
+      if (this.selectedJoiningDate) {
+        const selectedDate = moment(this.selectedJoiningDate);
+        const startDate = selectedDate.clone().subtract(5, 'months');
+        const processDate = moment(process.clientProcessJoining);
+        if (!processDate.isBetween(startDate, selectedDate, undefined, '[]')) {
+          isMatch = false;
+        }
+      }
+
+      return isMatch;
+    });
+
+    this.dataSource.data = this.filteredProcesses;
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
@@ -168,12 +206,31 @@ export class ProcessSheetComponent implements OnInit {
     this.selectedlocation = null;
     this.selectedPackage = null;
     this.selectedJd = null;
+
+    this.selectedDeadline = null;
+    this.selectedJoiningDate = null;
+
+    this.filterProcesses();
+
+     // Reset the form fields
+     const filterInputs = document.querySelectorAll('input, select');
+     filterInputs.forEach(input => (input as HTMLInputElement).value = '');
   }
 
-  // update client
+  openAddEditEmpForm() {
+    const dialogRef = this._dialog.open(ProcessSheetFormComponent, { disableClose: true, data: { clientId: this.clientId } });
+    dialogRef.afterClosed().subscribe({
+      next: (val) => {
+        if (val) {
+          this.getAllProcess();
+        }
+      },
+    });
+  }
+
   openEditForm(data: any) {
     const dialogRef = this._dialog.open(ProcessSheetFormComponent, {
-      data:{
+      data: {
         ...data,
         clientId: this.clientId
       },
@@ -189,13 +246,10 @@ export class ProcessSheetComponent implements OnInit {
     });
   }
 
-  // delete client
   deleteEntry(processId: any) {
-    const confirmDelete = window.confirm(
-      'Do you want to delete this process, Please Comfirm'
-    );
+    const confirmDelete = window.confirm('Do you want to delete this process, Please Confirm');
     if (confirmDelete) {
-      this.clientService.deleteProcess(this.clientId,processId).subscribe({
+      this.clientService.deleteProcess(this.clientId, processId).subscribe({
         next: (res) => {
           this._snackBar.open('Process Deleted Successfully', 'Close', {
             duration: 4000,
@@ -205,10 +259,9 @@ export class ProcessSheetComponent implements OnInit {
         error: (err: any) => {
           console.log(err);
         },
-      })
+      });
       this.getAllProcess();
     }
-
   }
 
   getRole(): any {

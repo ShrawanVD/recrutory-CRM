@@ -12,7 +12,7 @@ export const navbarData = [
   {
     routeLink: 'todays-task',
     icon: 'fas fa-tasks',
-    label: 'Todays-Task'
+    label: `Today's-Task`
   },
   {
     routeLink: 'selected',

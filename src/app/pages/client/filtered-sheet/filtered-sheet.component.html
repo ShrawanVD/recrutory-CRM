@@ -1,7 +1,7 @@
 <!-- filtered data div -->
 <div class="card topp">
   <div class="card-head">
-    <h1 style="font-weight: bold">FILTERED DATA</h1>
+    <h1 style="font-weight: bold">FILTERED CANDIDATES</h1>
   </div>
   <div class="card-body">
     <div class="filterSearchBar">
@@ -11,10 +11,10 @@
       </button>
       <button style="background: #02465b; color: white; margin-right: 10px; padding: 10px; margin-bottom: 1rem;"
         mat-raised-button (click)="openInterestedCan()">
-        INTERESTED CANDIDATE LIST
+        INTERESTED CANDIDATES
       </button>
       <mat-form-field >
-        <mat-label>Filter</mat-label>
+        <mat-label>Search</mat-label>
         <input matInput (keyup)="applyFilter($event)" #input />
       </mat-form-field>
       <!-- <button style="background: #02465b; color: white; padding: 10px; margin-bottom: 1rem;" mat-raised-button

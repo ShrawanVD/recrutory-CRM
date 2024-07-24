@@ -136,3 +136,53 @@ td {
     background-color: rgb(218, 218, 218);
   }
   
+  th:nth-child(1),
+  td:nth-child(1) {
+    min-width: 80px;
+    width: 80px;
+  } 
+  th:nth-child(2),
+  td:nth-child(2) {
+    min-width: 280px;
+    width: 280px;
+  } 
+  th:nth-child(3),
+  td:nth-child(3) {
+    min-width: 280px;
+    width: 280px;
+  } 
+  th:nth-child(4),
+  td:nth-child(4) {
+    min-width: 200px;
+    width: 200px;
+  } 
+  th:nth-child(7),
+  td:nth-child(7) {
+    min-width: 300px;
+    width: 300px;
+  } 
+  th:nth-child(19),
+  td:nth-child(19) {
+    min-width: 240px;
+    width: 240px;
+  } 
+  th:nth-child(20),
+  td:nth-child(20) {
+    min-width: 240px;
+    width: 240px;
+  } 
+  th:nth-child(21),
+  td:nth-child(21) {
+    min-width: 280px;
+    width: 280px;
+  } 
+  th:nth-child(22),
+  td:nth-child(22) {
+    min-width: 280px;
+    width: 280px;
+  } 
+  th:nth-child(23),
+  td:nth-child(23) {
+    min-width: 200px;
+    width: 200px;
+  } 

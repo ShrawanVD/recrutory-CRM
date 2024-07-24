@@ -1,5 +1,8 @@
-<link href="
-https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+<link
+  href="
+https://fonts.googleapis.com/icon?family=Material+Icons"
+  rel="stylesheet"
+/>
 
 <div class="dialog-box">
   <mat-dialog-actions class="dialogAction">
@@ -12,18 +15,27 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   </div>
   <div mat-dialog-content>
     <form [formGroup]="processForm" (ngSubmit)="submitLead()">
-
       <div class="row">
         <!-- First Name -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Process Name</mat-label>
-          <input matInput placeholder="Hooper" required formControlName="clientProcessName" />
+          <input
+            matInput
+            placeholder="Hooper"
+            required
+            formControlName="clientProcessName"
+          />
         </mat-form-field>
 
         <!-- Last Name -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Language</mat-label>
-          <input matInput placeholder="Language" required formControlName="clientProcessLanguage" />
+          <input
+            matInput
+            placeholder="Language"
+            required
+            formControlName="clientProcessLanguage"
+          />
         </mat-form-field>
       </div>
 
@@ -32,24 +44,54 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
       <div class="row">
         <mat-form-field appearance="outline" class="input">
           <mat-label>Candidate required</mat-label>
-          <input matInput placeholder="100" required formControlName="clientProcessCandReq" />
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="input">
-          <mat-label>Process Deadline</mat-label>
-          <input matInput placeholder="1/1/2024" required formControlName="clientProcessDeadline" />
+          <input
+            matInput
+            placeholder="100"
+            required
+            formControlName="clientProcessCandReq"
+          />
         </mat-form-field>
 
+        <mat-form-field appearance="outline" class="input">
+          <mat-label>Process Deadline</mat-label>
+          <input
+            matInput
+            placeholder="MM/DD/YYY"
+            [matDatepicker]="deadlinePicker"
+            formControlName="clientProcessDeadline"
+          />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="deadlinePicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #deadlinePicker>
+            <mat-datepicker-actions>
+              <button mat-button matDatepickerCancel>Cancel</button>
+              <button mat-raised-button matDatepickerApply>Apply</button>
+            </mat-datepicker-actions>
+          </mat-datepicker>
+        </mat-form-field>
       </div>
 
       <div class="row">
         <mat-form-field appearance="outline" class="input">
           <mat-label>Package</mat-label>
-          <input matInput placeholder="10 LPA" required formControlName="clientProcessPckg" />
+          <input
+            matInput
+            placeholder="10 LPA"
+            required
+            formControlName="clientProcessPckg"
+          />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="input">
           <mat-label>Job Location</mat-label>
-          <input matInput placeholder="Pune" required formControlName="clientProcessLocation" />
+          <input
+            matInput
+            placeholder="Pune"
+            required
+            formControlName="clientProcessLocation"
+          />
         </mat-form-field>
       </div>
 
@@ -57,31 +99,53 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         <!-- domain -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Joining Date</mat-label>
-          <input matInput placeholder="2/1/2024" required formControlName="clientProcessJoining" />
+          <input
+            matInput
+            placeholder="MM/DD/YYY"
+            [matDatepicker]="joiningPicker"
+            formControlName="clientProcessJoining"
+          />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="joiningPicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #joiningPicker>
+            <mat-datepicker-actions>
+              <button mat-button matDatepickerCancel>Cancel</button>
+              <button mat-raised-button matDatepickerApply>Apply</button>
+            </mat-datepicker-actions>
+          </mat-datepicker>
         </mat-form-field>
 
         <!-- current location -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Perks</mat-label>
-          <input matInput placeholder="50K joining bonus" required formControlName="clientProcessPerks" />
+          <input
+            matInput
+            placeholder="50K joining bonus"
+            required
+            formControlName="clientProcessPerks"
+          />
         </mat-form-field>
       </div>
 
       <div class="row">
-
         <!-- preferred location -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Job Description</mat-label>
-          <input matInput placeholder="Developer" required formControlName="clientProcessJobDesc" />
+          <input
+            matInput
+            placeholder="Developer"
+            required
+            formControlName="clientProcessJobDesc"
+          />
         </mat-form-field>
-
       </div>
 
       <div formArrayName="clientProcessPoc">
         <h2>Point of contact</h2>
         <div *ngFor="let poc of clientProcessPoc.controls; let i = index">
           <div [formGroupName]="i">
-
             <div class="row">
               <!-- POC Name -->
               <mat-form-field appearance="outline" class="input">
@@ -110,7 +174,6 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
               </mat-form-field>
             </div>
 
-
             <div class="row">
               <!-- POC LinkedIn -->
               <mat-form-field appearance="outline" class="input">
@@ -123,10 +186,15 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
             </div>
 
             <hr />
-
           </div>
         </div>
-        <button mat-raised-button color="primary" type="button" (click)="addPoc()" style="margin: 1rem 0rem;">
+        <button
+          mat-raised-button
+          color="primary"
+          type="button"
+          (click)="addPoc()"
+          style="margin: 1rem 0rem"
+        >
           Add POC
         </button>
       </div>

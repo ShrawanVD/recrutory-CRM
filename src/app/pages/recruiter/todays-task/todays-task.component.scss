@@ -134,8 +134,59 @@ td {
 .mat-icon:hover {
   background-color: rgb(218, 218, 218);
 }
-th:first-child,
-td:first-child {
-  min-width: 40px;
-  width: 40px;
+
+th:nth-child(1),
+td:nth-child(1) {
+  min-width: 100px;
+  width: 100px;
+}
+th:nth-child(2),
+td:nth-child(2) {
+  min-width: 240px;
+  width: 240px;
+}
+th:nth-child(3),
+td:nth-child(3) {
+  min-width: 240px;
+  width: 240px;
+}
+th:nth-child(5),
+td:nth-child(5) {
+  min-width: 300px;
+  width: 300px;
+}
+th:nth-child(9),
+td:nth-child(9) {
+  min-width: 240px;
+  width: 240px;
+}
+th:nth-child(17),
+td:nth-child(17) {
+  min-width: 240px;
+  width: 240px;
+}
+th:nth-child(18),
+td:nth-child(18) {
+  min-width: 240px;
+  width: 240px;
+}
+th:nth-child(19),
+td:nth-child(19) {
+  min-width: 300px;
+  width: 300px;
+}
+th:nth-child(20),
+td:nth-child(20) {
+  min-width: 300px;
+  width: 300px;
+}
+th:nth-child(21),
+td:nth-child(21) {
+  min-width: 200px;
+  width: 200px;
+}
+th:nth-child(24),
+td:nth-child(24) {
+  min-width: 340px;
+  width: 340px;
 }
