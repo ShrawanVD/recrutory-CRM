@@ -32,10 +32,10 @@
       </mat-form-field>
       <mat-form-field appearance="fill" class="filterDropDown">
         <mat-label>Proficiency</mat-label>
-        <mat-select [(value)]="selectedproficiencyLevel" (selectionChange)="filterProfi($event.value)">
-          <mat-option [value]="null">None</mat-option>
-          <mat-option *ngFor="let proficiencyLevel of proficiencyLevels" [value]="proficiencyLevel">{{ proficiencyLevel
-            }}</mat-option>
+        <mat-select [(value)]="selectedProficiencyLevels" (selectionChange)="filterProfi($event.value)" multiple>
+          <mat-option *ngFor="let proficiencyLevel of proficiencyLevels" [value]="proficiencyLevel">
+            {{ proficiencyLevel }}
+          </mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill" class="filterDropDown">
@@ -334,9 +334,9 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
         <!-- Row shown when there is no matching data. -->
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" colspan="4">
-            OOOPs, No Data Found
+        <tr class="mat-row" *matNoDataRow >
+          <td class="mat-cell" colspan="26" style="padding: 1rem;">
+            OOOPs, No Matching Record Found ....
           </td>
         </tr>
       </table>

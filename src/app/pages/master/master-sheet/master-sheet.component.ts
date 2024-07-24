@@ -49,6 +49,8 @@ export class MasterSheetComponent implements OnInit {
   assignProcesslist: any;
   selectedRows: string[] = [];
   openFilters: boolean = false;
+  proficiencyLevelsString: any;
+
   displayedColumns: string[] = [
     'select',
     'SrNo',
@@ -83,7 +85,7 @@ export class MasterSheetComponent implements OnInit {
   filterValues: any = {};
 
   selectedLanguage: any ="";
-  selectedproficiencyLevel: any = "";
+  selectedProficiencyLevels: any[] = [];
   selectedJobStatus: string | null = null;
   selectedQualification: string | null = null;
   selectedmode: string | null = null;
@@ -364,14 +366,15 @@ export class MasterSheetComponent implements OnInit {
     this.filterLangProf();
   }
 
-  filterProfi(value: any){
-    this.selectedproficiencyLevel = value;
-    this.filterLangProf();
+  filterProfi(selectedProficiencyLevels: string[]) {
+    this.proficiencyLevelsString = selectedProficiencyLevels.join(',');
+    console.log(this.proficiencyLevelsString);
+    this.filterLangProf()
   }
 
   // apply filter for lang and proficiency
   filterLangProf() {
-    this.leadService.langFilter(this.selectedLanguage, this.selectedproficiencyLevel).subscribe({
+    this.leadService.langFilter(this.selectedLanguage, this.proficiencyLevelsString).subscribe({
       next: (res: any) => {
         let filteredData = res;
   
@@ -444,7 +447,7 @@ export class MasterSheetComponent implements OnInit {
     this.filterValues = {};
     this.dataSource.filter = "";
     this.selectedLanguage = null;
-    this.selectedproficiencyLevel = null;
+    this.selectedProficiencyLevels = [];
     this.selectedJobStatus = null;
     this.selectedQualification = null;
     this.selectedmode = null;

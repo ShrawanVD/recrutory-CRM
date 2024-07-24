@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FilteredSheetFormComponent } from '../filtered-sheet-form/filtered-sheet-form.component';
 import { CilentService } from 'src/app/services/cilent/cilent.service';
+import { LeadsService } from 'src/app/services/leads/leads.service';
 @Component({
   selector: 'app-filtered-sheet',
   templateUrl: './filtered-sheet.component.html',
@@ -20,6 +21,7 @@ export class FilteredSheetComponent {
   selectedRows: string[] = [];
   openFilters: boolean = false;
   filterValues: any = {};
+  proficiencyLevelsString: any;
 
   displayedColumns: string[] = [
     'select',
@@ -27,9 +29,7 @@ export class FilteredSheetComponent {
     'name',
     'email',
     'phone',
-    'lType',
     'language',
-    'proficiencyLevel',
     'jbStatus',
     'qualification',
     'industry',
@@ -51,11 +51,11 @@ export class FilteredSheetComponent {
     'assignedRecruiter',
     'action',
   ];
- 
+
   dataSource!: MatTableDataSource<any>;
 
-  selectedLanguage: string | null = null;
-  selectedproficiencyLevel: string | null = null;
+  selectedLanguage: any = "";
+  selectedProficiencyLevels: any[] = [];
   selectedJobStatus: string | null = null;
   selectedQualification: string | null = null;
   selectedmode: string | null = null;
@@ -82,7 +82,8 @@ export class FilteredSheetComponent {
     private clientService: CilentService,
     private _snackBar: MatSnackBar,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private leadService: LeadsService,
   ) { }
   // for creating lead
   openAddEditEmpForm() {
@@ -158,22 +159,63 @@ export class FilteredSheetComponent {
   }
 
   // filter for interested candidate
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.filterValues['global'] = filterValue;
-    this.dataSource.filter = JSON.stringify(this.filterValues);
+  filterLang(value: any) {
+    this.selectedLanguage = value;
+    this.filterLangProf();
+  }
 
+  filterProfi(selectedProficiencyLevels: string[]) {
+    this.proficiencyLevelsString = selectedProficiencyLevels.join(',');
+    console.log(this.proficiencyLevelsString);
+    this.filterLangProf()
+  }
+
+  // apply filter for lang and proficiency
+  filterLangProf() {
+    this.leadService.langFilter(this.selectedLanguage, this.proficiencyLevelsString).subscribe({
+      next: (res: any) => {
+        let filteredData = res;
+
+        // Apply existing local filters to the data received from the API
+        Object.keys(this.filterValues).forEach(key => {
+          if (this.filterValues[key]) {
+            filteredData = filteredData.filter((item: any) =>
+              item[key] && item[key].toString().toLowerCase().includes(this.filterValues[key].toLowerCase())
+            );
+          }
+        });
+
+        this.dataSource = new MatTableDataSource(filteredData);
+        this.dataSource.filterPredicate = this.createFilter();
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
-  
+
   applyDropdownFilter(value: string, column: string) {
     this.filterValues[column] = value;
-    this.dataSource.filter = JSON.stringify(this.filterValues);
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+    // Check if language or proficiency filter is applied
+    if (column === 'language' || column === 'proficiencyLevel') {
+      this.filterLangProf();
+    } else {
+      this.dataSource.filter = JSON.stringify(this.filterValues);
+
+      if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
+      }
     }
   }
 
@@ -202,7 +244,7 @@ export class FilteredSheetComponent {
     this.filterValues = {};
     this.dataSource.filter = "";
     this.selectedLanguage = null;
-    this.selectedproficiencyLevel = null;
+    this.selectedProficiencyLevels = [];
     this.selectedJobStatus = null;
     this.selectedQualification = null;
     this.selectedmode = null;
@@ -210,6 +252,8 @@ export class FilteredSheetComponent {
     this.selectednoticePeriod = null;
     this.selectedsource = null;
     this.selectedexp = null;
+
+    this.getCuriotoryLeads();
   }
 
   // open edit form for updating candidate information
@@ -256,13 +300,13 @@ export class FilteredSheetComponent {
       const confirmAssignRecruiter = window.confirm(`Do you want to assign these candidates to ${this.recruiters[lead.assignedRecruiter]}, Please Comfirm`)
       if (confirmAssignRecruiter) {
         this.clientService.updateMultipleRecruiter(this.clientId, this.processId, payload).subscribe({
-          next: (res:any) => {
-            if(res.alreadyAssignedCandidates && res.alreadyAssignedCandidates.length > 0){
+          next: (res: any) => {
+            if (res.alreadyAssignedCandidates && res.alreadyAssignedCandidates.length > 0) {
               this._snackBar.open(`Some candidates are already assign to ${this.recruiters[lead.assignedRecruiter]}`, 'Close', {
                 duration: 4000,
               });
             }
-            else{
+            else {
               this._snackBar.open('Recriuter Assigned Successfully', 'Close', {
                 duration: 4000,
               });
@@ -282,13 +326,13 @@ export class FilteredSheetComponent {
   }
 
   // open interested candidates
-  openInterestedCan(){
-    this.router.navigate(['interested'],{ relativeTo: this.route });
+  openInterestedCan() {
+    this.router.navigate(['interested'], { relativeTo: this.route });
   }
 
-  
+
   // open filter div
-  openFilterDiv(){
+  openFilterDiv() {
     this.openFilters = !this.openFilters;
   }
 
