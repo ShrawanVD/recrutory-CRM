@@ -12,7 +12,7 @@ export class LoginService {
   private token: string = '';
   private role: string = '';
   isUserLoggedIn = new BehaviorSubject<boolean>(false);
-  url = "https://recrutory-crm-backend.onrender.com/api";
+  url = "https://recrutory-crm-backend-yhnk.onrender.com";
 
   constructor(public http: HttpClient, private router: Router) { }
 
@@ -55,12 +55,12 @@ export class LoginService {
   }
   //Role specific api  Recruiter
   getCandidatByRecruiterId(){
-    return this.http.get('https://recrutory-crm-backend.onrender.com/api/assigned-candidates?recruiterId=66868b4a82d622656abd3873');
+    return this.http.get(`${this.url}/api/assigned-candidates?recruiterId=66868b4a82d622656abd3873`);
   }
 
   // update status of interested or not interested
   updateInterested(data: any){
-    return this.http.put('https://recrutory-crm-backend.onrender.com/api/update-status',data)
+    return this.http.put(`${this.url}/api/update-status`,data)
   }
 }
 

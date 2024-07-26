@@ -8,49 +8,49 @@ import { Observable } from 'rxjs';
 
 export class LeadsService {
 
+  url = "https://recrutory-crm-backend-yhnk.onrender.com"
+
   constructor(public http:HttpClient) { }
 
 
   // mastersheet api 
   getAllLeads(){
-    return this.http.get('https://recrutory-crm-backend.onrender.com/api/master/candidates');
+    return this.http.get(`${this.url}/api/master/candidates`);
   }
 
   getLeadById(id:any){
-    return this.http.get(`https://recrutory-crm-backend.onrender.com/api/master/candidates/${id}`);
+    return this.http.get(`${this.url}/api/master/candidates/${id}`);
   }
 
   createLead(data:any){
-    return this.http.post("https://recrutory-crm-backend.onrender.com/api/master/candidates",data);
+    return this.http.post(`${this.url}/api/master/candidates`,data);
   }
 
   deleteLeadById(id:any){
-    return this.http.delete(`https://recrutory-crm-backend.onrender.com/api/master/candidates/${id}`);
+    return this.http.delete(`${this.url}/api/master/candidates/${id}`);
   }
 
   updateLeadById(id: any, data: any) {
-    return this.http.put(`https://recrutory-crm-backend.onrender.com/api/master/candidates/${id}`, data);
+    return this.http.put(`${this.url}/api/master/candidates/${id}`, data);
   }
 
   langFilter(lang:any,proficiencyLevels: any){
-    console.log("This is lang: ",lang)
-    console.log("This is profi: ",proficiencyLevels)
-    return this.http.get(`https://recrutory-crm-backend.onrender.com/api/master/langfilter?lang=${lang}&proficiencyLevel=${proficiencyLevels}`);
+    return this.http.get(`${this.url}/api/master/langfilter?lang=${lang}&proficiencyLevel=${proficiencyLevels}`);
   }
 
   // updating recruiter
   updateLead(lead:any): Observable<any> {
-    return this.http.put<any>(`https://recrutory-crm-backend.onrender.com/api/crm/leads/${lead.id}`, lead);
+    return this.http.put<any>(`${this.url}/api/crm/leads/${lead.id}`, lead);
   }
 
   // getting list of assign process 
   getProcessList(){
-    return this.http.get('https://recrutory-crm-backend.onrender.com/api/client/process-options');
+    return this.http.get(`${this.url}/api/client/process-options`);
   }
 
   //adding candidate in process
   addProcessMultipleCandidate(data: any){
-    return this.http.post('https://recrutory-crm-backend.onrender.com/api/master/candidates/assign-process',data);
+    return this.http.post(`${this.url}/api/master/candidates/assign-process`,data);
   }
 
   // updateLeadById(id:any){
