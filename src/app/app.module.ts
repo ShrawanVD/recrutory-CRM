@@ -47,6 +47,9 @@ import { InterestedSheetComponent } from './pages/client/interested-sheet/intere
 import { TodaysTaskComponent } from './pages/recruiter/todays-task/todays-task.component';
 
 import { MatNativeDateModule } from '@angular/material/core';
+import { AddMembersComponent } from './pages/addMembers/add-members/add-members.component';
+import { AddMemberFormComponent } from './pages/addMembers/add-member-form/add-member-form.component';
+import { ProcessJobDescComponent } from './pages/client/process-sheet/process-job-desc/process-job-desc.component';
 
 
 @NgModule({
@@ -72,6 +75,9 @@ import { MatNativeDateModule } from '@angular/material/core';
     FinalSelectedSheetComponent,
     InterestedSheetComponent,
     TodaysTaskComponent,
+    AddMembersComponent,
+    AddMemberFormComponent,
+    ProcessJobDescComponent,
   ],
   imports: [
     BrowserModule,

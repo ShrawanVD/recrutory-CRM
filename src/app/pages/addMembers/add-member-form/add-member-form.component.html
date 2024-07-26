@@ -1,0 +1,49 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+<div class="dialog-box">
+  <mat-dialog-actions class="dialogAction">
+    <button mat-icon-button class="close-button" [mat-dialog-close]="true">
+      <mat-icon class="close-icon" color="warn">close</mat-icon>
+    </button>
+  </mat-dialog-actions>
+  <h1>User Form</h1>
+  <div mat-dialog-content>
+    <form [formGroup]="leadForm" (ngSubmit)="submitLead()">
+      <div class="row">
+        <!-- Username -->
+        <mat-form-field appearance="outline" class="input">
+          <mat-label>User Name</mat-label>
+          <input matInput placeholder="Suhas" required formControlName="username" />
+        </mat-form-field>
+
+        <!-- Role -->
+        <mat-form-field appearance="outline" class="input">
+          <mat-label>Role</mat-label>
+          <mat-select formControlName="role">
+            <mat-option value="Admin">Admin</mat-option>
+            <mat-option value="Team Lead">Team Lead</mat-option>
+            <mat-option value="HR">HR</mat-option>
+            <mat-option value="Recruiter">Recruiter</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Password -->
+      <mat-form-field appearance="outline" class="input">
+        <mat-label>Password</mat-label>
+        <input matInput placeholder="********" required formControlName="password" type="password" />
+        <mat-hint *ngIf="isEditing">Leave BLANK to retain the password</mat-hint>
+      </mat-form-field>
+
+      <!-- Actions -->
+      <div mat-dialog-actions class="action" style="margin-top: 1rem;">
+        <button mat-raised-button type="button" [mat-dialog-close]="false">
+          Cancel
+        </button>
+        <button mat-raised-button color="primary" type="submit">
+          {{ data ? "Update" : "Register" }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -7,9 +7,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
       <mat-icon class="close-icon" color="warn">close</mat-icon>
     </button>
   </mat-dialog-actions>
-  <div mat-dialog-title>
-    <h1>Leads Form</h1>
-  </div>
+  <h1>Leads Form</h1>
   <div mat-dialog-content>
     <form [formGroup]="leadForm" (ngSubmit)="submitLead()">
 
@@ -304,7 +302,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
       </div>
 
       <!-- action -->
-      <div mat-dialog-actions class="action">
+      <div mat-dialog-actions class="action" style="margin-top: 1rem;">
         <button mat-raised-button type="button" [mat-dialog-close]="false">
           Cancel
         </button>
