@@ -368,7 +368,6 @@ export class MasterSheetComponent implements OnInit {
 
   filterProfi(selectedProficiencyLevels: string[]) {
     this.proficiencyLevelsString = selectedProficiencyLevels.join(',');
-    console.log(this.proficiencyLevelsString);
     this.filterLangProf()
   }
 
@@ -377,7 +376,7 @@ export class MasterSheetComponent implements OnInit {
     this.leadService.langFilter(this.selectedLanguage, this.proficiencyLevelsString).subscribe({
       next: (res: any) => {
         let filteredData = res;
-  
+        console.log("this is filteradata",filteredData)
         // Apply existing local filters to the data received from the API
         Object.keys(this.filterValues).forEach(key => {
           if (this.filterValues[key]) {
@@ -398,7 +397,6 @@ export class MasterSheetComponent implements OnInit {
     });
   }
   
-
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();

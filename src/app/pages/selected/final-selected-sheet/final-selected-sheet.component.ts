@@ -16,6 +16,7 @@ import { CilentService } from 'src/app/services/cilent/cilent.service';
 })
 export class FinalSelectedSheetComponent {
   openFilters: boolean = false;
+  proficiencyLevelsString: any;
 
   displayedColumns: string[] = [
     'SrNo',
@@ -24,9 +25,7 @@ export class FinalSelectedSheetComponent {
     'email',
     'phone',
     'status',
-    'lType',
     'language',
-    'proficiencyLevel',
     'jbStatus',
     'qualification',
     'industry',
@@ -54,8 +53,8 @@ export class FinalSelectedSheetComponent {
   filterValues: any = {};
 
   selectedClientName: string | null = null;
-  selectedLanguage: string | null = null;
-  selectedproficiencyLevel: string | null = null;
+  selectedLanguage: any ="";
+  selectedProficiencyLevels: any[] = [];
   selectedJobStatus: string | null = null;
   selectedQualification: string | null = null;
   selectedmode: string | null = null;
@@ -106,7 +105,6 @@ export class FinalSelectedSheetComponent {
   getAllProcessList(){
     this.leadService.getProcessList().subscribe({
       next:(res) =>{
-        console.log(res);
         this.clients = res;
       },
       error:(err)  =>{
@@ -116,11 +114,44 @@ export class FinalSelectedSheetComponent {
   }
 
   // filter for interested candidate
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.filterValues['global'] = filterValue;
-    this.dataSource.filter = JSON.stringify(this.filterValues);
+  filterLang(value: any){
+    this.selectedLanguage = value;
+    this.filterLangProf();
+  }
 
+  filterProfi(selectedProficiencyLevels: string[]) {
+    this.proficiencyLevelsString = selectedProficiencyLevels.join(',');
+    this.filterLangProf()
+  }
+
+  // apply filter for lang and proficiency
+  filterLangProf() {
+    this.clientService.filterSelectedSheet(this.selectedLanguage, this.proficiencyLevelsString).subscribe({
+      next: (res: any) => {
+        let filteredData = res;
+        // Apply existing local filters to the data received from the API
+        Object.keys(this.filterValues).forEach(key => {
+          if (this.filterValues[key]) {
+            filteredData = filteredData.filter((item: any) => 
+              item[key] && item[key].toString().toLowerCase().includes(this.filterValues[key].toLowerCase())
+            );
+          }
+        });
+  
+        this.dataSource = new MatTableDataSource(filteredData);
+        this.dataSource.filterPredicate = this.createFilter();
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+  
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
@@ -128,10 +159,16 @@ export class FinalSelectedSheetComponent {
 
   applyDropdownFilter(value: string, column: string) {
     this.filterValues[column] = value;
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+  
+    // Check if language or proficiency filter is applied
+    if (column === 'language' || column === 'proficiencyLevel') {
+      this.filterLangProf();
+    } else {
+      this.dataSource.filter = JSON.stringify(this.filterValues);
+  
+      if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
+      }
     }
   }
 
@@ -139,7 +176,7 @@ export class FinalSelectedSheetComponent {
     let filterFunction = (data: any, filter: string): boolean => {
       let searchTerms = JSON.parse(filter);
       let isMatch = true;
-
+  
       if (searchTerms['global']) {
         isMatch = JSON.stringify(data).toLowerCase().includes(searchTerms['global']);
       } else {
@@ -150,7 +187,7 @@ export class FinalSelectedSheetComponent {
           }
         }
       }
-
+  
       return isMatch;
     };
     return filterFunction;
@@ -160,7 +197,7 @@ export class FinalSelectedSheetComponent {
     this.filterValues = {};
     this.dataSource.filter = "";
     this.selectedLanguage = null;
-    this.selectedproficiencyLevel = null;
+    this.selectedProficiencyLevels = [];
     this.selectedJobStatus = null;
     this.selectedQualification = null;
     this.selectedmode = null;
@@ -168,6 +205,8 @@ export class FinalSelectedSheetComponent {
     this.selectednoticePeriod = null;
     this.selectedsource = null;
     this.selectedexp = null;
+
+    this.getCuriotoryLeads();
   }
 
    // open filter div

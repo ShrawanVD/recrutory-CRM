@@ -166,13 +166,12 @@ export class FilteredSheetComponent {
 
   filterProfi(selectedProficiencyLevels: string[]) {
     this.proficiencyLevelsString = selectedProficiencyLevels.join(',');
-    console.log(this.proficiencyLevelsString);
     this.filterLangProf()
   }
 
   // apply filter for lang and proficiency
   filterLangProf() {
-    this.leadService.langFilter(this.selectedLanguage, this.proficiencyLevelsString).subscribe({
+    this.clientService.filterSheetlangFilter(this.clientId,this.processId,this.selectedLanguage, this.proficiencyLevelsString).subscribe({
       next: (res: any) => {
         let filteredData = res;
 

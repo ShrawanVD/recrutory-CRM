@@ -31,15 +31,14 @@ dateControl = new FormControl();
   updatedInterestedCandidate: any;
   selectedRows: string[] = [];
   openFilters: boolean = false;
-  
+  proficiencyLevelsString: any;
+
   displayedColumns: string[] = [
     'SrNo',
     'name',
     'email',
     'phone',
-    'lType',
     'language',
-    'proficiencyLevel',
     'jbStatus',
     'qualification',
     'industry',
@@ -67,8 +66,8 @@ dateControl = new FormControl();
 
   filterValues: any = {};
 
-  selectedLanguage: string | null = null;
-  selectedproficiencyLevel: string | null = null;
+  selectedLanguage: any ="";
+  selectedProficiencyLevels: any[] = [];
   selectedJobStatus: string | null = null;
   selectedQualification: string | null = null;
   selectedmode: string | null = null;
@@ -179,11 +178,45 @@ dateControl = new FormControl();
   }
 
   // filter for interested candidate
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.filterValues['global'] = filterValue;
-    this.dataSource.filter = JSON.stringify(this.filterValues);
+  filterLang(value: any){
+    this.selectedLanguage = value;
+    this.filterLangProf();
+  }
 
+  filterProfi(selectedProficiencyLevels: string[]) {
+    this.proficiencyLevelsString = selectedProficiencyLevels.join(',');
+    this.filterLangProf()
+  }
+
+  // apply filter for lang and proficiency
+  filterLangProf() {
+    this.loginService.getFilteredCanByRecruiterId(this.selectedLanguage, this.proficiencyLevelsString).subscribe({
+      next: (res: any) => {
+        let filteredData = res;
+        console.log("this is filteradata",filteredData)
+        // Apply existing local filters to the data received from the API
+        Object.keys(this.filterValues).forEach(key => {
+          if (this.filterValues[key]) {
+            filteredData = filteredData.filter((item: any) => 
+              item[key] && item[key].toString().toLowerCase().includes(this.filterValues[key].toLowerCase())
+            );
+          }
+        });
+  
+        this.dataSource = new MatTableDataSource(filteredData);
+        this.dataSource.filterPredicate = this.createFilter();
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
@@ -191,10 +224,16 @@ dateControl = new FormControl();
 
   applyDropdownFilter(value: string, column: string) {
     this.filterValues[column] = value;
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+  
+    // Check if language or proficiency filter is applied
+    if (column === 'language' || column === 'proficiencyLevel') {
+      this.filterLangProf();
+    } else {
+      this.dataSource.filter = JSON.stringify(this.filterValues);
+  
+      if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
+      }
     }
   }
 
@@ -223,7 +262,7 @@ dateControl = new FormControl();
     this.filterValues = {};
     this.dataSource.filter = "";
     this.selectedLanguage = null;
-    this.selectedproficiencyLevel = null;
+    this.selectedProficiencyLevels = [];
     this.selectedJobStatus = null;
     this.selectedQualification = null;
     this.selectedmode = null;
@@ -234,6 +273,7 @@ dateControl = new FormControl();
 
     // Clear the date filter
     this.dateControl.reset();
+    this.getCandidatesByRecruiterId();
   }
 
   // open edit form for updating candidate information

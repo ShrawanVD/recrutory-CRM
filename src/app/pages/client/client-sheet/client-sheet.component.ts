@@ -5,7 +5,6 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoginService } from 'src/app/services/login/login.service';
-import { LeadsService } from 'src/app/services/leads/leads.service';
 import { ClientSheetFormComponent } from '../client-sheet-form/client-sheet-form.component';
 import { Router } from '@angular/router';
 import { CilentPocComponent } from './cilent-poc/cilent-poc.component';
@@ -40,7 +39,8 @@ export class ClientSheetComponent implements OnInit {
     private _dialog: MatDialog,
     private clientService: CilentService,
     private _snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private loginService: LoginService
   ) { }
 
   // for creating lead
@@ -160,7 +160,11 @@ export class ClientSheetComponent implements OnInit {
     return localStorage.getItem('role');
   }
 
-  isAdmin(): boolean {
-    return this.getRole() === 'admin';
+  isHr(){
+    return this.loginService.isHr();
+  }
+
+  isRecruiter(){
+    return this.loginService.isRecruiter();
   }
 }

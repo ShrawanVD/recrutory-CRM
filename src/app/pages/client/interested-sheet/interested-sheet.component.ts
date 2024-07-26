@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FilteredSheetFormComponent } from '../filtered-sheet-form/filtered-sheet-form.component';
 import { CilentService } from 'src/app/services/cilent/cilent.service';
 import { Location } from '@angular/common';
+import { LeadsService } from 'src/app/services/leads/leads.service';
 
 @Component({
   selector: 'app-interested-sheet',
@@ -21,14 +22,14 @@ export class InterestedSheetComponent {
   updatedInterestedCandidate: any;
   selectedRows: string[] = [];
   openFilters: boolean = false;
+  proficiencyLevelsString: any;
+  
   displayedColumns1: string[] = [
     'SrNo',
     'name',
     'email',
     'phone',
-    'lType',
     'language',
-    'proficiencyLevel',
     'jbStatus',
     'qualification',
     'industry',
@@ -56,8 +57,8 @@ export class InterestedSheetComponent {
 
   filterValues: any = {};
 
-  selectedLanguage: string | null = null;
-  selectedproficiencyLevel: string | null = null;
+  selectedLanguage: any ="";
+  selectedProficiencyLevels: any[] = [];
   selectedJobStatus: string | null = null;
   selectedQualification: string | null = null;
   selectedmode: string | null = null;
@@ -65,6 +66,7 @@ export class InterestedSheetComponent {
   selectednoticePeriod: string | null = null;
   selectedsource: string | null = null;
   selectedexp: string | null = null;
+  selectedRound: string | null = null;
 
   languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Chinese', 'Nepalese']; // replace with actual statuses
   proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
@@ -75,6 +77,7 @@ export class InterestedSheetComponent {
   noticePeriods = ['15', '30', '60', '90', '90+'];
   sources = ['Linkedin', 'Naukri', 'Meta', 'Google', 'Instagram', 'Website', 'App', 'Email', 'Reference'];
   exps = ['0-1', '1-2', '2-4', '4-8', '8-12', '12+'];
+  round = ['Round 1','Round 2','Round 3','Round 4','Selected'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -82,6 +85,7 @@ export class InterestedSheetComponent {
   constructor(
     private _dialog: MatDialog,
     private clientService: CilentService,
+    private leadService: LeadsService,
     private _snackBar: MatSnackBar,
     private location: Location,
     private route: ActivatedRoute
@@ -117,13 +121,51 @@ export class InterestedSheetComponent {
     });
   }
 
+  // open filter div
+  openFilterDiv() {
+    this.openFilters = !this.openFilters;
+  }
+
+  filterLang(value: any){
+    this.selectedLanguage = value;
+    this.filterLangProf();
+  }
+
+  filterProfi(selectedProficiencyLevels: string[]) {
+    this.proficiencyLevelsString = selectedProficiencyLevels.join(',');
+    this.filterLangProf()
+  }
+
+  // apply filter for lang and proficiency
+  filterLangProf() {
+    this.clientService.interestedlangFilter(this.clientId,this.processId,this.selectedLanguage, this.proficiencyLevelsString).subscribe({
+      next: (res: any) => {
+        let filteredData = res;
+
+        // Apply existing local filters to the data received from the API
+        Object.keys(this.filterValues).forEach(key => {
+          if (this.filterValues[key]) {
+            filteredData = filteredData.filter((item: any) => 
+              item[key] && item[key].toString().toLowerCase().includes(this.filterValues[key].toLowerCase())
+            );
+          }
+        });
+  
+        this.dataSource = new MatTableDataSource(filteredData);
+        this.dataSource.filterPredicate = this.createFilter();
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
 
   // filter for interested candidate
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.filterValues['global'] = filterValue;
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
@@ -131,10 +173,16 @@ export class InterestedSheetComponent {
 
   applyDropdownFilter(value: string, column: string) {
     this.filterValues[column] = value;
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+  
+    // Check if language or proficiency filter is applied
+    if (column === 'language' || column === 'proficiencyLevel') {
+      this.filterLangProf();
+    } else {
+      this.dataSource.filter = JSON.stringify(this.filterValues);
+  
+      if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
+      }
     }
   }
 
@@ -142,7 +190,7 @@ export class InterestedSheetComponent {
     let filterFunction = (data: any, filter: string): boolean => {
       let searchTerms = JSON.parse(filter);
       let isMatch = true;
-
+  
       if (searchTerms['global']) {
         isMatch = JSON.stringify(data).toLowerCase().includes(searchTerms['global']);
       } else {
@@ -153,7 +201,7 @@ export class InterestedSheetComponent {
           }
         }
       }
-
+  
       return isMatch;
     };
     return filterFunction;
@@ -163,7 +211,7 @@ export class InterestedSheetComponent {
     this.filterValues = {};
     this.dataSource.filter = "";
     this.selectedLanguage = null;
-    this.selectedproficiencyLevel = null;
+    this.selectedProficiencyLevels = [];
     this.selectedJobStatus = null;
     this.selectedQualification = null;
     this.selectedmode = null;
@@ -171,16 +219,14 @@ export class InterestedSheetComponent {
     this.selectednoticePeriod = null;
     this.selectedsource = null;
     this.selectedexp = null;
+
+    this.getCuriotoryLeads();
   }
 
   updateInterested(lead: any, status: boolean): void {
     lead.interested = status;
     // this.clientService.updateLead(lead).subscribe();
   }
-    // open filter div
-    openFilterDiv(){
-      this.openFilters = !this.openFilters;
-    }
 
   updateRound(lead: any): void {
     this.clientService.updateFilteredCandidate(this.clientId,this.processId,lead._id,lead).subscribe({

@@ -25,28 +25,30 @@
       <div class="filters" *ngIf="openFilters">
         <mat-form-field appearance="fill" class="filterDropDown">
           <mat-label>Languages</mat-label>
-          <mat-select [(value)]="selectedLanguage" (selectionChange)="applyDropdownFilter($event.value, 'language')">
+          <mat-select [(value)]="selectedLanguage" (selectionChange)="filterLang($event.value)">
             <mat-option [value]="null">None</mat-option>
             <mat-option *ngFor="let language of languages" [value]="language">{{ language }}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="fill" class="filterDropDown">
           <mat-label>Proficiency</mat-label>
-          <mat-select [(value)]="selectedproficiencyLevel" (selectionChange)="applyDropdownFilter($event.value, 'proficiencyLevel')">
-            <mat-option [value]="null">None</mat-option>
-            <mat-option *ngFor="let proficiencyLevel of proficiencyLevels" [value]="proficiencyLevel">{{ proficiencyLevel }}</mat-option>
+          <mat-select [(value)]="selectedProficiencyLevels" (selectionChange)="filterProfi($event.value)" multiple>
+            <mat-option *ngFor="let proficiencyLevel of proficiencyLevels" [value]="proficiencyLevel">
+              {{ proficiencyLevel }}
+            </mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="fill" class="filterDropDown">
           <mat-label>Job Status</mat-label>
-          <mat-select [(value)]="selectedJobStatus"  (selectionChange)="applyDropdownFilter($event.value, 'jbStatus')">
+          <mat-select [(value)]="selectedJobStatus" (selectionChange)="applyDropdownFilter($event.value, 'jbStatus')">
             <mat-option [value]="null">None</mat-option>
             <mat-option *ngFor="let status of jobStatuses" [value]="status">{{ status }}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="fill" class="filterDropDown">
           <mat-label>Qualification</mat-label>
-          <mat-select [(value)]="selectedQualification" (selectionChange)="applyDropdownFilter($event.value, 'qualification')">
+          <mat-select [(value)]="selectedQualification"
+            (selectionChange)="applyDropdownFilter($event.value, 'qualification')">
             <mat-option [value]="null">None</mat-option>
             <mat-option *ngFor="let qualification of qualifications" [value]="qualification">{{ qualification
               }}</mat-option>
@@ -70,7 +72,8 @@
         </mat-form-field>
         <mat-form-field appearance="fill" class="filterDropDown">
           <mat-label>Notice Period</mat-label>
-          <mat-select [(value)]="selectednoticePeriod" (selectionChange)="applyDropdownFilter($event.value, 'noticePeriod')">
+          <mat-select [(value)]="selectednoticePeriod"
+            (selectionChange)="applyDropdownFilter($event.value, 'noticePeriod')">
             <mat-option [value]="null">None</mat-option>
             <mat-option *ngFor="let noticePeriod of noticePeriods" [value]="noticePeriod">{{ noticePeriod
               }}</mat-option>
@@ -92,7 +95,17 @@
               }}</mat-option>
           </mat-select>
         </mat-form-field>
-        <button mat-raised-button style="background: #02465b;color: white;" (click)="clearFilters()" class="filterDropDown">Clear Filters</button>
+
+        <mat-form-field appearance="fill" class="filterDropDown">
+          <mat-label>Round</mat-label>
+          <mat-select [(value)]="selectedRound" (selectionChange)="applyDropdownFilter($event.value, 'status')">
+            <mat-option [value]="null">None</mat-option>
+            <mat-option *ngFor="let status of round" [value]="status">{{ status
+              }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-raised-button style="background: #02465b;color: white;" (click)="clearFilters()"
+          class="filterDropDown">Clear Filters</button>
       </div>
   
   
@@ -130,25 +143,17 @@
             <td mat-cell *matCellDef="let lead">{{ lead.phone }}</td>
           </ng-container>
   
-          <ng-container matColumnDef="lType">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
-              Language Type
-            </th>
-            <td mat-cell *matCellDef="let lead">{{ lead.lType }}</td>
-          </ng-container>
-  
           <ng-container matColumnDef="language">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
-              Language
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b; color: white;">
+              Language Details
             </th>
-            <td mat-cell *matCellDef="let lead">{{ lead.language }}</td>
-          </ng-container>
-  
-          <ng-container matColumnDef="proficiencyLevel">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
-              Proficiency Level
-            </th>
-            <td mat-cell *matCellDef="let lead">{{ lead.proficiencyLevel }}</td>
+            <td mat-cell *matCellDef="let lead">
+              <div *ngIf="lead.language">
+                <ng-container *ngFor="let lang of lead.language">
+                  <div>{{ lang.lType }} - {{ lang.lang }} - {{ lang.proficiencyLevel }}</div>
+                </ng-container>
+              </div>  
+            </td>
           </ng-container>
   
           <ng-container matColumnDef="jbStatus">

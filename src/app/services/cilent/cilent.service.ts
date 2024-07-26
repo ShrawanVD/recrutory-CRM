@@ -72,4 +72,43 @@ export class CilentService {
     return this.http.get(`${this.url}/api/client/selected-candidates`);
   }
 
+  // filter for lang and prof in filter sheet
+  filterSheetlangFilter(clientId: any,processId: any,lang: any,proficiencyLevels: any){
+    if(lang && !proficiencyLevels){
+      return this.http.get(`${this.url}/api/client/clients/${clientId}/process/${processId}/filterLangFilter?lang=${lang}`);
+    }
+    else if(!lang && proficiencyLevels){
+      return this.http.get(`${this.url}/api/client/clients/${clientId}/process/${processId}/filterLangFilter?proficiencyLevel=${proficiencyLevels}`);
+    }
+    else{
+      return this.http.get(`${this.url}/api/client/clients/${clientId}/process/${processId}/filterLangFilter?lang=${lang}&proficiencyLevel=${proficiencyLevels}`);
+    }
+  }
+
+  // filter for lang and prof in interested candidate
+  interestedlangFilter(clientId: any,processId: any,lang:any,proficiencyLevels: any){
+    if(lang && !proficiencyLevels){
+      return this.http.get(`${this.url}/api/client/clients/${clientId}/process/${processId}/interestedlangfilter?lang=${lang}`);
+    }
+    else if(!lang && proficiencyLevels){
+      return this.http.get(`${this.url}/api/client/clients/${clientId}/process/${processId}/interestedlangfilter?proficiencyLevel=${proficiencyLevels}`);
+    }
+    else{
+      return this.http.get(`${this.url}/api/client/clients/${clientId}/process/${processId}/interestedlangfilter?lang=${lang}&proficiencyLevel=${proficiencyLevels}`);
+    }
+  }
+
+  // filter for lan and prof in selected sheet
+  filterSelectedSheet(lang: any,proficiencyLevels: any){
+    if(lang && !proficiencyLevels){
+      return this.http.get(`${this.url}/api/client/selectedFilter?lang=${lang}`);
+    }
+    else if(!lang && proficiencyLevels){
+      return this.http.get(`${this.url}/api/client/selectedFilter?proficiencyLevel=${proficiencyLevels}`);
+    }
+    else{
+      return this.http.get(`${this.url}/api/client/selectedFilter?lang=${lang}&proficiencyLevel=${proficiencyLevels}`);
+    }
+  }
+
 }
