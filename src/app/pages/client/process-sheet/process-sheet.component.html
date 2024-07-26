@@ -146,18 +146,23 @@
         </ng-container>
 
         <ng-container matColumnDef="clientProcessJobDesc">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b; color: white;">
             Job Description
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.clientProcessJobDesc }}</td>
+          <td mat-cell *matCellDef="let lead" (click)="viewJobDesc(lead._id)" style="cursor:pointer; color: rgb(55, 55, 238);">
+            View Job Description
+          </td>
         </ng-container>
         <ng-container matColumnDef="viewDetails">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white; ">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             POC Details
           </th>
           <td mat-cell *matCellDef="let lead" (click)="moreDetails(lead._id)"
-            style="cursor:pointer; color: rgb(55, 55, 238);">View Details</td>
+              style="cursor:pointer; color: rgb(55, 55, 238);">
+            View Details
+          </td>
         </ng-container>
+        
 
         <ng-container matColumnDef="action">
               <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b; color: white;">

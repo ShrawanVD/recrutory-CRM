@@ -7,21 +7,19 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
       <mat-icon class="close-icon" color="warn">close</mat-icon>
     </button>
   </mat-dialog-actions>
-  <div mat-dialog-title>
-    <h1>Candidate Form</h1>
-  </div>
+  <h1>Candidate Form</h1>
   <div mat-dialog-content>
     <form [formGroup]="leadForm" (ngSubmit)="submitLead()">
 
       <div class="row">
         <!-- First Name -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-left">
           <mat-label>First Name</mat-label>
           <input matInput placeholder="Suhas" required formControlName="name" />
         </mat-form-field>
 
         <!-- Email -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-right">
           <mat-label>Email</mat-label>
           <input matInput placeholder="abc@gmail.com" required formControlName="email" />
         </mat-form-field>
@@ -31,13 +29,13 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
 
         <!-- Phone -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-left">
           <mat-label>Mobile No</mat-label>
           <input matInput placeholder="98XXXXXXXX.." required formControlName="phone" />
         </mat-form-field>
 
         <!-- languages type -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-right">
           <mat-label>Language Type</mat-label>
           <mat-select placeholder="Foreign, Regional.." required formControlName="lType">
             <mat-option value="Foreign">Foreign</mat-option>
@@ -66,7 +64,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
       <div class="row">
         <!-- proficiencyLevel -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-left">
           <mat-label>Proficiency</mat-label>
           <mat-select formControlName="proficiencyLevel">
             <mat-option value="A1">A1</mat-option>
@@ -79,7 +77,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         </mat-form-field>
 
         <!-- jobStatus -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-right">
           <mat-label>Job Status</mat-label>
           <mat-select formControlName="jbStatus">
             <mat-option value="Working">Working</mat-option>
@@ -91,7 +89,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
       <div class="row">
         <!-- qualification -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-left">
           <mat-label>Qualification</mat-label>
           <mat-select formControlName="qualification">
             <mat-option value="SSC">SSC</mat-option>
@@ -110,7 +108,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         </mat-form-field>
 
         <!-- industry -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-right">
           <mat-label>Industry</mat-label>
           <input matInput placeholder="Software.." required formControlName="industry" />
         </mat-form-field>
@@ -118,13 +116,13 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
       <div class="row">
         <!-- domain -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-left">
           <mat-label>Domain</mat-label>
           <input matInput placeholder="Development.." required formControlName="domain" />
         </mat-form-field>
 
         <!-- experience -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-right">
           <mat-label>Experience</mat-label>
           <mat-select formControlName="exp">
             <mat-option value="0-1">0-1 Year</mat-option>
@@ -141,13 +139,13 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
       <div class="row">
 
         <!-- current location -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-left">
           <mat-label>Current Location</mat-label>
           <input matInput placeholder="Pune.." required formControlName="cLocation" />
         </mat-form-field>
 
         <!-- preferred location -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-right">
           <mat-label>Preferred Location</mat-label>
           <input matInput placeholder="Mumbai.." required formControlName="pLocation" />
         </mat-form-field>
@@ -157,13 +155,13 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
       <div class="row">
 
         <!-- currentCTC -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-left">
           <mat-label>Current CTC</mat-label>
           <input matInput placeholder="in lakhs.." required formControlName="currentCTC" />
         </mat-form-field>
 
         <!-- expectedCTC -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-right">
           <mat-label>Expected CTC</mat-label>
           <input matInput placeholder="in lakhs.." required formControlName="expectedCTC" />
         </mat-form-field>
@@ -173,7 +171,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
       <div class="row">
 
         <!-- noticePeriod -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-left">
           <mat-label>Notice Period</mat-label>
           <mat-select formControlName="noticePeriod">
             <mat-option value="15">15 Days</mat-option>
@@ -185,7 +183,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         </mat-form-field>
 
         <!-- Mode -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-right">
           <mat-label>Mode</mat-label>
           <mat-select placeholder="wfh.." required formControlName="wfh">
             <mat-option value="WFH">WFH</mat-option>
@@ -199,13 +197,13 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
       <div class="row">
 
         <!-- resumeLink -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-left">
           <mat-label>Resume</mat-label>
           <input matInput placeholder="resume.." required formControlName="resumeLink" />
         </mat-form-field>
 
         <!-- linkedinLink -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-right">
           <mat-label>Linkedin Profile</mat-label>
           <input matInput placeholder="linkedin.." required formControlName="linkedinLink" />
         </mat-form-field>
@@ -238,13 +236,13 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
       <div class="row">
         <!-- company -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-left">
           <mat-label>Organisation</mat-label>
           <input matInput placeholder="xyz.." required formControlName="company" />
         </mat-form-field>
 
         <!-- voiceNonVoice -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-right">
           <mat-label>Voice / NonVoice</mat-label>
           <mat-select required formControlName="voiceNonVoice">
             <mat-option value="Voice">Voice</mat-option>
@@ -274,7 +272,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
       </div>
 
       <!-- action -->
-      <div mat-dialog-actions class="action">
+      <div mat-dialog-actions class="action" style="margin-top: 1rem;">
         <button mat-raised-button type="button" [mat-dialog-close]="false">
           Cancel
         </button>

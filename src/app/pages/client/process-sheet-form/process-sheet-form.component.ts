@@ -71,6 +71,9 @@ export class ProcessSheetFormComponent {
   // Remove a POC from the FormArray
   removePoc(index: number): void {
     this.clientProcessPoc.removeAt(index);
+    this._snackBar.open('POC removed', 'Close', {
+      duration: 1000,
+    });
   }
 
 

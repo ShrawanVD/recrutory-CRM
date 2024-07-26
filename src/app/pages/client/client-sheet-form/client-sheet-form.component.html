@@ -6,21 +6,22 @@
       <mat-icon class="close-icon" color="warn">close</mat-icon>
     </button>
   </mat-dialog-actions>
-  <div mat-dialog-title>
-    <h1>Client Form</h1>
-  </div>
+  <h1>Client Form</h1>
+  <!-- <div mat-dialog-title>
+    
+  </div> -->
   <div mat-dialog-content>
     <form [formGroup]="clientForm" (ngSubmit)="submitLead()">
 
       <div class="row">
         <!-- Client Name -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-left">
           <mat-label>Client Name</mat-label>
           <input matInput placeholder="Suhas" required formControlName="clientName" />
         </mat-form-field>
 
         <!-- Vertical -->
-        <mat-form-field appearance="outline" class="input">
+        <mat-form-field appearance="outline" class="input ip-right">
           <mat-label>Vertical</mat-label>
           <input matInput placeholder="Vertical" formControlName="clientVertical" />
         </mat-form-field>
@@ -33,13 +34,13 @@
 
             <div class="row">
               <!-- POC Name -->
-              <mat-form-field appearance="outline" class="input">
+              <mat-form-field appearance="outline" class="input ip-left">
                 <mat-label>POC Name</mat-label>
                 <input matInput formControlName="clientPocName" />
               </mat-form-field>
 
               <!-- POC Designation -->
-              <mat-form-field appearance="outline" class="input">
+              <mat-form-field appearance="outline" class="input ip-right">
                 <mat-label>POC Designation</mat-label>
                 <input matInput formControlName="clientPocDesg" />
               </mat-form-field>
@@ -47,13 +48,13 @@
 
             <div class="row">
               <!-- POC Phone Number -->
-              <mat-form-field appearance="outline" class="input">
+              <mat-form-field appearance="outline" class="input ip-left">
                 <mat-label>POC Phone Number</mat-label>
                 <input matInput formControlName="clientPocNumber" />
               </mat-form-field>
 
               <!-- POC Email -->
-              <mat-form-field appearance="outline" class="input">
+              <mat-form-field appearance="outline" class="input ip-right">
                 <mat-label>POC Email</mat-label>
                 <input matInput formControlName="clientPocEmail" />
               </mat-form-field>
@@ -81,7 +82,7 @@
       </div>
 
       <!-- action -->
-      <div mat-dialog-actions class="action">
+      <div mat-dialog-actions class="action" style="margin-top: 1rem;">
         <button mat-raised-button type="button" [mat-dialog-close]="false">
           Cancel
         </button>

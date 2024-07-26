@@ -20,6 +20,11 @@ export const navbarData = [
     label: 'Selected-Sheet'
   },
   {
+    routeLink: 'add-member',
+    icon: 'fas fa-user-plus', // changed 'fal' to 'fas'
+    label: 'Add Member'
+  },
+  {
     routeLink: 'settings',
     icon: 'fas fa-cog', // changed 'fal' to 'fas'
     label: 'Settings'

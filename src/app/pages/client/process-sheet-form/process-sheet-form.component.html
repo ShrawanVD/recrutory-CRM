@@ -10,9 +10,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons"
       <mat-icon class="close-icon" color="warn">close</mat-icon>
     </button>
   </mat-dialog-actions>
-  <div mat-dialog-title>
-    <h1>Process Form</h1>
-  </div>
+  <h1>Process Form</h1>
   <div mat-dialog-content>
     <form [formGroup]="processForm" (ngSubmit)="submitLead()">
       <div class="row">
@@ -200,7 +198,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons"
       </div>
 
       <!-- action -->
-      <div mat-dialog-actions class="action">
+      <div mat-dialog-actions class="action" style="margin-top: 1rem;">
         <button mat-raised-button type="button" [mat-dialog-close]="false">
           Cancel
         </button>

@@ -62,7 +62,11 @@ export class ClientSheetFormComponent implements OnInit {
   // Remove a POC from the FormArray
   removePoc(index: number): void {
     this.clientPoc.removeAt(index);
+    this._snackBar.open('POC removed', 'Close', {
+      duration: 1000,
+    });
   }
+  
 
   // Add and update function
   submitLead() {

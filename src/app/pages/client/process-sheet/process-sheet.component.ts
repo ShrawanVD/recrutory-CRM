@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { ProcessSheetFormComponent } from '../process-sheet-form/process-sheet-form.component';
 import { ProcessPocComponent } from './process-poc/process-poc.component';
 import { CilentService } from 'src/app/services/cilent/cilent.service';
+import { ProcessJobDescComponent } from './process-job-desc/process-job-desc.component';
 
 @Component({
   selector: 'app-process-sheet',
@@ -100,6 +101,20 @@ export class ProcessSheetComponent implements OnInit {
     if (this.clientId) {
       this.router.navigate(['process', processId], { relativeTo: this.route });
     }
+  }
+
+  viewJobDesc(processId: any) {
+    const dialogRef = this._dialog.open(ProcessJobDescComponent, {
+      disableClose: true,
+      data: { clientId: this.clientId, processId: processId }
+    });
+    dialogRef.afterClosed().subscribe({
+      next: (val) => {
+        if (val) {
+          this.getAllProcess();
+        }
+      },
+    });
   }
 
   moreDetails(processId: any) {

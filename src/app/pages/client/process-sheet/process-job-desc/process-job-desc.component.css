@@ -1,0 +1,34 @@
+.job-desc{
+  width: 40vw;
+}
+
+.job-desc .dialogAction {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.job-desc .close-button {
+  margin-top: -10px;
+  margin-right: -10px;
+}
+
+.job-desc .close-icon {
+  color: red;
+}
+
+.job-desc .jobDescContainer {
+  padding: 20px;
+  text-align: left;
+}
+
+h1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.job-desc .jobDescContainer p {
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: justify;
+}
