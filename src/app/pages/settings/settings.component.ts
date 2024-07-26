@@ -19,6 +19,7 @@ export class SettingsComponent implements OnInit {
 
   logout(): void {
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
     this.router.navigate(['/login']);
     this.snackBar.open('Logged out successfully ...', 'Close', {
       duration: 1000,

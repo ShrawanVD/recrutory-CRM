@@ -22,7 +22,8 @@ export const navbarData = [
   {
     routeLink: 'add-member',
     icon: 'fas fa-user-plus', // changed 'fal' to 'fas'
-    label: 'Add Member'
+    label: 'Add Member',
+    isAdmin: true
   },
   {
     routeLink: 'settings',

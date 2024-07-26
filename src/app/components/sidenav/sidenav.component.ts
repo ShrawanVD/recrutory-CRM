@@ -1,6 +1,7 @@
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
 import { Component, Output, EventEmitter, OnInit, HostListener } from '@angular/core';
 import { navbarData } from './nav-data';
+import { LoginService } from 'src/app/services/login/login.service';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -44,6 +45,7 @@ export class SidenavComponent implements OnInit {
   collapsed = false;
   screenWidth = 0;
   navData = navbarData;
+  isAdmin: boolean = false;
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -54,8 +56,11 @@ export class SidenavComponent implements OnInit {
     }
   }
 
+  constructor(private loginService: LoginService) {}
+
   ngOnInit(): void {
       this.screenWidth = window.innerWidth;
+      this.isAdmin = this.loginService.isAdmin();
   }
 
   toggleCollapse(): void {
