@@ -38,10 +38,11 @@
         </mat-form-field>
         <mat-form-field appearance="fill" class="filterDropDown">
           <mat-label>Recruiters</mat-label>
-          <mat-select [(value)]="selectRecruiter" (selectionChange)="applyDropdownFilter($event.value, 'recruiter')">
+          <mat-select [(value)]="selectRecruiter" (selectionChange)="applyDropdownFilter($event.value, 'assignedRecruiter')">
             <mat-option [value]="null">None</mat-option>
-            <mat-option *ngFor="let recruiter of recruiters" [value]="recruiter">{{ recruiter
-              }}</mat-option>
+            <mat-option *ngFor="let recruiterId of getRecruiterIds()" [value]="recruiterId">
+              {{ recruiters[recruiterId] }}
+            </mat-option>
           </mat-select>
         </mat-form-field>
         <!-- <mat-form-field appearance="fill" class="filterDropDown">

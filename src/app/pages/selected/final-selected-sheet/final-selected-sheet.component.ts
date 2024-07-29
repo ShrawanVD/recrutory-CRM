@@ -119,12 +119,15 @@ export class FinalSelectedSheetComponent {
     this.clientService.getRecruiter('Recruiter').subscribe({
       next:(res) =>{
         this.recruiters = res;
-        console.log(this.recruiters);
+        console.log(this.recruiters.value);
       },
       error:(err) =>{
         console.log(err);
       }
     })
+  }
+  getRecruiterIds(): string[] {
+    return Object.keys(this.recruiters);
   }
 
   // filter for interested candidate
