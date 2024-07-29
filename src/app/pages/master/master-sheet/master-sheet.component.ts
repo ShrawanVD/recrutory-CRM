@@ -498,7 +498,7 @@ export class MasterSheetComponent implements OnInit {
   }
 
   isAdmin(): boolean {
-    return this.getRole() === 'admin';
+    return this.getRole() === 'Admin';
   }
 
 }

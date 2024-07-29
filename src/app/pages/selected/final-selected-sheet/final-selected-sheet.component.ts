@@ -16,6 +16,7 @@ import { CilentService } from 'src/app/services/cilent/cilent.service';
 })
 export class FinalSelectedSheetComponent {
   openFilters: boolean = false;
+  filterValues: any = {};
   proficiencyLevelsString: any;
 
   displayedColumns: string[] = [
@@ -50,8 +51,6 @@ export class FinalSelectedSheetComponent {
 
   dataSource!: MatTableDataSource<any>;
 
-  filterValues: any = {};
-
   selectedClientName: string | null = null;
   selectedLanguage: any ="";
   selectedProficiencyLevels: any[] = [];
@@ -62,6 +61,7 @@ export class FinalSelectedSheetComponent {
   selectednoticePeriod: string | null = null;
   selectedsource: string | null = null;
   selectedexp: string | null = null;
+  selectRecruiter: string | null = null;
 
   languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Chinese', 'Nepalese']; // replace with actual statuses
   proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
@@ -73,6 +73,7 @@ export class FinalSelectedSheetComponent {
   sources = ['Linkedin', 'Naukri', 'Meta', 'Google', 'Instagram', 'Website', 'App', 'Email', 'Reference'];
   exps = ['0-1', '1-2', '2-4', '4-8', '8-12', '12+'];
   clients: any;
+  recruiters: any;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -88,6 +89,7 @@ export class FinalSelectedSheetComponent {
   ngOnInit(): void {
     this.getCuriotoryLeads();
     this.getAllProcessList();
+    this.getAllRecruiterList();
   }
 
   getCuriotoryLeads() {
@@ -108,6 +110,18 @@ export class FinalSelectedSheetComponent {
         this.clients = res;
       },
       error:(err)  =>{
+        console.log(err);
+      }
+    })
+  }
+
+  getAllRecruiterList(){
+    this.clientService.getRecruiter('Recruiter').subscribe({
+      next:(res) =>{
+        this.recruiters = res;
+        console.log(this.recruiters);
+      },
+      error:(err) =>{
         console.log(err);
       }
     })

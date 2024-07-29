@@ -32,6 +32,7 @@ dateControl = new FormControl();
   selectedRows: string[] = [];
   openFilters: boolean = false;
   proficiencyLevelsString: any;
+  recruiterId: any;
 
   displayedColumns: string[] = [
     'SrNo',
@@ -111,10 +112,11 @@ dateControl = new FormControl();
 
   ngOnInit(): void {
     this.getCandidatesByRecruiterId();
+    this.recruiterId = this.loginService.getRecruiterId();
   }
 
   getCandidatesByRecruiterId() {
-    this.loginService.getCandidatByRecruiterId().subscribe({
+    this.loginService.getCandidateByRecruiterId().subscribe({
       next: (res: any) => {
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.filterPredicate = this.createFilter();

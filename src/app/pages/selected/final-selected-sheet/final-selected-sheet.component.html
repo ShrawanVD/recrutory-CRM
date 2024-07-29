@@ -37,6 +37,14 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="fill" class="filterDropDown">
+          <mat-label>Recruiters</mat-label>
+          <mat-select [(value)]="selectRecruiter" (selectionChange)="applyDropdownFilter($event.value, 'recruiter')">
+            <mat-option [value]="null">None</mat-option>
+            <mat-option *ngFor="let recruiter of recruiters" [value]="recruiter">{{ recruiter
+              }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!-- <mat-form-field appearance="fill" class="filterDropDown">
           <mat-label>Job Status</mat-label>
           <mat-select [(value)]="selectedJobStatus"  (selectionChange)="applyDropdownFilter($event.value, 'jbStatus')">
             <mat-option [value]="null">None</mat-option>
@@ -90,7 +98,7 @@
             <mat-option *ngFor="let exp of exps" [value]="exp">{{ exp
               }}</mat-option>
           </mat-select>
-        </mat-form-field>
+        </mat-form-field> -->
         <button mat-raised-button style="background: #02465b;color: white; margin-bottom: 1rem;" (click)="clearFilters()" class="filterDropDown">Clear Filters</button>
       </div>
 

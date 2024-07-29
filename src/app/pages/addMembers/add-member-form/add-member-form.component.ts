@@ -26,8 +26,8 @@ export class AddMemberFormComponent implements OnInit {
     this.leadForm = this._formBuilder.group({
       username: [data?.username || '', Validators.required],
       role: [data?.role || '', Validators.required],
-      password: ['', this.isEditing ? Validators.nullValidator : Validators.required],
-      confirmPassword: ['', this.isEditing ? Validators.nullValidator : Validators.required]
+      password: ['', this.isEditing ? Validators.nullValidator : Validators.required]
+      // confirmPassword: ['', this.isEditing ? Validators.nullValidator : Validators.required]
     });
   }
 

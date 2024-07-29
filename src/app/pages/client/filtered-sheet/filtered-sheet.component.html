@@ -27,7 +27,7 @@
       <mat-form-field appearance="fill" class="filterDropDown">
         <mat-label>Languages</mat-label>
         <mat-select [(value)]="selectedLanguage" (selectionChange)="filterLang($event.value)">
-          <mat-option [value]="null">None</mat-option>
+          <mat-option [value]="null" (click)="clearFilters()">None</mat-option>
           <mat-option *ngFor="let language of languages" [value]="language">{{ language }}</mat-option>
         </mat-select>
       </mat-form-field>

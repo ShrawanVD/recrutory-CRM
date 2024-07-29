@@ -11,6 +11,7 @@ import { tap } from 'rxjs/operators';
 export class LoginService {
   private token: string = '';
   private role: string = '';
+  private recruiterId: any;
   isUserLoggedIn = new BehaviorSubject<boolean>(false);
   url = 'https://recrutory-crm-backend-yhnk.onrender.com/api';
 
@@ -19,9 +20,9 @@ export class LoginService {
   login(data: any) {
     return this.http.post(`${this.url}/login`, data).pipe(
       tap((result: any) => {
-        console.log("result:", result);
         localStorage.setItem('token', result.token);
         localStorage.setItem('role', result.role);
+        localStorage.setItem('recruiter', result._id);
         this.isUserLoggedIn.next(true);
         this.router.navigate(['/dashboard/client']);
       })
@@ -53,17 +54,24 @@ export class LoginService {
   getRole() {
     return this.role || localStorage.getItem('role');
   }
+
+  getRecruiterId(){
+    return this.recruiterId || localStorage.getItem('recruiter');
+  }
   //Role specific api  Recruiter
-  getCandidatByRecruiterId(){
-    return this.http.get(`${this.url}/assigned-candidates?recruiterId=66868b4a82d622656abd3873`);
+  getCandidateByRecruiterId(){
+    return this.http.get(`${this.url}/assigned-candidates?recruiterId=${this.getRecruiterId()}`);
   }
 
   getFilteredCanByRecruiterId(lang: any,proficiencyLevels: any){
     if(lang && !proficiencyLevels){
-      return this.http.get(`${this.url}/filterCandidateRecruiter?recruiterId=66868b4a82d622656abd3873&lang=${lang}`);
+      return this.http.get(`${this.url}/filterCandidateRecruiter?recruiterId=${this.getRecruiterId()}&lang=${lang}`);
+    }
+  else if(!lang && proficiencyLevels){
+    return this.http.get(`${this.url}/filterCandidateRecruiter?recruiterId=${this.getRecruiterId()}&proficiencyLevel=${proficiencyLevels}`);
     }
     else{
-      return this.http.get(`${this.url}/filterCandidateRecruiter?recruiterId=66868b4a82d622656abd3873&lang=${lang}&proficiencyLevel=${proficiencyLevels}`);
+      return this.http.get(`${this.url}/filterCandidateRecruiter?recruiterId=${this.getRecruiterId()}&lang=${lang}&proficiencyLevel=${proficiencyLevels}`);
     }
   }
 

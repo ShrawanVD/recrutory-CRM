@@ -16,7 +16,7 @@ export class CilentService {
   }
 
   addClient(data: any) {
-    return this.http.post(`${this.url}/api/client/create`, data);
+    return this.http.post(`${this.url}/api/client/clients`, data);
   }
 
   updateClientById(clientId: any, data: any) {

@@ -117,7 +117,7 @@ export class FilteredSheetComponent {
   }
 
   getRecruitersList(): void {
-    this.clientService.getRecruiter('recruiter').subscribe({
+    this.clientService.getRecruiter('Recruiter').subscribe({
       next: (res) => {
         this.recruiters = res;
       },

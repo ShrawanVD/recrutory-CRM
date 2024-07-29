@@ -35,8 +35,11 @@ export class LeadsService {
   }
 
   langFilter(lang:any,proficiencyLevels: any){
-    if(lang){
+    if(lang && !proficiencyLevels){
       return this.http.get(`${this.url}/api/master/langfilter?lang=${lang}`);
+    }
+    else if(!lang && proficiencyLevels){
+      return this.http.get(`${this.url}/api/master/langfilter?proficiencyLevel=${proficiencyLevels}`);
     }
     else{
       return this.http.get(`${this.url}/api/master/langfilter?lang=${lang}&proficiencyLevel=${proficiencyLevels}`);

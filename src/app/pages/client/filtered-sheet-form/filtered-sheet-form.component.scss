@@ -1,18 +1,15 @@
 .dialog-box {
   text-align: center;
-  width: 70vw;
 }
 .container-box {
   padding-top: 3rem;
 }
-
 .dialogAction{
   display: flex;
   align-items: right;
   justify-content: right;
   text-align: right;
 }
-
 h1 {
   margin: 0rem 0 0;
   font-size: 2rem;
@@ -73,13 +70,10 @@ h1 {
 }
 .input{
   min-width: 47%;
-}
 
-.ip-left{
-  margin-right: 0.5rem;
 }
-.ip-right{
-  margin-left: 0.5rem;
+.adjustThree{
+  min-width: 29%;
 }
 
 .full{

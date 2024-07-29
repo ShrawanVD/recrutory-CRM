@@ -229,19 +229,25 @@ export class InterestedSheetComponent {
   }
 
   updateRound(lead: any): void {
-    this.clientService.updateFilteredCandidate(this.clientId,this.processId,lead._id,lead).subscribe({
-      next: (val) => {
-        this._snackBar.open('Candidate status updated successfully', 'Close', {
-          duration: 3000,
-        });
-      },
-      error: (err) => {
-        console.error(err);
-        this._snackBar.open('Failed to update status candidate data', 'Close', {
-          duration: 3000,
-        });
-      },
-    });
+    const confirmSelectRound =  window.confirm(
+      `Do you want to change the status of the candidate to ${lead.status}, Please Confirm`
+    );
+    if(confirmSelectRound){
+      this.clientService.updateFilteredCandidate(this.clientId,this.processId,lead._id,lead).subscribe({
+        next: (val) => {
+          this._snackBar.open('Candidate status updated successfully', 'Close', {
+            duration: 3000,
+          });
+        },
+        error: (err) => {
+          console.error(err);
+          this._snackBar.open('Failed to update status candidate data', 'Close', {
+            duration: 3000,
+          });
+        },
+      });
+    }
+    
   }
 
   // open filter component
