@@ -64,8 +64,8 @@ export class FilteredSheetComponent {
   selectedsource: string | null = null;
   selectedexp: string | null = null;
 
-  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Chinese', 'Nepalese']; // replace with actual statuses
-  proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Chinese', 'Nepalese', 'Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Marathi']; // replace with actual statuses
+  proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'HSK1', 'HSK2', 'HSK3','HSK4', 'HSK5', 'HSK6', 'N1', 'N2', 'N3', 'N4', 'N5'];
   jobStatuses = ['Working', 'Job Seeking', 'Teacher'];
   qualifications = ['SSC', 'HSC', 'Under Graduate', 'Post Graduate', 'PHD'];
   modes = ['WFH', 'WHO', 'Hybrid'];

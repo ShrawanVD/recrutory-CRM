@@ -1,7 +1,7 @@
 <div class="sidenav" [ngClass]="collapsed ? 'sidenav-collapsed': ''">
     <div class="logo-container">
       <img alt="logo" src="https://res.cloudinary.com/dvk1ynowq/image/upload/v1720093465/android-chrome-192x192_qgwk5j.png" class="logo" (click)="toggleCollapse()" />
-      <div class="logo-text" @fadeInOut *ngIf="collapsed">Admin</div>
+      <div class="logo-text" @fadeInOut *ngIf="collapsed">{{this.userRole}}</div>
       <button class="btn-close" @rotate *ngIf="collapsed" (click)="closeSidenav()">
         <i class="fas fa-times close-icon"></i>
       </button>

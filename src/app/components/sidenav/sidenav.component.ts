@@ -46,7 +46,7 @@ export class SidenavComponent implements OnInit {
   screenWidth = 0;
   navData = navbarData;
   isAdmin: boolean = false;
-
+  userRole:any;
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.screenWidth = window.innerWidth;
@@ -61,6 +61,7 @@ export class SidenavComponent implements OnInit {
   ngOnInit(): void {
       this.screenWidth = window.innerWidth;
       this.isAdmin = this.loginService.isAdmin();
+      this.userRole  = this.loginService.getRole();
   }
 
   toggleCollapse(): void {

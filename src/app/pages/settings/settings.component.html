@@ -3,15 +3,15 @@
   <div class="employee-info">
     <div class="info-item">
       <div class="info-label">Name:</div>
-      <div class="info-value">{{employeeName}}</div>
+      <div class="info-value">{{this.userRole}}</div>
     </div>
-    <div class="info-item">
+    <!-- <div class="info-item">
       <div class="info-label">Email ID:</div>
       <div class="info-value">{{employeeEmail}}</div>
-    </div>
+    </div> -->
     <div class="info-item">
       <div class="info-label">Role:</div>
-      <div class="info-value">{{employeeRole}}</div>
+      <div class="info-value">{{this.userRole}}</div>
     </div>
   </div>
   <button class="button" (click)="logout()">
