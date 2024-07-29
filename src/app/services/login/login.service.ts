@@ -12,6 +12,8 @@ export class LoginService {
   private token: string = '';
   private role: string = '';
   private recruiterId: any;
+  private username: any;
+  
   isUserLoggedIn = new BehaviorSubject<boolean>(false);
   url = 'https://recrutory-crm-backend-yhnk.onrender.com/api';
 
@@ -23,6 +25,7 @@ export class LoginService {
         localStorage.setItem('token', result.token);
         localStorage.setItem('role', result.role);
         localStorage.setItem('recruiter', result._id);
+        localStorage.setItem('username',result.username);
         this.isUserLoggedIn.next(true);
         this.router.navigate(['/dashboard/client']);
       })
@@ -58,6 +61,11 @@ export class LoginService {
   getRecruiterId(){
     return this.recruiterId || localStorage.getItem('recruiter');
   }
+
+  getUsername(){
+    return this.username || localStorage.getItem('username');
+  }
+
   //Role specific api  Recruiter
   getCandidateByRecruiterId(){
     return this.http.get(`${this.url}/assigned-candidates?recruiterId=${this.getRecruiterId()}`);

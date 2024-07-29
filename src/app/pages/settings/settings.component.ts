@@ -10,10 +10,12 @@ import { LoginService } from 'src/app/services/login/login.service';
 })
 export class SettingsComponent implements OnInit {
   userRole: any;
+  userName: any;
   constructor(private router: Router, private snackBar: MatSnackBar,private loginService: LoginService) { }
 
   ngOnInit(): void {
     this.userRole =this.loginService.getRole();
+    this.userName = this.loginService.getUsername();
    }
 
   // employeeName: any = this.userRole;
