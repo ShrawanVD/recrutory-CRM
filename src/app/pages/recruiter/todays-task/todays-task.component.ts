@@ -298,6 +298,11 @@ dateControl = new FormControl();
     });
   }
 
+    // for getting srno 
+    getSrNo(index: number): number {
+      return index + 1 + (this.paginator.pageIndex * this.paginator.pageSize);
+    }
+
   updateInterestedStatus(lead: any, status: any): void {
     const payload = {
       clientId: lead.clientId,

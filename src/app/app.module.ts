@@ -28,7 +28,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatCheckboxModule } from '@angular/material/checkbox'
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatMenuModule } from '@angular/material/menu';
 import { LoginComponent } from './pages/login/login.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { AfterLoginComponent } from './components/after-login/after-login.component';
@@ -102,6 +103,7 @@ import { ProcessJobDescComponent } from './pages/client/process-sheet/process-jo
     MatExpansionModule,
     MatDatepickerModule,
     MatCheckboxModule,
+    MatMenuModule,
     MatNativeDateModule
   ],
   providers: [],

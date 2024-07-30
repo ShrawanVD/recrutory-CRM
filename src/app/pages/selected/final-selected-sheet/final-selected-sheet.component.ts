@@ -8,6 +8,11 @@ import { LoginService } from 'src/app/services/login/login.service';
 import { LeadsService } from 'src/app/services/leads/leads.service';
 import { ActivatedRoute } from '@angular/router';
 import { CilentService } from 'src/app/services/cilent/cilent.service';
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
+
+const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+const EXCEL_EXTENSION = '.xlsx';
 
 @Component({
   selector: 'app-final-selected-sheet',
@@ -54,24 +59,10 @@ export class FinalSelectedSheetComponent {
   selectedClientName: string | null = null;
   selectedLanguage: any ="";
   selectedProficiencyLevels: any[] = [];
-  selectedJobStatus: string | null = null;
-  selectedQualification: string | null = null;
-  selectedmode: string | null = null;
-  selectedfeedback: string | null = null;
-  selectednoticePeriod: string | null = null;
-  selectedsource: string | null = null;
-  selectedexp: string | null = null;
   selectRecruiter: string | null = null;
 
   languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Chinese', 'Nepalese', 'Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Marathi']; // replace with actual statuses
   proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'HSK1', 'HSK2', 'HSK3','HSK4', 'HSK5', 'HSK6', 'N1', 'N2', 'N3', 'N4', 'N5', 'Native' , 'Non-Native'];
-  jobStatuses = ['Working', 'Job Seeking', 'Teacher'];
-  qualifications = ['SSC', 'HSC', 'Under Graduate', 'Post Graduate', 'PHD'];
-  modes = ['WFH', 'WHO', 'Hybrid'];
-  feedbacks = ['Not Intrested - CTC Not Matching', 'Not Intrested - Relocation Issue', 'Not Intrested - Notice Period', 'Not Intrested - Cooling Down Period', 'Not Intrested - Call Not Recieved', 'Not Intrested - Under Qualified"'];
-  noticePeriods = ['15', '30', '60', '90', '90+'];
-  sources = ['Linkedin', 'Naukri', 'Meta', 'Google', 'Instagram', 'Website', 'App', 'Email', 'Reference'];
-  exps = ['0-1', '1-2', '2-4', '4-8', '8-12', '12+'];
   clients: any;
   recruiters: any;
 
@@ -215,14 +206,7 @@ export class FinalSelectedSheetComponent {
     this.dataSource.filter = "";
     this.selectedLanguage = null;
     this.selectedProficiencyLevels = [];
-    this.selectedJobStatus = null;
-    this.selectedQualification = null;
-    this.selectedmode = null;
-    this.selectedfeedback = null;
-    this.selectednoticePeriod = null;
-    this.selectedsource = null;
-    this.selectedexp = null;
-
+    this.selectRecruiter = null;
     this.getCuriotoryLeads();
   }
 
@@ -230,6 +214,11 @@ export class FinalSelectedSheetComponent {
    openFilterDiv(){
     this.openFilters = !this.openFilters;
   }
+  
+    // for getting srno 
+    getSrNo(index: number): number {
+      return index + 1 + (this.paginator.pageIndex * this.paginator.pageSize);
+    }
 
   getRole(): any {
     return localStorage.getItem('role');
@@ -237,5 +226,87 @@ export class FinalSelectedSheetComponent {
 
   isAdmin(): boolean {
     return this.getRole() === 'admin';
+  }
+
+  exportExcel() {
+    const leadsToExport = this.dataSource.filteredData;
+
+    if (leadsToExport.length === 0) {
+      alert('No rows available for export');
+      return;
+    }
+
+    const formattedData = leadsToExport.map((lead: any, index: number) => {
+      return {
+        'SrNo': index + 1,
+        'Client Name': lead.clientInfo,
+        'Name': lead.candidate.name,
+        'Email': lead.candidate.email,
+        'Phone': lead.candidate.phone,
+        'Lead Status': lead.candidate.status,
+        'Language Details': lead.candidate.language.map((langObj: any) => `${langObj.lType} - ${langObj.proficiencyLevel} - ${langObj.lang}`).join(', '),
+        'Job Status': lead.candidate.jbStatus,
+        'Qualification': lead.candidate.qualification,
+        'Industry': lead.candidate.industry,
+        'Profile': lead.candidate.domain,
+        'Experience': lead.candidate.exp,
+        'Current Location': lead.candidate.cLocation,
+        'Preferred Location': lead.candidate.pLocation,
+        'Current CTC (in Lakhs)': lead.candidate.currentCTC,
+        'Expected CTC (in Lakhs)': lead.candidate.expectedCTC,
+        'Notice Period (in days)': lead.candidate.noticePeriod,
+        'Mode': lead.candidate.wfh,
+        'Resume': lead.candidate.resumeLink,
+        'LinkedIn Profile': lead.candidate.linkedinLink,
+        'Feedback': lead.candidate.feedback,
+        'Remark': lead.candidate.remark,
+        'Organisation': lead.candidate.company,
+        'Voice/Non-voice': lead.candidate.voiceNonVoice,
+        'Source': lead.candidate.source,
+        'Recruiter': lead.candidate.assignedRecruiter
+      };
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(formattedData);
+
+    const wscols = [
+      { wch: 5 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 50 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 50 },
+      { wch: 50 },
+      { wch: 50 },
+      { wch: 50 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 }
+    ];
+
+    ws['!cols'] = wscols;
+
+    const wb: XLSX.WorkBook = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    this.saveAsExcelFile(excelBuffer, 'SelectedCandidates');
+  }
+
+  private saveAsExcelFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
+    FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
   }
 }

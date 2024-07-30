@@ -9,6 +9,11 @@ import { FilteredSheetFormComponent } from '../filtered-sheet-form/filtered-shee
 import { CilentService } from 'src/app/services/cilent/cilent.service';
 import { Location } from '@angular/common';
 import { LeadsService } from 'src/app/services/leads/leads.service';
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
+
+const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+const EXCEL_EXTENSION = '.xlsx';
 
 @Component({
   selector: 'app-interested-sheet',
@@ -232,22 +237,47 @@ export class InterestedSheetComponent {
     const confirmSelectRound =  window.confirm(
       `Do you want to change the status of the candidate to ${lead.status}, Please Confirm`
     );
-    if(confirmSelectRound){
-      this.clientService.updateFilteredCandidate(this.clientId,this.processId,lead._id,lead).subscribe({
-        next: (val) => {
-          this._snackBar.open('Candidate status updated successfully', 'Close', {
-            duration: 3000,
-          });
-        },
-        error: (err) => {
-          console.error(err);
-          this._snackBar.open('Failed to update status candidate data', 'Close', {
-            duration: 3000,
-          });
-        },
-      });
+
+    if(lead.status === 'Rejected'){
+      const confirmRemark = window.confirm(
+        `Please fill the remark before changing candidate status to ${lead.status}`
+      );
+
+      if(confirmRemark){
+        this.clientService.updateFilteredCandidate(this.clientId,this.processId,lead._id,lead).subscribe({
+          next: (val) => {
+            this._snackBar.open('Candidate status updated successfully', 'Close', {
+              duration: 3000,
+            });
+          },
+          error: (err) => {
+            console.error(err);
+            this._snackBar.open('Failed to update status candidate data', 'Close', {
+              duration: 3000,
+            });
+          },
+        });
+      }
+
     }
-    
+    else{
+      if(confirmSelectRound){
+        this.clientService.updateFilteredCandidate(this.clientId,this.processId,lead._id,lead).subscribe({
+          next: (val) => {
+            this._snackBar.open('Candidate status updated successfully', 'Close', {
+              duration: 3000,
+            });
+          },
+          error: (err) => {
+            console.error(err);
+            this._snackBar.open('Failed to update status candidate data', 'Close', {
+              duration: 3000,
+            });
+          },
+        });
+      }
+    }
+
   }
 
   // open filter component
@@ -261,6 +291,93 @@ export class InterestedSheetComponent {
 
   isAdmin(): boolean {
     return this.getRole() === 'admin';
+  }
+    // for getting srno 
+    getSrNo(index: number): number {
+      return index + 1 + (this.paginator.pageIndex * this.paginator.pageSize);
+    }
+
+  exportExcel() {
+    const leadsToExport = this.dataSource.filteredData;
+
+    if (leadsToExport.length === 0) {
+      alert('No rows available for export');
+      return;
+    }
+
+    const formattedData = leadsToExport.map((lead: any, index: number) => {
+      return {
+        'SrNo': index + 1,
+        // 'Client Name': lead.clientInfo,
+        'Name': lead.name,
+        'Email': lead.email,
+        'Phone': lead.phone,
+        'Lead Status': lead.status,
+        'Language Details': lead.language.map((langObj: any) => `${langObj.lType} - ${langObj.proficiencyLevel} - ${langObj.lang}`).join(', '),
+        'Job Status': lead.jbStatus,
+        'Qualification': lead.qualification,
+        'Industry': lead.industry,
+        'Profile': lead.domain,
+        'Experience': lead.exp,
+        'Current Location': lead.cLocation,
+        'Preferred Location': lead.pLocation,
+        'Current CTC (in Lakhs)': lead.currentCTC,
+        'Expected CTC (in Lakhs)': lead.expectedCTC,
+        'Notice Period (in days)': lead.noticePeriod,
+        'Mode': lead.wfh,
+        'Resume': lead.resumeLink,
+        'LinkedIn Profile': lead.linkedinLink,
+        'Feedback': lead.feedback,
+        'Remark': lead.remark,
+        'Organisation': lead.company,
+        'Voice/Non-voice': lead.voiceNonVoice,
+        'Source': lead.source,
+        'Recruiter': lead.assignedRecruiter,
+        // 'Status': lead.candidate.status
+      };
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(formattedData);
+
+    const wscols = [
+      { wch: 5 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 50 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 50 },
+      { wch: 50 },
+      { wch: 50 },
+      { wch: 50 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 }
+    ];
+
+    ws['!cols'] = wscols;
+
+    const wb: XLSX.WorkBook = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    this.saveAsExcelFile(excelBuffer, 'InterestedCandidates');
+  }
+
+  private saveAsExcelFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
+    FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
   }
 
 }

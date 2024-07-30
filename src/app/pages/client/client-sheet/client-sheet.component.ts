@@ -90,6 +90,11 @@ export class ClientSheetComponent implements OnInit {
     this.getCilents();
   }
 
+  // for getting srno 
+  getSrNo(index: number): number {
+    return index + 1 + (this.paginator.pageIndex * this.paginator.pageSize);
+  }
+
   getCilents() {
     this.clientService.getAllClient().subscribe({
       next: (res: any) => {

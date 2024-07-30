@@ -71,6 +71,11 @@ export class ProcessSheetComponent implements OnInit {
     this.getAllProcess();
   }
 
+    // for getting srno 
+    getSrNo(index: number): number {
+      return index + 1 + (this.paginator.pageIndex * this.paginator.pageSize);
+    }
+
   getAllProcess() {
     this.clientService.getClientById(this.clientId).subscribe({
       next: (res: any) => {

@@ -329,6 +329,32 @@ export class FilteredSheetComponent {
     this.router.navigate(['interested'], { relativeTo: this.route });
   }
 
+  deleteEntry(candidateId: any){
+    const confirmDelete = window.confirm(
+      `Do you want to delete this candidates, Please Confirm`
+    );
+
+    if(confirmDelete){
+      this.clientService.deleteFilteredCandidate(this.clientId,this.processId,candidateId).subscribe({
+        next:(res) =>{
+          this._snackBar.open(`Candidate Deleted Successfully`, 'Close', {
+            duration: 4000,
+          });
+
+          this.getCuriotoryLeads();
+        },
+        error:(err) =>{
+          console.log(err);
+        }
+      })
+    }
+    
+  }
+    // for getting srno 
+    getSrNo(index: number): number {
+      return index + 1 + (this.paginator.pageIndex * this.paginator.pageSize);
+    }
+
 
   // open filter div
   openFilterDiv() {
@@ -340,6 +366,6 @@ export class FilteredSheetComponent {
   }
 
   isAdmin(): boolean {
-    return this.getRole() === 'admin';
+    return this.getRole() === 'Admin';
   }
 }

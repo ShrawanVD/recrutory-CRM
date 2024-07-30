@@ -2,6 +2,17 @@
   <div class="card-head">
     <h1 style="font-weight: bold">Master Sheet</h1>
     <input type="file" #fileInput style="display: none" (change)="onFileChange($event)" />
+    <div>
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>info</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <div class="menu-item">
+          <span class="red-dot"></span>
+          <span>Candidate already assigned to a process</span>
+        </div>
+      </mat-menu>
+    </div>
   </div>
   <div class="card-body">
     <div class="filterSearchBar">
@@ -121,8 +132,8 @@
             style="background: #02465b;color: white; min-width: fit-content">
             SrNo
           </th>
-          <td mat-cell *matCellDef="let element; let i = index">
-            {{ i + 1 }}
+          <td mat-cell *matCellDef="let element; let i = index" [ngClass]="{'red-text': element.isProcessAssigned}">
+            {{ getSrNo(i) }}
           </td>
         </ng-container>
 
@@ -130,21 +141,21 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             Name
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.name }}</td>
+          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.name }}</td>
         </ng-container>
 
         <ng-container matColumnDef="email">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             Email
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.email }}</td>
+          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.email }}</td>
         </ng-container>
 
         <ng-container matColumnDef="phone">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             Phone
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.phone }}</td>
+          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.phone }}</td>
         </ng-container>
 
         <!-- <ng-container matColumnDef="status">
@@ -160,7 +171,7 @@
           </th>
           <td mat-cell *matCellDef="let lead">
             <div *ngIf="lead.language">
-              <ng-container *ngFor="let lang of lead.language">
+              <ng-container *ngFor="let lang of lead.language" [ngClass]="{'red-text': lead.isProcessAssigned}">
                 <div>{{ lang.lType }} - {{ lang.lang }} - {{ lang.proficiencyLevel }}</div>
               </ng-container>
             </div>  
@@ -171,84 +182,84 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             Job Status
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.jbStatus }}</td>
+          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.jbStatus }}</td>
         </ng-container>
 
         <ng-container matColumnDef="qualification">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             Qualification
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.qualification }}</td>
+          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.qualification }}</td>
         </ng-container>
 
         <ng-container matColumnDef="industry">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             Industry
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.industry }}</td>
+          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.industry }}</td>
         </ng-container>
 
         <ng-container matColumnDef="domain">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             Profile
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.domain }}</td>
+          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.domain }}</td>
         </ng-container>
 
         <ng-container matColumnDef="exp">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             Experience
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.exp }}</td>
+          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.exp }}</td>
         </ng-container>
 
         <ng-container matColumnDef="cLocation">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             Current Location
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.cLocation }}</td>
+          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.cLocation }}</td>
         </ng-container>
 
         <ng-container matColumnDef="pLocation">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             Preferred Location
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.pLocation }}</td>
+          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.pLocation }}</td>
         </ng-container>
 
         <ng-container matColumnDef="currentCTC">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             Current CTC (in Lakhs)
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.currentCTC }}</td>
+          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.currentCTC }}</td>
         </ng-container>
 
         <ng-container matColumnDef="expectedCTC">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             Expected CTC (in Lakhs)
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.expectedCTC }}</td>
+          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.expectedCTC }}</td>
         </ng-container>
 
         <ng-container matColumnDef="noticePeriod">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             Notice Period (in days)
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.noticePeriod }}</td>
+          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.noticePeriod }}</td>
         </ng-container>
 
         <ng-container matColumnDef="wfh">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             Mode
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.wfh }}</td>
+          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.wfh }}</td>
         </ng-container>
 
         <ng-container matColumnDef="resumeLink">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             Resume
           </th>
-          <td mat-cell *matCellDef="let lead">
+          <td mat-cell *matCellDef="let lead" >
             <a [href]="lead.resumeLink" target="_blank">{{lead.name}}_resume</a>
           </td>
         </ng-container>
@@ -257,7 +268,7 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             LinkedIn Profile
           </th>
-          <td mat-cell *matCellDef="let lead">
+          <td mat-cell *matCellDef="let lead" >
             <a [href]="lead.linkedinLink" target="_blank">Profile</a>
           </td>
         </ng-container>
@@ -266,35 +277,35 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             Feedback
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.feedback }}</td>
+          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.feedback }}</td>
         </ng-container>
 
         <ng-container matColumnDef="remark">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             Remark
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.remark }}</td>
+          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.remark }}</td>
         </ng-container>
 
         <ng-container matColumnDef="company">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             Organisation
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.company }}</td>
+          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.company }}</td>
         </ng-container>
 
         <ng-container matColumnDef="voiceNonVoice">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b; color: white;">Voice/Non-
             voice
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.voiceNonVoice }}</td>
+          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.voiceNonVoice }}</td>
         </ng-container>
 
         <ng-container matColumnDef="source">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
             Source
           </th>
-          <td mat-cell *matCellDef="let lead">{{ lead.source }}</td>
+          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.source }}</td>
         </ng-container>
 
         <ng-container matColumnDef="assignProcess">
@@ -304,7 +315,7 @@
           <td mat-cell *matCellDef="let lead">
             <mat-form-field style="margin-top: 1rem;">
               <mat-label>Assign Process</mat-label>
-              <mat-select (selectionChange)="updateAssignProcess($event.value)">
+              <mat-select [disabled]="lead.isProcessAssigned" (selectionChange)="updateAssignProcess($event.value)">
                 <mat-option *ngFor="let process of assignProcesslist" [value]="process">
                   {{ process }}
                 </mat-option>
@@ -340,6 +351,8 @@
           </td>
         </tr>
       </table>
+     
     </div>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </div>
 </div>

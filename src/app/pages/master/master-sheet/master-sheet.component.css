@@ -1,3 +1,21 @@
+.red-text {
+  color: red;
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.red-dot {
+  height: 8px;
+  width: 11px;
+  background-color: red;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+
 .card-head {
   display: flex;
   align-items: center;

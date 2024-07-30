@@ -129,7 +129,7 @@ export class MasterSheetComponent implements OnInit {
         'Name of Candidate': lead.name,
         'Email ID': lead.email,
         'Contact Number': lead.phone,
-        Language: lead.language.join(', '), // Join array elements into a string
+        Language: lead.language.map((langObj: { lType: any; proficiencyLevel: any; lang: any; }) => `${langObj.lType} -  ${langObj.lang} - ${langObj.proficiencyLevel}`)  .join(', '), // Format language field
         'Job Status': lead.jbStatus,
         'Educational Qualification': lead.qualification,
         Industry: lead.industry,
@@ -258,6 +258,11 @@ export class MasterSheetComponent implements OnInit {
     this.getCuriotoryLeads();
     this.getAllProcessList();
     this.clearFilters();
+  }
+
+  // for getting srno 
+  getSrNo(index: number): number {
+    return index + 1 + (this.paginator.pageIndex * this.paginator.pageSize);
   }
 
   // getting the list of all process

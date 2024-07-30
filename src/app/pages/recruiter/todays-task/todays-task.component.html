@@ -114,7 +114,7 @@
               SrNo
             </th>
             <td mat-cell *matCellDef="let element; let i = index">
-              {{ i + 1 }}
+              {{ getSrNo(i) }}
             </td>
           </ng-container>
   
@@ -334,6 +334,7 @@
           </tr>
         </table>
       </div>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </div>
   </div>
   

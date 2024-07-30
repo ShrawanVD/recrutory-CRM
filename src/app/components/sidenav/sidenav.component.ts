@@ -47,6 +47,8 @@ export class SidenavComponent implements OnInit {
   navData = navbarData;
   isAdmin: boolean = false;
   userRole:any;
+  isRecruiter: boolean = false;
+
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.screenWidth = window.innerWidth;
@@ -62,6 +64,7 @@ export class SidenavComponent implements OnInit {
       this.screenWidth = window.innerWidth;
       this.isAdmin = this.loginService.isAdmin();
       this.userRole  = this.loginService.getRole();
+      this.isRecruiter = this.loginService.isRecruiter();
   }
 
   toggleCollapse(): void {
@@ -72,5 +75,15 @@ export class SidenavComponent implements OnInit {
   closeSidenav(): void {
     this.collapsed = false;
     this.onToggleSideNav.emit({collapsed: this.collapsed, screenWidth: this.screenWidth});
+  }
+
+  shouldShowNavItem(data: any): boolean {
+    if (data.isAdmin && !this.isAdmin) {
+      return false;
+    }
+    if (data.isRecruiter && !this.isRecruiter) {
+      return false;
+    }
+    return true;
   }
 }

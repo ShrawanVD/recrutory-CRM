@@ -67,6 +67,11 @@ export class CilentService {
     return this.http.put(`${this.url}/api/client/clients/${clientId}/processes/${processId}/candidates/${candidateId}`,data);
   } 
 
+  // delete candidate from filtered sheet
+  deleteFilteredCandidate(clientId: any,processId: any,candidateId: any){
+    return this.http.delete(`${this.url}/api/client/clients/${clientId}/process/${processId}/candidates/${candidateId}`);
+  }
+
   // get for selected candidate sheet
   getSelectCandidate(){
     return this.http.get(`${this.url}/api/client/selected-candidates`);
