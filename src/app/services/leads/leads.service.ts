@@ -66,5 +66,8 @@ export class LeadsService {
   //   return this.http.put(`https://backendapi-1-nlyi.onrender.com/api/lead/leads/${id}`);
   // }
   
-
+  importFiles(data: any){
+    return this.http.post(`${this.url}/api/master/candidate/import`,data);
+  }
+                            
 }

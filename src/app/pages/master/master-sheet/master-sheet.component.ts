@@ -84,7 +84,7 @@ export class MasterSheetComponent implements OnInit {
   selection = new SelectionModel<Lead>(true, []);
   filterValues: any = {};
 
-  selectedLanguage: any ="";
+  selectedLanguage: any = "";
   selectedProficiencyLevels: any[] = [];
   selectedJobStatus: string | null = null;
   selectedQualification: string | null = null;
@@ -95,7 +95,7 @@ export class MasterSheetComponent implements OnInit {
   selectedexp: string | null = null;
 
   languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Chinese', 'Nepalese', 'Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Marathi']; // replace with actual statuses
-  proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'HSK1', 'HSK2', 'HSK3','HSK4', 'HSK5', 'HSK6', 'N1', 'N2', 'N3', 'N4', 'N5', 'Native' , 'Non-Native'];
+  proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5', 'HSK6', 'N1', 'N2', 'N3', 'N4', 'N5', 'Native', 'Non-Native'];
   jobStatuses = ['Working', 'Job Seeking', 'Teacher'];
   qualifications = ['SSC', 'HSC', 'Under Graduate', 'Post Graduate', 'PHD'];
   modes = ['WFH', 'WHO', 'Hybrid'];
@@ -125,15 +125,21 @@ export class MasterSheetComponent implements OnInit {
     }
 
     const formattedData = selectedLeads.map((lead) => {
+
+      const lTypes = lead.language.map((langObj: { lType: string; }) => langObj.lType).join(', ');
+      const langs = lead.language.map((langObj: { lang: string; }) => langObj.lang).join(', ');
+      const proficiencyLevels = lead.language.map((langObj: { proficiencyLevel: string; }) => langObj.proficiencyLevel).join(', ');
+
       return {
         'Name of Candidate': lead.name,
         'Email ID': lead.email,
         'Contact Number': lead.phone,
-        Language: lead.language.map((langObj: { lType: any; proficiencyLevel: any; lang: any; }) => `${langObj.lType} -  ${langObj.lang} - ${langObj.proficiencyLevel}`)  .join(', '), // Format language field
+        'Language Type': lTypes,
+        'Language': langs,
+        'Proficiency Level': proficiencyLevels,
         'Job Status': lead.jbStatus,
         'Educational Qualification': lead.qualification,
         Industry: lead.industry,
-        Domain: lead.domain,
         Experience: lead.exp,
         Profile: lead.domain,
         'Current Location': lead.cLocation,
@@ -145,7 +151,6 @@ export class MasterSheetComponent implements OnInit {
         'Link to Resume': lead.resumeLink,
         'Link to LinkedIn': lead.linkedinLink,
         Feedback: lead.feedback,
-        Company: lead.company,
         Remark: lead.remark,
         Organisation: lead.company,
         'Voice / non voice': lead.voiceNonVoice,
@@ -366,7 +371,7 @@ export class MasterSheetComponent implements OnInit {
     this.openFilters = !this.openFilters;
   }
 
-  filterLang(value: any){
+  filterLang(value: any) {
     this.selectedLanguage = value;
     this.filterLangProf();
   }
@@ -381,16 +386,16 @@ export class MasterSheetComponent implements OnInit {
     this.leadService.langFilter(this.selectedLanguage, this.proficiencyLevelsString).subscribe({
       next: (res: any) => {
         let filteredData = res;
-        console.log("this is filteradata",filteredData)
+        console.log("this is filteradata", filteredData)
         // Apply existing local filters to the data received from the API
         Object.keys(this.filterValues).forEach(key => {
           if (this.filterValues[key]) {
-            filteredData = filteredData.filter((item: any) => 
+            filteredData = filteredData.filter((item: any) =>
               item[key] && item[key].toString().toLowerCase().includes(this.filterValues[key].toLowerCase())
             );
           }
         });
-  
+
         this.dataSource = new MatTableDataSource(filteredData);
         this.dataSource.filterPredicate = this.createFilter();
         this.dataSource.sort = this.sort;
@@ -401,7 +406,7 @@ export class MasterSheetComponent implements OnInit {
       }
     });
   }
-  
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -412,13 +417,13 @@ export class MasterSheetComponent implements OnInit {
 
   applyDropdownFilter(value: string, column: string) {
     this.filterValues[column] = value;
-  
+
     // Check if language or proficiency filter is applied
     if (column === 'language' || column === 'proficiencyLevel') {
       this.filterLangProf();
     } else {
       this.dataSource.filter = JSON.stringify(this.filterValues);
-  
+
       if (this.dataSource.paginator) {
         this.dataSource.paginator.firstPage();
       }
@@ -429,7 +434,7 @@ export class MasterSheetComponent implements OnInit {
     let filterFunction = (data: any, filter: string): boolean => {
       let searchTerms = JSON.parse(filter);
       let isMatch = true;
-  
+
       if (searchTerms['global']) {
         isMatch = JSON.stringify(data).toLowerCase().includes(searchTerms['global']);
       } else {
@@ -440,7 +445,7 @@ export class MasterSheetComponent implements OnInit {
           }
         }
       }
-  
+
       return isMatch;
     };
     return filterFunction;
@@ -504,6 +509,40 @@ export class MasterSheetComponent implements OnInit {
 
   isAdmin(): boolean {
     return this.getRole() === 'Admin';
+  }
+  data: any[] = [];
+
+  onFileChangess(event: any) {
+    const target: DataTransfer = <DataTransfer>(event.target);
+
+    if (target.files.length !== 1) throw new Error('Cannot use multiple files');
+
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+      const bstr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+
+      const wsname: string = wb.SheetNames[0];
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+      this.data = XLSX.utils.sheet_to_json(ws, { header: 1 });
+      // console.log(this.data);
+    };
+    reader.readAsBinaryString(target.files[0]);
+  }
+
+  uploadData() {
+    this.leadService.importFiles({ data: this.data }).subscribe({
+      next: (res) => {
+        this._snackBar.open(`Data Uploaded Successfully`, 'Close', {
+          duration: 4000,
+        });
+        this.getCuriotoryLeads();
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 
 }
