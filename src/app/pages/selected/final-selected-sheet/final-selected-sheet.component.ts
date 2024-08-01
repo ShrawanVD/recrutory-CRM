@@ -237,6 +237,11 @@ export class FinalSelectedSheetComponent {
     }
 
     const formattedData = leadsToExport.map((lead: any, index: number) => {
+      
+      const lTypes = lead.language.map((langObj: { lType: string; }) => langObj.lType).join(', ');
+      const langs = lead.language.map((langObj: { lang: string; }) => langObj.lang).join(', ');
+      const proficiencyLevels = lead.language.map((langObj: { proficiencyLevel: string; }) => langObj.proficiencyLevel).join(', ');
+      
       return {
         'SrNo': index + 1,
         'Client Name': lead.clientInfo,
@@ -244,7 +249,9 @@ export class FinalSelectedSheetComponent {
         'Email': lead.candidate.email,
         'Phone': lead.candidate.phone,
         'Lead Status': lead.candidate.status,
-        'Language Details': lead.candidate.language.map((langObj: any) => `${langObj.lType} - ${langObj.proficiencyLevel} - ${langObj.lang}`).join(', '),
+        'Language Type': lTypes,
+        'Language': langs,
+        'Proficiency Level': proficiencyLevels,
         'Job Status': lead.candidate.jbStatus,
         'Qualification': lead.candidate.qualification,
         'Industry': lead.candidate.industry,

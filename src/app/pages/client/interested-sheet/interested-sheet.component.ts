@@ -306,6 +306,11 @@ export class InterestedSheetComponent {
     }
 
     const formattedData = leadsToExport.map((lead: any, index: number) => {
+
+      const lTypes = lead.language.map((langObj: { lType: string; }) => langObj.lType).join(', ');
+      const langs = lead.language.map((langObj: { lang: string; }) => langObj.lang).join(', ');
+      const proficiencyLevels = lead.language.map((langObj: { proficiencyLevel: string; }) => langObj.proficiencyLevel).join(', ');
+
       return {
         'SrNo': index + 1,
         // 'Client Name': lead.clientInfo,
@@ -313,7 +318,9 @@ export class InterestedSheetComponent {
         'Email': lead.email,
         'Phone': lead.phone,
         'Lead Status': lead.status,
-        'Language Details': lead.language.map((langObj: any) => `${langObj.lType} - ${langObj.proficiencyLevel} - ${langObj.lang}`).join(', '),
+        'Language Type': lTypes,
+        'Language': langs,
+        'Proficiency Level': proficiencyLevels,
         'Job Status': lead.jbStatus,
         'Qualification': lead.qualification,
         'Industry': lead.industry,

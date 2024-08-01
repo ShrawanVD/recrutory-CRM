@@ -16,6 +16,13 @@
   </div>
   <div class="card-body">
     <div class="filterSearchBar">
+      <div>
+        <input type="file" (change)="onFileChangess($event)"  style="margin-right: -80px;" placeholder=" upload"/>
+        <button style="background: #02465b; color: white; margin-left: 10px; margin-right:10px" mat-raised-button
+          (click)="uploadData()">
+          IMPORT
+        </button>
+      </div>
       <button style="background: #02465b; color: white; padding: 10px" mat-raised-button (click)="openFilterDiv()">
         FILTER
       </button>
@@ -27,13 +34,6 @@
         (click)="exportExcel()">
         EXPORT
       </button>
-      <div>
-        <input type="file" (change)="onFileChangess($event)" />
-        <button style="background: #02465b; color: white; margin-left: 10px; margin-right:10px" mat-raised-button
-          (click)="uploadData()">
-          IMPORT
-        </button>
-      </div>
       <mat-form-field>
         <mat-label>Search</mat-label>
         <input matInput (keyup)="applyFilter($event)" #input />

@@ -306,24 +306,6 @@
           </td>
         </ng-container>
 
-
-        <!-- <ng-container matColumnDef="interested">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
-            Interested
-          </th>
-          <td mat-cell *matCellDef="let lead">
-            <mat-icon [ngClass]="{'selected': lead.interested === true}" (click)="updateInterested(lead, true)"
-              style="cursor: pointer; color:green;">
-              check
-            </mat-icon>
-            <mat-icon [ngClass]="{'selected': lead.interested === false}" (click)="updateInterested(lead, false)"
-              style="cursor: pointer; color:red;">
-              close
-            </mat-icon>
-          </td>
-        </ng-container> -->
-
-
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b; color: white;">
             Action
@@ -333,9 +315,9 @@
               <mat-icon>edit</mat-icon>
             </button>
 
-            <!-- <button mat-icon-button color="warn" (click)="deleteEntry(lead.candidateId)" *ngIf="isAdmin()">
+            <button mat-icon-button color="warn" (click)="deleteEntry(lead.candidateId)" *ngIf="isAdmin()">
               <mat-icon>delete</mat-icon>
-            </button> -->
+            </button>
 
           </td>
         </ng-container>
