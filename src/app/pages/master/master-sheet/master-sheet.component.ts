@@ -11,6 +11,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { SelectionModel } from '@angular/cdk/collections';
 import * as FileSaver from 'file-saver';
+import { ImportDialogeBoxComponent } from '../import-dialoge-box/import-dialoge-box.component';
 
 interface Lead {
   _id: any,
@@ -37,7 +38,6 @@ interface Lead {
   voiceNonVoice: string;
   source: string;
 }
-
 
 @Component({
   selector: 'app-master-sheet',
@@ -512,27 +512,18 @@ export class MasterSheetComponent implements OnInit {
   }
   data: any[] = [];
 
-  onFileChangess(event: any) {
-    const target: DataTransfer = <DataTransfer>(event.target);
+  openDialog(): void {
+    const dialogRef = this._dialog.open(ImportDialogeBoxComponent);
 
-    if (target.files.length !== 1) throw new Error('Cannot use multiple files');
-
-    const reader: FileReader = new FileReader();
-    reader.onload = (e: any) => {
-      const bstr: string = e.target.result;
-      const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
-
-      const wsname: string = wb.SheetNames[0];
-      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
-
-      this.data = XLSX.utils.sheet_to_json(ws, { header: 1 });
-      // console.log(this.data);
-    };
-    reader.readAsBinaryString(target.files[0]);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.uploadData(result);
+      }
+    });
   }
 
-  uploadData() {
-    this.leadService.importFiles({ data: this.data }).subscribe({
+  uploadData(data: any) {
+    this.leadService.importFiles({ data }).subscribe({
       next: (res) => {
         this._snackBar.open(`Data Uploaded Successfully`, 'Close', {
           duration: 4000,
@@ -542,11 +533,43 @@ export class MasterSheetComponent implements OnInit {
       error: (err) => {
         console.log(err);
       }
-    })
+    });
   }
+
+  // onFileChangess(event: any) {
+  //   const target: DataTransfer = <DataTransfer>(event.target);
+
+  //   if (target.files.length !== 1) throw new Error('Cannot use multiple files');
+
+  //   const reader: FileReader = new FileReader();
+  //   reader.onload = (e: any) => {
+  //     const bstr: string = e.target.result;
+  //     const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+
+  //     const wsname: string = wb.SheetNames[0];
+  //     const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+  //     this.data = XLSX.utils.sheet_to_json(ws, { header: 1 });
+  //     // console.log(this.data);
+  //   };
+  //   reader.readAsBinaryString(target.files[0]);
+  // }
+
+  // uploadData() {
+  //   this.leadService.importFiles({ data: this.data }).subscribe({
+  //     next: (res) => {
+  //       this._snackBar.open(`Data Uploaded Successfully`, 'Close', {
+  //         duration: 4000,
+  //       });
+  //       this.getCuriotoryLeads();
+  //     },
+  //     error: (err) => {
+  //       console.log(err);
+  //     }
+  //   })
+  // }
 
 }
 
-const EXCEL_TYPE =
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';

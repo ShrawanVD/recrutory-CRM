@@ -51,6 +51,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { AddMembersComponent } from './pages/addMembers/add-members/add-members.component';
 import { AddMemberFormComponent } from './pages/addMembers/add-member-form/add-member-form.component';
 import { ProcessJobDescComponent } from './pages/client/process-sheet/process-job-desc/process-job-desc.component';
+import { ImportDialogeBoxComponent } from './pages/master/import-dialoge-box/import-dialoge-box.component';
 
 
 @NgModule({
@@ -79,6 +80,7 @@ import { ProcessJobDescComponent } from './pages/client/process-sheet/process-jo
     AddMembersComponent,
     AddMemberFormComponent,
     ProcessJobDescComponent,
+    ImportDialogeBoxComponent,
   ],
   imports: [
     BrowserModule,
