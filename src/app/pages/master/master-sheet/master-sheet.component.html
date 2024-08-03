@@ -16,7 +16,6 @@
   </div>
   <div class="card-body">
     <div class="filterSearchBar">
-      <button mat-button (click)="openDialog()">Import</button>
 
       <!-- <div>
         <input type="file" (change)="onFileChangess($event)"  style="margin-right: -80px;" placeholder=" upload"/>
@@ -32,10 +31,11 @@
         (click)="openAddEditEmpForm()">
         CREATE A NEW LEAD
       </button>
-      <button style="background: #4caf50; color: white; margin-left: 10px; margin-right:10px" mat-raised-button
+      <button style="background: #4caf50; color: white; margin-left: 10px; margin-right:5px" mat-raised-button
         (click)="exportExcel()">
         EXPORT
       </button>
+      <button style="background: #4caf50; color: white; margin-left: 5px; margin-right:10px; padding: auto 20px" mat-button (click)="openDialog()">IMPORT</button>
       <mat-form-field>
         <mat-label>Search</mat-label>
         <input matInput (keyup)="applyFilter($event)" #input />

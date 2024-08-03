@@ -1,8 +1,14 @@
-<h1 mat-dialog-title>Import Data</h1>
-<div mat-dialog-content>
-  <input type="file" (change)="onFileChangess($event)" placeholder="Choose file" />
-</div>
-<div mat-dialog-actions>
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-button (click)="onUpload()">Upload</button>
+<div class="outer">
+  <h1 mat-dialog-title>Import Excel</h1>
+  <div mat-dialog-content class="inputt">
+    <input
+      type="file"
+      (change)="onFileChangess($event)"
+      placeholder="Choose file"
+    />
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-button (click)="onUpload()">Upload</button>
+  </div>
 </div>

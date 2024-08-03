@@ -1,26 +1,101 @@
-/* Styles for the dialog container */
-.mat-dialog-container {
-    padding: 24px;
-    max-width: 600px;
-    width: 100%;
+/* Outer container */
+.outer {
+  width: 30vw;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* Title */
+.outer h1[mat-dialog-title] {
+  font-size: 24px;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 20px;
+}
+
+/* Content */
+.outer .inputt {
+}
+
+.outer .inputt input[type="file"] {
+  width: 25vw;
+  padding: 10px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  font-size: 14px;
+  color: #555555;
+}
+
+/* Actions */
+.outer [mat-dialog-actions] {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.outer [mat-dialog-actions] button {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.outer [mat-dialog-actions] button[mat-button] {
+  /* background-color: #3f51b5; */
+  background-color: #4caf50;  
+  color: #ffffff;
+}
+
+.outer [mat-dialog-actions] button[mat-button]:hover {
+  background-color: #429d45;
+}
+
+.outer [mat-dialog-actions] button[mat-button]:first-child {
+  background-color: #f44336;
+}
+
+.outer [mat-dialog-actions] button[mat-button]:first-child:hover {
+  background-color: #d32f2f;
+}
+
+
+
+/* .outer{
+  width: 30vw;
+  border-radius: 10px;
+}
+
+
+  .outer h1 {
+    font-size: 1.5rem;
+    margin: 1rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
-  /* Title styles */
-  .mat-dialog-title {
-    font-size: 24px;
-    margin-bottom: 16px;
+
+  .outer .inputt{
+    margin: 1rem 0;
+    
   }
   
-  /* Content styles */
-  .mat-dialog-content {
-    font-size: 16px;
-    margin-bottom: 24px;
-  }
   
-  /* Button styles */
+ 
   .mat-dialog-actions {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     margin-top: 16px;
   }
   
@@ -28,14 +103,13 @@
     margin-left: 8px;
   }
   
-  /* Input file styles */
+ 
   input[type="file"] {
     width: 100%;
     padding: 8px;
     box-sizing: border-box;
   }
   
-  /* Optional: Additional styling for buttons */
   button.mat-button {
     background-color: #3f51b5;
     color: white;
@@ -44,4 +118,4 @@
   button.mat-button:hover {
     background-color: #303f9f;
   }
-  
+   */
