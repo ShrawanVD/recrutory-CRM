@@ -101,7 +101,7 @@ export class AddMembersComponent implements OnInit {
   }
 
   isAdmin(): boolean {
-    return this.getRole() === 'admin';
+    return this.getRole() === 'Admin';
   }
 
   applyFilter(event: Event) {

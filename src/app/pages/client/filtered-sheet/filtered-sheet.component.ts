@@ -375,7 +375,7 @@ export class FilteredSheetComponent {
   }
 
   isInterestAccess(): boolean{
-    if(this.loginService.isAdmin() || this.loginService.isHr())
+    if(this.loginService.isAdmin() || this.loginService.isHr() || this.loginService.isTeamLead())
       return true;
     else
       return false;
