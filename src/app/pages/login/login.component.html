@@ -10,7 +10,7 @@
                            placeholder="Password"
                            [(ngModel)]="password"
                            required>
-                    <mat-icon class="password-icon" (click)="togglePasswordVisibility()">
+                    <mat-icon style="margin-bottom: 0.8rem;" class="password-icon" (click)="togglePasswordVisibility()">
                         {{passwordFieldType === 'password' ? 'visibility_off' : 'visibility'}}
                     </mat-icon>
                 </div>

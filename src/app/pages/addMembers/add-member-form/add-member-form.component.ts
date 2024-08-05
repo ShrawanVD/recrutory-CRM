@@ -31,6 +31,7 @@ export class AddMemberFormComponent implements OnInit {
     });
   }
 
+
   ngOnInit(): void {
     if (this.isEditing) {
       this.leadForm.patchValue(this.data);
@@ -39,13 +40,17 @@ export class AddMemberFormComponent implements OnInit {
 
   submitLead() {
     if (this.leadForm.valid) {
+      console.log(this.leadForm.value); // Log form values to check data
       if (this.isEditing) {
         const updateData = { ...this.leadForm.value };
-
+  
+        // If password is empty, remove it from updateData
         if (!updateData.password) {
           delete updateData.password;
         }
-
+  
+        console.log('Update Data:', updateData); // Log data being sent to backend
+  
         this.loginService.editUser(this.data._id, updateData).subscribe({
           next: () => {
             this._snackBar.open('User updated successfully', 'Close', { duration: 3000 });
@@ -72,6 +77,7 @@ export class AddMemberFormComponent implements OnInit {
       this._snackBar.open('Please fill the form', 'Close', { duration: 3000 });
     }
   }
+  
 }
 
 
