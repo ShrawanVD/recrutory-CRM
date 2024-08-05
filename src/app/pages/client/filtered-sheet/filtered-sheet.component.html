@@ -10,7 +10,7 @@
         FILTER
       </button>
       <button style="background: #02465b; color: white; margin-right: 10px; padding: 10px; margin-bottom: 1rem;"
-        mat-raised-button (click)="openInterestedCan()">
+        mat-raised-button (click)="openInterestedCan()" *ngIf="isInterestAccess()">
         INTERESTED CANDIDATES
       </button>
       <mat-form-field >
@@ -297,7 +297,7 @@
             <mat-form-field style="margin-top: 1rem;">
               <mat-label *ngIf="!lead.assignedRecruiter">Select Recruiter</mat-label>
               <mat-label *ngIf="lead.assignedRecruiter">{{lead.assignedRecruiter}}</mat-label>
-              <mat-select [(value)]="lead.assignedRecruiter" (selectionChange)="updateRecruiter(lead._id, lead)">
+              <mat-select [(value)]="lead.assignedRecruiter" (selectionChange)="updateRecruiter(lead._id, lead)" [disabled]="!isTeamLead">
                 <mat-option *ngFor="let recruiterId of getRecruiterIds()" [value]="recruiterId">
                   {{ recruiters[recruiterId] }}
                 </mat-option>

@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FilteredSheetFormComponent } from '../filtered-sheet-form/filtered-sheet-form.component';
 import { CilentService } from 'src/app/services/cilent/cilent.service';
 import { LeadsService } from 'src/app/services/leads/leads.service';
+import { LoginService } from 'src/app/services/login/login.service';
 @Component({
   selector: 'app-filtered-sheet',
   templateUrl: './filtered-sheet.component.html',
@@ -22,6 +23,7 @@ export class FilteredSheetComponent {
   openFilters: boolean = false;
   filterValues: any = {};
   proficiencyLevelsString: any;
+  isTeamLead: boolean = false;
 
   displayedColumns: string[] = [
     'select',
@@ -84,6 +86,7 @@ export class FilteredSheetComponent {
     private router: Router,
     private route: ActivatedRoute,
     private leadService: LeadsService,
+    private loginService: LoginService
   ) { }
   // for creating lead
   openAddEditEmpForm() {
@@ -100,6 +103,8 @@ export class FilteredSheetComponent {
   ngOnInit(): void {
     this.clientId = this.route.snapshot.paramMap.get('id');
     this.processId = this.route.snapshot.paramMap.get('processId');
+    this.isTeamLead = this.loginService.isTeamLead()
+    console.log(this.isTeamLead);
     this.getCuriotoryLeads();
     this.getRecruitersList();
   }
@@ -368,4 +373,13 @@ export class FilteredSheetComponent {
   isAdmin(): boolean {
     return this.getRole() === 'Admin';
   }
+
+  isInterestAccess(): boolean{
+    if(this.loginService.isAdmin() || this.loginService.isHr())
+      return true;
+    else
+      return false;
+  }
+
+
 }
