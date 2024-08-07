@@ -8,7 +8,9 @@ import { Observable } from 'rxjs';
 
 export class LeadsService {
 
-  url = "https://recrutory-crm-backend-yhnk.onrender.com"
+  // url = "https://recrutory-crm-backend-yhnk.onrender.com"
+  url = "https://recrutory-crm-backend-ejb3.onrender.com"
+
 
   constructor(public http:HttpClient) { }
 

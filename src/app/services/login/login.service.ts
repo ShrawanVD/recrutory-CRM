@@ -15,7 +15,8 @@ export class LoginService {
   private username: any;
   
   isUserLoggedIn = new BehaviorSubject<boolean>(false);
-  url = 'https://recrutory-crm-backend-yhnk.onrender.com/api';
+  // url = 'https://recrutory-crm-backend-yhnk.onrender.com/api';
+  url = 'https://recrutory-crm-backend-ejb3.onrender.com/api';
 
   constructor(public http: HttpClient, private router: Router) { }
 
