@@ -13,10 +13,6 @@
         <mat-label>Search</mat-label>
         <input matInput (keyup)="applyFilter($event)" #input />
       </mat-form-field>
-        <!-- <button style="background: #02465b; color: white; padding: 10px; margin-bottom: 1rem;" mat-raised-button
-            (click)="openAddEditEmpForm()">
-            ADD INTERESTED CANDIDATE
-          </button> -->
       </div>
       <div class="filters" *ngIf="openFilters">
 
@@ -334,7 +330,7 @@
           </tr>
         </table>
       </div>
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[50, 100, 150]" showFirstLastButtons></mat-paginator>
     </div>
   </div>
   

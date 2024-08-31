@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -6,8 +6,8 @@ import { Injectable } from '@angular/core';
 })
 export class CilentService {
 
-  // url = "https://recrutory-crm-backend-yhnk.onrender.com"
   url = "https://recrutory-crm-backend-iwf1.onrender.com"
+  //  url = "http://localhost:4000"
 
   constructor(private http: HttpClient) { }
 
@@ -65,7 +65,11 @@ export class CilentService {
 
   // updating candidate in filtered table which also reflect in mastersheet
   updateFilteredCandidate(clientId: any, processId: any, candidateId: any, data: any){
-    return this.http.put(`${this.url}/api/client/clients/${clientId}/processes/${processId}/candidates/${candidateId}`,data);
+
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.put(`${this.url}/api/client/clients/${clientId}/processes/${processId}/candidates/${candidateId}`,data, {headers});
   } 
 
   // delete candidate from filtered sheet

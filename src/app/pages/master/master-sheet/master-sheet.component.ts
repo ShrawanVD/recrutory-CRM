@@ -37,6 +37,8 @@ interface Lead {
   company: string;
   voiceNonVoice: string;
   source: string;
+  createdBy: string;
+  lastUpdatedBy: string
 }
 
 @Component({
@@ -58,6 +60,7 @@ export class MasterSheetComponent implements OnInit {
     'email',
     'phone',
     'language',
+    'assignProcess',
     'jbStatus',
     'qualification',
     'industry',
@@ -76,7 +79,8 @@ export class MasterSheetComponent implements OnInit {
     'company',
     'voiceNonVoice',
     'source',
-    'assignProcess',
+    'createdBy',
+    'lastUpdatedBy',
     'action',
   ];
 
@@ -94,15 +98,18 @@ export class MasterSheetComponent implements OnInit {
   selectedsource: string | null = null;
   selectedexp: string | null = null;
 
-  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Chinese', 'Nepalese', 'Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Marathi']; // replace with actual statuses
+  
+
+  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Mandarin', 'Nepalese', 'Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Marathi']; // replace with actual statuses
   proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5', 'HSK6', 'N1', 'N2', 'N3', 'N4', 'N5', 'Native', 'Non-Native'];
   jobStatuses = ['Working', 'Job Seeking', 'Teacher'];
-  qualifications = ['SSC', 'HSC', 'Under Graduate', 'Post Graduate', 'PHD'];
-  modes = ['WFH', 'WHO', 'Hybrid'];
-  feedbacks = ['Not Intrested - CTC Not Matching', 'Not Intrested - Relocation Issue', 'Not Intrested - Notice Period', 'Not Intrested - Cooling Down Period', 'Not Intrested - Call Not Recieved', 'Not Intrested - Under Qualified"'];
-  noticePeriods = ['15', '30', '60', '90', '90+'];
-  sources = ['Linkedin', 'Naukri', 'Meta', 'Google', 'Instagram', 'Website', 'App', 'Email', 'Reference'];
-  exps = ['0-1', '1-2', '2-4', '4-8', '8-12', '12+'];
+  qualifications = ['SSC', 'HSC', 'Diploma', 'Advance Diploma', 'Under Graduate', 'Post Graduate', 'PHD', 'BA (Language)', 'MA (Language)'];
+  modes = ['WFH', 'WFO', 'Hybrid', 'Both'];
+  feedbacks = ['Interested','Not Intrested - CTC Not Matching', 'Not Intrested - Relocation Issue', 'Not Intrested - Notice Period', 'Not Intrested - Cooling Down Period', 'Not Intrested - Call Not Recieved', 'Not Intrested - Under Qualified"'];
+  noticePeriods = ['Immediate', '15 Days', '1 Month', '2 Months', '3 Months'];
+  sources = ['LinkedIn', 'Naukri', 'Meta', 'Google', 'Instagram', 'Website', 'App', 'Email', 'Reference'];
+  // exps = ['0-1', '1-2', '2-4', '4-8', '8-12', '12+'];
+  experienceRanges = ['Fresher', '0 - 1', '1 - 3', '3 - 6', '6 - 10', '10+'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -155,6 +162,8 @@ export class MasterSheetComponent implements OnInit {
         Organisation: lead.company,
         'Voice / non voice': lead.voiceNonVoice,
         Source: lead.source,
+        'Created By': lead.createdBy,
+        'Last Updated By': lead.lastUpdatedBy,
       };
     });
 
@@ -263,6 +272,7 @@ export class MasterSheetComponent implements OnInit {
     this.getCuriotoryLeads();
     this.getAllProcessList();
     this.clearFilters();
+    this.dataSource.filterPredicate = this.createFilter();
   }
 
   // for getting srno 
@@ -386,7 +396,7 @@ export class MasterSheetComponent implements OnInit {
     this.leadService.langFilter(this.selectedLanguage, this.proficiencyLevelsString).subscribe({
       next: (res: any) => {
         let filteredData = res;
-        console.log("this is filteradata", filteredData)
+  
         // Apply existing local filters to the data received from the API
         Object.keys(this.filterValues).forEach(key => {
           if (this.filterValues[key]) {
@@ -395,7 +405,15 @@ export class MasterSheetComponent implements OnInit {
             );
           }
         });
-
+  
+        // Sort the data to place the latest entry at the top
+        filteredData = filteredData.sort((a: any, b: any) => {
+          // Assuming your entries have a `createdAt` or `id` field to determine order
+          // return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          // Alternatively, if using an incrementing `id`, you can use:
+          return b._id - a._id;
+        });
+  
         this.dataSource = new MatTableDataSource(filteredData);
         this.dataSource.filterPredicate = this.createFilter();
         this.dataSource.sort = this.sort;
@@ -406,50 +424,126 @@ export class MasterSheetComponent implements OnInit {
       }
     });
   }
+  
+  
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.dataSource.filter = JSON.stringify(filterValue.trim().toLowerCase());
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
 
   applyDropdownFilter(value: string, column: string) {
-    this.filterValues[column] = value;
-
-    // Check if language or proficiency filter is applied
-    if (column === 'language' || column === 'proficiencyLevel') {
-      this.filterLangProf();
+    if (column === 'exp') {
+      this.applyExperienceFilter(value);
     } else {
+      this.filterValues[column] = value;
       this.dataSource.filter = JSON.stringify(this.filterValues);
-
+  
       if (this.dataSource.paginator) {
         this.dataSource.paginator.firstPage();
       }
     }
   }
+  
+  applyExperienceFilter(range: string) {
+    if (!range) {
+      delete this.filterValues['exp']; // Clear the experience filter if "None" is selected
+    } else if (range === 'Fresher') {
+      this.filterValues['exp'] = (entry: Lead) => entry.exp === 'Fresher';
+    } else {
+      const [min, max] = range.split(' - ').map(val => parseFloat(val));
+      const upperLimit = isNaN(max) ? Infinity : max;
+  
+      this.filterValues['exp'] = (entry: Lead) => {
+        const experienceValue = parseFloat(entry.exp);
+        return (entry.exp === 'Fresher') || (experienceValue >= min && experienceValue <= upperLimit);
+      };
+    }
+  
+    this.dataSource.filter = JSON.stringify(this.filterValues);
+  
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+  
+  // createFilter(): (data: any, filter: string) => boolean {
+  //   return (data: any, filter: string): boolean => {
+  //     const searchTerms = JSON.parse(filter);
+  //     let isMatch = true;
+  
+  //     for (const key in searchTerms) {
+  //       if (searchTerms[key]) {
+  //         if (typeof searchTerms[key] === 'function') {
+  //           if (!searchTerms[key](data)) {
+  //             isMatch = false;
+  //             break;
+  //           }
+  //         } else if (!data[key] || !data[key].toString().toLowerCase().includes(searchTerms[key].toLowerCase())) {
+  //           isMatch = false;
+  //           break;
+  //         }
+  //       }
+  //     }
+
+  //     console.log(this.dataSource.filteredData);
+  
+  //     return isMatch;
+  //   };
+  // }
+  
+  
+  
+  
+
+  // createFilter(): (data: any, filter: string) => boolean {
+  //   let filterFunction = (data: any, filter: string): boolean => {
+  //     let searchTerms = JSON.parse(filter);
+  //     let isMatch = true;
+
+  //     if (searchTerms['global']) {
+  //       isMatch = JSON.stringify(data).toLowerCase().includes(searchTerms['global']);
+  //     } else {
+  //       for (let key in searchTerms) {
+  //         if (searchTerms[key] && (!data[key] || !data[key].toString().toLowerCase().includes(searchTerms[key].toLowerCase()))) {
+  //           isMatch = false;
+  //           break;
+  //         }
+  //       }
+  //     }
+
+  //     return isMatch;
+  //   };
+  //   return filterFunction;
+  // }
 
   createFilter(): (data: any, filter: string) => boolean {
-    let filterFunction = (data: any, filter: string): boolean => {
-      let searchTerms = JSON.parse(filter);
+    return (data: any, filter: string): boolean => {
+      const searchTerms = JSON.parse(filter);
       let isMatch = true;
-
-      if (searchTerms['global']) {
-        isMatch = JSON.stringify(data).toLowerCase().includes(searchTerms['global']);
-      } else {
-        for (let key in searchTerms) {
-          if (searchTerms[key] && (!data[key] || !data[key].toString().toLowerCase().includes(searchTerms[key].toLowerCase()))) {
+  
+      // Iterate over the filter terms
+      for (const key in searchTerms) {
+        if (searchTerms[key]) {
+          // Check if the data has the key and if it matches the search term
+          if (!data[key] || !data[key].toString().toLowerCase().includes(searchTerms[key].toLowerCase())) {
             isMatch = false;
             break;
           }
         }
       }
+      
+      console.log('Filter terms:', searchTerms);
+      console.log('Data item:', data);
 
+  
       return isMatch;
     };
-    return filterFunction;
   }
+  
 
   clearFilters() {
     this.filterValues = {};
@@ -466,6 +560,7 @@ export class MasterSheetComponent implements OnInit {
 
     this.getCuriotoryLeads();
   }
+
 
   // for editing lead
   openEditForm(data: any) {

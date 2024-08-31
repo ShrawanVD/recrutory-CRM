@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -8,8 +8,8 @@ import { Observable } from 'rxjs';
 
 export class LeadsService {
 
-  // url = "https://recrutory-crm-backend-yhnk.onrender.com"
   url = "https://recrutory-crm-backend-iwf1.onrender.com"
+  // url = "http://localhost:4000"
 
 
   constructor(public http:HttpClient) { }
@@ -24,8 +24,15 @@ export class LeadsService {
     return this.http.get(`${this.url}/api/master/candidates/${id}`);
   }
 
-  createLead(data:any){
-    return this.http.post(`${this.url}/api/master/candidates`,data);
+  // createLead(data:any){
+  //   return this.http.post(`${this.url}/api/master/candidates`,data);
+  // }
+
+  createLead(data: any) {
+    const token = localStorage.getItem('token'); // Get the token from localStorage (or wherever it is stored)
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.post(`${this.url}/api/master/candidates`, data, { headers });
   }
 
   deleteLeadById(id:any){
@@ -33,7 +40,9 @@ export class LeadsService {
   }
 
   updateLeadById(id: any, data: any) {
-    return this.http.put(`${this.url}/api/master/candidates/${id}`, data);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization',`Bearer ${token}`)
+    return this.http.put(`${this.url}/api/master/candidates/${id}`, data, {headers});
   }
 
   langFilter(lang:any,proficiencyLevels: any){

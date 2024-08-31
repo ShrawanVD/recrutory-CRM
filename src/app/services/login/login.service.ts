@@ -15,7 +15,7 @@ export class LoginService {
   private username: any;
   
   isUserLoggedIn = new BehaviorSubject<boolean>(false);
-  // url = 'https://recrutory-crm-backend-yhnk.onrender.com/api';
+  
   url = 'https://recrutory-crm-backend-iwf1.onrender.com/api';
 
   constructor(public http: HttpClient, private router: Router) { }
@@ -48,7 +48,7 @@ export class LoginService {
 
       }, (error: any) => {
         console.log(error);
-      });
+      }); 
   }
 
   getToken() {
@@ -69,6 +69,7 @@ export class LoginService {
 
   //Role specific api  Recruiter
   getCandidateByRecruiterId(){
+    console.log("recruiter id is: " + this.getRecruiterId());
     return this.http.get(`${this.url}/assigned-candidates?recruiterId=${this.getRecruiterId()}`);
   }
 

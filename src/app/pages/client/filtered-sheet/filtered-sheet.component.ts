@@ -24,6 +24,7 @@ export class FilteredSheetComponent {
   filterValues: any = {};
   proficiencyLevelsString: any;
   isTeamLead: boolean = false;
+  adminRole: boolean = false;
 
   displayedColumns: string[] = [
     'select',
@@ -51,6 +52,8 @@ export class FilteredSheetComponent {
     'voiceNonVoice',
     'source',
     'assignedRecruiter',
+    'createdBy',
+    'lastUpdatedBy',
     'action',
   ];
 
@@ -66,15 +69,17 @@ export class FilteredSheetComponent {
   selectedsource: string | null = null;
   selectedexp: string | null = null;
 
-  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Chinese', 'Nepalese', 'Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Marathi']; // replace with actual statuses
-  proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'HSK1', 'HSK2', 'HSK3','HSK4', 'HSK5', 'HSK6', 'N1', 'N2', 'N3', 'N4', 'N5', 'Native' , 'Non-Native'];
+  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Mandarin', 'Nepalese', 'Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Marathi']; // replace with actual statuses
+  proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5', 'HSK6', 'N1', 'N2', 'N3', 'N4', 'N5', 'Native', 'Non-Native'];
   jobStatuses = ['Working', 'Job Seeking', 'Teacher'];
-  qualifications = ['SSC', 'HSC', 'Under Graduate', 'Post Graduate', 'PHD'];
-  modes = ['WFH', 'WHO', 'Hybrid'];
-  feedbacks = ['Not Intrested - CTC Not Matching', 'Not Intrested - Relocation Issue', 'Not Intrested - Notice Period', 'Not Intrested - Cooling Down Period', 'Not Intrested - Call Not Recieved', 'Not Intrested - Under Qualified"'];
-  noticePeriods = ['15', '30', '60', '90', '90+'];
-  sources = ['Linkedin', 'Naukri', 'Meta', 'Google', 'Instagram', 'Website', 'App', 'Email', 'Reference'];
-  exps = ['0-1', '1-2', '2-4', '4-8', '8-12', '12+'];
+  qualifications = ['SSC', 'HSC', 'Diploma', 'Advance Diploma', 'Under Graduate', 'Post Graduate', 'PHD', 'BA (Language)', 'MA (Language)'];
+  modes = ['WFH', 'WFO', 'Hybrid', 'Both'];
+  feedbacks = ['Interested','Not Intrested - CTC Not Matching', 'Not Intrested - Relocation Issue', 'Not Intrested - Notice Period', 'Not Intrested - Cooling Down Period', 'Not Intrested - Call Not Recieved', 'Not Intrested - Under Qualified"'];
+  noticePeriods = ['Immediate', '15 Days', '1 Month', '2 Months', '3 Months'];
+  sources = ['LinkedIn', 'Naukri', 'Meta', 'Google', 'Instagram', 'Website', 'App', 'Email', 'Reference'];
+  // exps = ['0-1', '1-2', '2-4', '4-8', '8-12', '12+'];
+  experienceRanges = ['Fresher', '0 - 1', '1 - 3', '3 - 6', '6 - 10', '10+'];
+
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -104,6 +109,7 @@ export class FilteredSheetComponent {
     this.clientId = this.route.snapshot.paramMap.get('id');
     this.processId = this.route.snapshot.paramMap.get('processId');
     this.isTeamLead = this.loginService.isTeamLead()
+    this.adminRole = this.loginService.isAdmin();
     console.log(this.isTeamLead);
     this.getCuriotoryLeads();
     this.getRecruitersList();
@@ -208,6 +214,7 @@ export class FilteredSheetComponent {
     }
   }
 
+
   applyDropdownFilter(value: string, column: string) {
     this.filterValues[column] = value;
 
@@ -222,6 +229,7 @@ export class FilteredSheetComponent {
       }
     }
   }
+
 
   createFilter(): (data: any, filter: string) => boolean {
     let filterFunction = (data: any, filter: string): boolean => {

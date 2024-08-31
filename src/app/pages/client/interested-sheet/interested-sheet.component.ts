@@ -239,11 +239,11 @@ export class InterestedSheetComponent {
     );
 
     if(lead.status === 'Rejected'){
-      const confirmRemark = window.confirm(
-        `Please fill the remark before changing candidate status to ${lead.status}`
-      );
+      // const confirmRemark = window.confirm(
+      //   `Please fill the remark before changing candidate status to ${lead.status}`
+      // );
 
-      if(confirmRemark){
+      if(confirmSelectRound){
         this.clientService.updateFilteredCandidate(this.clientId,this.processId,lead._id,lead).subscribe({
           next: (val) => {
             this._snackBar.open('Candidate status updated successfully', 'Close', {

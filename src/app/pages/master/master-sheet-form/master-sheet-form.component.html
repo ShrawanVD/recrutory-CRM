@@ -14,14 +14,14 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
       <div class="row">
         <!-- First Name -->
         <mat-form-field appearance="outline" class="input">
-          <mat-label>First Name</mat-label>
+          <mat-label>Full Name</mat-label>
           <input matInput placeholder="Suhas" required formControlName="name" />
         </mat-form-field>
 
         <!-- Email -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Email</mat-label>
-          <input matInput placeholder="abc@gmail.com" required formControlName="email" />
+          <input matInput placeholder="abc@gmail.com" formControlName="email" />
         </mat-form-field>
 
       </div>
@@ -66,9 +66,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
           </mat-select>
         </mat-form-field> -->
 
-
-
-
+        
         <div formArrayName="language">
           <div *ngFor="let languageGroup of languages.controls; let i = index" [formGroupName]="i">
             <div class="row">
@@ -80,8 +78,58 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
                   <mat-option value="Regional">Regional</mat-option>
                 </mat-select>
               </mat-form-field>
-
+        
               <!-- Languages -->
+              <mat-form-field appearance="outline" class="adjustThree">
+                <mat-label>Languages</mat-label>
+                <mat-select formControlName="lang">
+                  <mat-option 
+                    *ngFor="let option of (languageGroup.get('filteredLanguages')?.value || [])" 
+                    [value]="option">
+                    {{ option }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              
+              
+        
+              <!-- Proficiency Level -->
+              <mat-form-field appearance="outline" class="adjustThree">
+                <mat-label>Proficiency</mat-label>
+                <mat-select formControlName="proficiencyLevel">
+                  <mat-option *ngFor="let level of proficiencyLevels" [value]="level">{{ level }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+        
+              <!-- Add button (only for the first set) -->
+              <button *ngIf="i === 0" type="button" mat-raised-button color="primary" (click)="addLanguage()">+</button>
+        
+              <!-- Delete button (for all sets except the first one) -->
+              <button *ngIf="i > 0" type="button" mat-raised-button color="warn" (click)="removeLanguage(i)">-</button>
+            </div>
+          </div>
+        </div>
+               
+        
+
+
+
+
+        <!-- <div formArrayName="language">
+          <div *ngFor="let languageGroup of languages.controls; let i = index" [formGroupName]="i">
+            <div class="row">
+
+
+              Language Type section
+              <mat-form-field appearance="outline" class="adjustThree">
+                <mat-label>Language Type</mat-label>
+                <mat-select placeholder="Foreign, Regional.." formControlName="lType">
+                  <mat-option value="Foreign">Foreign</mat-option>
+                  <mat-option value="Regional">Regional</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              Languages section
               <mat-form-field appearance="outline" class="adjustThree">
                 <mat-label>Languages</mat-label>
                 <mat-select formControlName="lang">
@@ -104,7 +152,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
                 </mat-select>
               </mat-form-field>
 
-              <!-- Proficiency Level -->
+              Proficiency Level section
               <mat-form-field appearance="outline" class="adjustThree">
                 <mat-label>Proficiency</mat-label>
                 <mat-select formControlName="proficiencyLevel">
@@ -135,7 +183,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
             </div>
           </div>
         </div>
-        
+         -->
 
       <div class="row">
         <!-- qualification -->
@@ -144,9 +192,14 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
           <mat-select formControlName="qualification">
             <mat-option value="SSC">SSC</mat-option>
             <mat-option value="HSC">HSC</mat-option>
+            <mat-option value="Diploma">Diploma</mat-option>
+            <mat-option value="Advanced Diploma">Advanced Diploma</mat-option>
             <mat-option value="Under Graduate">Under Graduate</mat-option>
+            <mat-option value="Graduate">Graduate</mat-option>
             <mat-option value="Post Graduate">Post Graduate</mat-option>
             <mat-option value="PHD">PHD</mat-option>
+            <mat-option value="BA (Langauge)">BA Language</mat-option>
+            <mat-option value="MA (Language)">MA Language</mat-option>
             <!-- <mat-option value="Professional Certificate"
               >Professional Certificate</mat-option
             >
@@ -160,7 +213,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         <!-- industry -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Industry</mat-label>
-          <input matInput placeholder="Software.." required formControlName="industry" />
+          <input matInput placeholder="Software.." formControlName="industry" />
         </mat-form-field>
       </div>
 
@@ -168,20 +221,13 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         <!-- domain -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Domain</mat-label>
-          <input matInput placeholder="Development.." required formControlName="domain" />
+          <input matInput placeholder="Development.." formControlName="domain" />
         </mat-form-field>
 
         <!-- experience -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Experience</mat-label>
-          <mat-select formControlName="exp">
-            <mat-option value="0-1">0-1 Year</mat-option>
-            <mat-option value="1-2">1-2 Years</mat-option>
-            <mat-option value="2-4">2-4 Years</mat-option>
-            <mat-option value="4-8">4-8 Years</mat-option>
-            <mat-option value="8-12">8-12 Years</mat-option>
-            <mat-option value="12+">12+ Years</mat-option>
-          </mat-select>
+          <input matInput placeholder="in Years.." formControlName="exp" />
         </mat-form-field>
 
       </div>
@@ -191,13 +237,13 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         <!-- current location -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Current Location</mat-label>
-          <input matInput placeholder="Pune.." required formControlName="cLocation" />
+          <input matInput placeholder="Pune.." formControlName="cLocation" />
         </mat-form-field>
 
         <!-- preferred location -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Preferred Location</mat-label>
-          <input matInput placeholder="Mumbai.." required formControlName="pLocation" />
+          <input matInput placeholder="Mumbai.." formControlName="pLocation" />
         </mat-form-field>
 
       </div>
@@ -207,13 +253,13 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         <!-- currentCTC -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Current CTC</mat-label>
-          <input matInput placeholder="in lakhs.." required formControlName="currentCTC" />
+          <input matInput placeholder="in lakhs.." formControlName="currentCTC" />
         </mat-form-field>
 
         <!-- expectedCTC -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Expected CTC</mat-label>
-          <input matInput placeholder="in lakhs.." required formControlName="expectedCTC" />
+          <input matInput placeholder="in lakhs.." formControlName="expectedCTC" />
         </mat-form-field>
 
       </div>
@@ -224,21 +270,23 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         <mat-form-field appearance="outline" class="input">
           <mat-label>Notice Period</mat-label>
           <mat-select formControlName="noticePeriod">
+            <mat-option value="Immediate">Immediate</mat-option>
             <mat-option value="15">15 Days</mat-option>
-            <mat-option value="30">30 Days</mat-option>
-            <mat-option value="60">60 Days</mat-option>
-            <mat-option value="90">90 Days</mat-option>
-            <mat-option value="90+">90+ Days</mat-option>
+            <mat-option value="30">1 Month</mat-option>
+            <mat-option value="60">2 Months</mat-option>
+            <mat-option value="90">3 Months</mat-option>
+            <mat-option value="90+">3+ Months</mat-option>
           </mat-select>
         </mat-form-field>
 
         <!-- Mode -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Mode</mat-label>
-          <mat-select placeholder="wfh.." required formControlName="wfh">
+          <mat-select placeholder="wfh.." formControlName="wfh">
             <mat-option value="WFH">WFH</mat-option>
             <mat-option value="WFO">WFO</mat-option>
             <mat-option value="Hybrid">Hybrid</mat-option>
+            <mat-option value="Both">Both</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -249,13 +297,13 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         <!-- resumeLink -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Resume</mat-label>
-          <input matInput placeholder="resume.." required formControlName="resumeLink" />
+          <input matInput placeholder="resume.." formControlName="resumeLink" />
         </mat-form-field>
 
         <!-- linkedinLink -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Linkedin Profile</mat-label>
-          <input matInput placeholder="linkedin.." required formControlName="linkedinLink" />
+          <input matInput placeholder="linkedin.." formControlName="linkedinLink" />
         </mat-form-field>
 
 
@@ -274,6 +322,7 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
           <mat-option value="Not Intrested - Under Qualified">Not Intrested - Under Qualified</mat-option>
           <mat-option value="Not Intrested - already associated with org">Not Intrested - already associated with
             org</mat-option>
+          <mat-option value="Currently not looking for a job">Currently not looking for a job</mat-option>
           <mat-option value="Rejected">Rejected</mat-option>
         </mat-select>
       </mat-form-field>
@@ -288,15 +337,16 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         <!-- company -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Organisation</mat-label>
-          <input matInput placeholder="xyz.." required formControlName="company" />
+          <input matInput placeholder="xyz.." formControlName="company" />
         </mat-form-field>
 
         <!-- voiceNonVoice -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Voice / NonVoice</mat-label>
-          <mat-select required formControlName="voiceNonVoice">
+          <mat-select formControlName="voiceNonVoice">
             <mat-option value="Voice">Voice</mat-option>
             <mat-option value="Non-Voice">Non-Voice</mat-option>
+            <mat-option value="Both">Both</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
@@ -305,8 +355,8 @@ https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         <!-- source -->
         <mat-form-field appearance="outline" class="input">
           <mat-label>Source</mat-label>
-          <mat-select required formControlName="source">
-            <mat-option value="Linkedin">Linkedin</mat-option>
+          <mat-select formControlName="source">
+            <mat-option value="Linkedin">LinkedIn</mat-option>
             <mat-option value="Naukri">Naukri</mat-option>
             <mat-option value="Meta">Meta</mat-option>
             <mat-option value="Google">Google</mat-option>

@@ -33,6 +33,7 @@ dateControl = new FormControl();
   openFilters: boolean = false;
   proficiencyLevelsString: any;
   recruiterId: any;
+  loggedInUsername: any;
 
   displayedColumns: string[] = [
     'SrNo',
@@ -113,6 +114,10 @@ dateControl = new FormControl();
   ngOnInit(): void {
     this.getCandidatesByRecruiterId();
     this.recruiterId = this.loginService.getRecruiterId();
+    this.loggedInUsername = this.loginService.getUsername();
+    console.log("the username is: " + this.loggedInUsername);
+    console.log("the id is: " + this.recruiterId);
+    
   }
 
   getCandidatesByRecruiterId() {

@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LeadsService } from '../../../services/leads/leads.service';
+import { LoginService } from 'src/app/services/login/login.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
@@ -14,9 +15,69 @@ export class FilteredSheetFormComponent {
   clientId: any;
   processId: any;
 
+  createdBy: string | null = null;
+  lastUpdatedBy: string | null = null;
+
   // Arrays for languages
-  foreignLanguages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Bahasa', 'Vietnamese', 'Chinese'];
-  regionalLanguages = ['Nepalese', 'Hindi', 'Marathi', 'Tamil', 'Telugu', 'Gujarati', 'Punjabi'];
+  foreignLanguages = [
+    "Arabic", 
+    "French", 
+    "German", 
+    "Spanish", 
+    "English", 
+    "Dutch", 
+    "Portuguese", 
+    "Italian", 
+    "Japanese", 
+    "Mandarin", 
+    "Thai", 
+    "Vietnamese", 
+    "Bahasa Indonesia", 
+    "Bahasa Malaysia", 
+    "Malay", 
+    "Tagalog", 
+    "Tamil", 
+    "Malayalam", 
+    "Gujarati", 
+    "Oriya", 
+    "Punjabi", 
+    "Assamese", 
+    "Bengali", 
+    "Hindi"
+  ]; // replace with actual statuses
+  proficiencyLevels = [
+    'A1',
+    'A2',
+    'B1',
+    'B2',
+    'C1',
+    'C2',
+    'HSK1',
+    'HSK2',
+    'HSK3',
+    'HSK4',
+    'HSK5',
+    'HSK6',
+    'N1',
+    'N2',
+    'N3',
+    'N4',
+    'N5',
+    'TOPIK I',
+    'TOPIK II',
+    'Native',
+    'Non-Native',
+  ];
+  regionalLanguages = [
+    "Tamil", 
+    "Malayalam", 
+    "Gujarati", 
+    "Oriya", 
+    "Punjabi", 
+    "Assamese", 
+    "Bengali", 
+    "Hindi"
+  ];
   filteredLanguages: string[] = [];
 
   // Creating lead form
@@ -26,6 +87,7 @@ export class FilteredSheetFormComponent {
     private _formBuilder: FormBuilder,
     private leadService: LeadsService,
     private clientService: CilentService,
+    private loginService: LoginService,
     private _snackBar: MatSnackBar,
     private _dialogRef: MatDialogRef<FilteredSheetFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -47,12 +109,14 @@ export class FilteredSheetFormComponent {
       noticePeriod: [data?.noticePeriod || '', Validators.required],
       wfh: [data?.wfh || '', Validators.required],
       resumeLink: [data?.resumeLink || '', Validators.required],
-      linkedinLink: [data?.linkedinLink || '', Validators.required],
-      feedback: [data?.feedback || ''],
+      linkedinLink: [data?.linkedinLink || ''],
+      feedback: [data?.feedback || '', Validators.required],
       remark: [data?.remark || ''],
-      company: [data?.company || '', Validators.required],
+      company: [data?.company || ''],
       voiceNonVoice: [data?.voiceNonVoice || '', Validators.required],
       source: [data?.source || '', Validators.required],
+      createdBy: [null],
+      lastUpdatedBy: [null],
     });
 
     this.clientId = data.clientId;
@@ -60,45 +124,122 @@ export class FilteredSheetFormComponent {
   }
 
   ngOnInit(): void {
-    this.leadForm.patchValue(this.data);
 
-    // Set filteredLanguages based on the initial lType value
-    if (this.leadForm.get('lType')?.value) {
-      this.updateLanguages(this.leadForm.get('lType')?.value);
-    }
+    // Clear the languages array and initialize it with a blank form group
+    this.languages.clear();
 
-    // Watch for changes in the lType field
-    this.leadForm.get('lType')?.valueChanges.subscribe(value => {
-      this.updateLanguages(value);
-    });
-  }
+    // this.leadForm.patchValue(this.data);
 
-  updateLanguages(selectedType: string) {
-    if (selectedType === 'Foreign') {
-      this.filteredLanguages = this.foreignLanguages;
-    } else if (selectedType === 'Regional') {
-      this.filteredLanguages = this.regionalLanguages;
-    } else {
-      this.filteredLanguages = [];
-    }
-  }
-
-   // for taking lang type, lang, proficiency 
-   createLanguageGroup(): FormGroup {
-    return this._formBuilder.group({
-      lType: ['', Validators.required],
-      lang: ['', Validators.required],
-      proficiencyLevel: ['', Validators.required]
-    });
-  }
-
-  get languages(): FormArray {
-    return this.leadForm.get('language') as FormArray;
-  }
+    if (this.data && Array.isArray(this.data.language)) {
+      this.data.language.forEach((lang: any, index: number) => {
+        const languageGroup = this.createLanguageGroup();
+        languageGroup.patchValue(lang);
+        this.languages.push(languageGroup);
   
-  addLanguage() {
-    this.languages.push(this.createLanguageGroup());
+        // Initialize filteredLanguages based on lType
+        this.updateLanguages(lang.lType, index);
+  
+        this.initLanguageTypeChange(index);
+      });
+    } else {
+      // Initialize with a single blank form group
+      this.languages.push(this.createLanguageGroup());
+  
+      // Ensure that we initialize language type change listeners
+      this.initLanguageTypeChange(0);
+    }
+  
+    console.log('Languages Form Array After Initialization:', this.languages.value);
   }
+
+    // Function to initialize valueChanges for a specific language group index
+    initLanguageTypeChange(index: number) {
+      this.updateLanguages(this.languages.at(index).get('lType')?.value, index);
+    
+      this.languages.at(index).get('lType')?.valueChanges.subscribe((value) => {
+        this.updateLanguages(value, index);
+      });
+    }
+    
+    updateLanguages(selectedType: string, index: number) {
+      const languageGroup = this.languages.at(index);
+    
+      if (!languageGroup) {
+        console.error(`Language group at index ${index} does not exist`);
+        return;
+      }
+    
+      const langControl = languageGroup.get('lang');
+      const filteredLanguagesControl = languageGroup.get('filteredLanguages');
+    
+      if (selectedType === 'Foreign') {
+        filteredLanguagesControl?.setValue(this.foreignLanguages);
+      } else if (selectedType === 'Regional') {
+        filteredLanguagesControl?.setValue(this.regionalLanguages);
+      } else {
+        filteredLanguagesControl?.setValue([]);
+      }
+    
+      langControl?.updateValueAndValidity();
+      console.log('Filtered Languages for index', index, ':', filteredLanguagesControl?.value);
+    }
+    
+    
+    
+    
+    // Function to create a new language form group
+    createLanguageGroup(): FormGroup {
+      return this._formBuilder.group({
+        lType: ['', Validators.required],
+        lang: ['', Validators.required],
+        proficiencyLevel: [''],
+        filteredLanguages: [[]],  // Add a control to store filtered languages
+      });
+    }
+    
+    
+    
+    
+    get languages(): FormArray {
+      return this.leadForm.get('language') as FormArray;
+    }
+    
+    addLanguage() {
+      console.log('Adding New Language Group');
+      const languageGroup = this.createLanguageGroup();
+    
+      // Set default value to 'Foreign' and initialize filteredLanguages
+      languageGroup.get('lType')?.setValue('Foreign');
+      this.languages.push(languageGroup);
+    
+      // Now, update languages for the new group at the last index
+      const newIndex = this.languages.length - 1;
+      this.updateLanguages('Foreign', newIndex);
+    
+      console.log('Languages Form Array After Addition:', this.languages.value);
+  
+      this._snackBar.open('New language set added successfully!', 'Close', {
+        duration: 1000, // duration in milliseconds
+      });
+    }
+    
+    
+  
+    
+    // Function to remove a language form group by index
+    removeLanguage(index: number) {
+      if (this.languages.length > 1) {
+        this.languages.removeAt(index);
+      }
+  
+      this._snackBar.open('Language set removed successfully!', 'Close', {
+        duration: 1000, // duration in milliseconds
+      });
+    }
+  
+
+    
+    // -----------------------------------------
 
   // Add and update function
   submitLead() {
@@ -106,6 +247,16 @@ export class FilteredSheetFormComponent {
     if (this.leadForm.valid) {
       // Update existing lead
       if (this.data?._id) {
+
+        console.log("exp is: " + this.data.exp);
+
+
+        // Store lastUpdatedBy field before submission
+        this.lastUpdatedBy = this.loginService.getUsername();
+        this.leadForm.patchValue({
+          lastUpdatedBy: this.lastUpdatedBy,
+        });
+
         this.clientService.updateFilteredCandidate(this.clientId, this.processId, this.data._id, this.leadForm.value)
           .subscribe({
             next: (val) => {
@@ -123,6 +274,13 @@ export class FilteredSheetFormComponent {
           });
       } else {
         // Create new lead
+
+        // Store createdBy field before submission
+        this.createdBy = this.loginService.getUsername();
+        this.leadForm.patchValue({
+          createdBy: this.createdBy,
+        });
+
         this.leadService.createLead(this.leadForm.value).subscribe({
           next: (val: any) => {
             this._snackBar.open('Form Submitted Successfully', 'Close', {
