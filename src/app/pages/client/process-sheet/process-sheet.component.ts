@@ -137,15 +137,6 @@ export class ProcessSheetComponent implements OnInit {
     this.openFilters = !this.openFilters;
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.filterValues['global'] = filterValue;
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
 
   applyDropdownFilter(value: string, column: string) {
     this.filterValues[column] = value;
@@ -198,25 +189,60 @@ export class ProcessSheetComponent implements OnInit {
     }
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+  
+    // If the input is empty, clear the filter to show all data
+    if (!filterValue) {
+      this.dataSource.filter = ''; // Clear the filter to show all data
+    } else {
+      // Create a filter object for multiple fields (name, phone, email)
+      const filterObject = { nameOrNumberOrEmail: filterValue };
+  
+      // Log the filter value and object for debugging
+      console.log("Applying filter:", filterValue);
+      console.log("Filter object:", filterObject);
+  
+      this.dataSource.filter = JSON.stringify(filterObject);
+    }
+  
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+
   createFilter(): (data: any, filter: string) => boolean {
-    let filterFunction = (data: any, filter: string): boolean => {
-      let searchTerms = JSON.parse(filter);
-      let isMatch = true;
-
-      if (searchTerms['global']) {
-        isMatch = JSON.stringify(data).toLowerCase().includes(searchTerms['global']);
-      } else {
-        for (let key in searchTerms) {
-          if (searchTerms[key] && (!data[key] || !data[key].toString().toLowerCase().includes(searchTerms[key].toLowerCase()))) {
-            isMatch = false;
-            break;
-          }
-        }
+    return (data: any, filter: string): boolean => {
+      if (!filter) {
+        // If the filter string is empty, return true to show all items
+        return true;
       }
+  
+      let searchTerms: any;
+      try {
+        // Parse filter string, which should be in JSON format
+        searchTerms = JSON.parse(filter);
+      } catch (error) {
+        // If parsing fails, log the error and return false to exclude the item
+        console.error("Invalid filter format:", filter);
+        return false;
+      }
+  
+      // Log parsed search terms for debugging
+  
+      const searchTerm = searchTerms.nameOrNumberOrEmail;
+  
+      // Convert the search term to lowercase for case-insensitive comparison
+      const term = searchTerm.toString().toLowerCase();
 
-      return isMatch;
+      // Check if the data matches the 'process name' field
+      const matchesProcessName = data.clientProcessName ? data.clientProcessName.toString().toLowerCase().includes(term) : false;
+  
+  
+      // Match if the search term is found in 'name', 'phone', or 'email'
+      return matchesProcessName;
     };
-    return filterFunction;
   }
 
   clearFilters() {

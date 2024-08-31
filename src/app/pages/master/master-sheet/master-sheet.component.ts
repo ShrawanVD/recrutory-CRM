@@ -100,7 +100,7 @@ export class MasterSheetComponent implements OnInit {
 
   
 
-  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Mandarin', 'Nepalese', 'Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Marathi']; // replace with actual statuses
+  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Mandarin', 'Nepalese', 'Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Marathi', 'Kannada']; // replace with actual statuses
   proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5', 'HSK6', 'N1', 'N2', 'N3', 'N4', 'N5', 'Native', 'Non-Native'];
   jobStatuses = ['Working', 'Job Seeking', 'Teacher'];
   qualifications = ['SSC', 'HSC', 'Diploma', 'Advance Diploma', 'Under Graduate', 'Post Graduate', 'PHD', 'BA (Language)', 'MA (Language)'];
@@ -272,7 +272,6 @@ export class MasterSheetComponent implements OnInit {
     this.getCuriotoryLeads();
     this.getAllProcessList();
     this.clearFilters();
-    this.dataSource.filterPredicate = this.createFilter();
   }
 
   // for getting srno 
@@ -427,13 +426,7 @@ export class MasterSheetComponent implements OnInit {
   
   
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = JSON.stringify(filterValue.trim().toLowerCase());
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
+  
 
   applyDropdownFilter(value: string, column: string) {
     if (column === 'exp') {
@@ -470,79 +463,86 @@ export class MasterSheetComponent implements OnInit {
     }
   }
   
-  // createFilter(): (data: any, filter: string) => boolean {
-  //   return (data: any, filter: string): boolean => {
-  //     const searchTerms = JSON.parse(filter);
-  //     let isMatch = true;
-  
-  //     for (const key in searchTerms) {
-  //       if (searchTerms[key]) {
-  //         if (typeof searchTerms[key] === 'function') {
-  //           if (!searchTerms[key](data)) {
-  //             isMatch = false;
-  //             break;
-  //           }
-  //         } else if (!data[key] || !data[key].toString().toLowerCase().includes(searchTerms[key].toLowerCase())) {
-  //           isMatch = false;
-  //           break;
-  //         }
-  //       }
-  //     }
 
-  //     console.log(this.dataSource.filteredData);
-  
-  //     return isMatch;
-  //   };
-  // }
-  
-  
-  
-  
 
-  // createFilter(): (data: any, filter: string) => boolean {
-  //   let filterFunction = (data: any, filter: string): boolean => {
-  //     let searchTerms = JSON.parse(filter);
-  //     let isMatch = true;
 
-  //     if (searchTerms['global']) {
-  //       isMatch = JSON.stringify(data).toLowerCase().includes(searchTerms['global']);
-  //     } else {
-  //       for (let key in searchTerms) {
-  //         if (searchTerms[key] && (!data[key] || !data[key].toString().toLowerCase().includes(searchTerms[key].toLowerCase()))) {
-  //           isMatch = false;
-  //           break;
-  //         }
-  //       }
-  //     }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+  
+    // If the input is empty, clear the filter to show all data
+    if (!filterValue) {
+      this.dataSource.filter = ''; // Clear the filter to show all data
+    } else {
+      // Create a filter object for multiple fields (name, phone, email)
+      const filterObject = { nameOrNumberOrEmail: filterValue };
+  
+      // Log the filter value and object for debugging
+      console.log("Applying filter:", filterValue);
+      console.log("Filter object:", filterObject);
+  
+      this.dataSource.filter = JSON.stringify(filterObject);
+    }
+  
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
 
-  //     return isMatch;
-  //   };
-  //   return filterFunction;
-  // }
 
   createFilter(): (data: any, filter: string) => boolean {
     return (data: any, filter: string): boolean => {
-      const searchTerms = JSON.parse(filter);
-      let isMatch = true;
-  
-      // Iterate over the filter terms
-      for (const key in searchTerms) {
-        if (searchTerms[key]) {
-          // Check if the data has the key and if it matches the search term
-          if (!data[key] || !data[key].toString().toLowerCase().includes(searchTerms[key].toLowerCase())) {
-            isMatch = false;
-            break;
-          }
-        }
+      if (!filter) {
+        // If the filter string is empty, return true to show all items
+        return true;
       }
-      
-      console.log('Filter terms:', searchTerms);
-      console.log('Data item:', data);
-
   
-      return isMatch;
+      let searchTerms: any;
+      try {
+        // Parse filter string, which should be in JSON format
+        searchTerms = JSON.parse(filter);
+      } catch (error) {
+        // If parsing fails, log the error and return false to exclude the item
+        console.error("Invalid filter format:", filter);
+        return false;
+      }
+  
+      // Log parsed search terms for debugging
+  
+      const searchTerm = searchTerms.nameOrNumberOrEmail;
+  
+      // Convert the search term to lowercase for case-insensitive comparison
+      const term = searchTerm.toString().toLowerCase();
+
+      // // Check if the data matches the 'process name' field
+      // const matchesProcessName = data.clientProcessName ? data.clientProcessName.toString().toLowerCase().includes(term) : false;
+  
+      // Check if the data matches the 'name' field
+      const matchesName = data.name ? data.name.toString().toLowerCase().includes(term) : false;
+  
+      // Check if the data matches the 'phone' field
+      const matchesPhone = data.phone ? data.phone.toString().toLowerCase().includes(term) : false;
+  
+      // Check if the data matches the 'email' field
+      const matchesEmail = data.email ? data.email.toString().toLowerCase().includes(term) : false;
+
+      // Check if the data matches the 'created by' field
+      const matchesCreatedBy = data.createdBy ? data.createdBy.toString().toLowerCase().includes(term) : false;
+
+      // Check if the data matches the 'last updated by' field
+      const matchesLastUpdatedBy = data.lastUpdatedBy ? data.lastUpdatedBy.toString().toLowerCase().includes(term) : false;
+  
+      // Match if the search term is found in 'name', 'phone', or 'email'
+      return matchesName || matchesPhone || matchesEmail || matchesCreatedBy || matchesLastUpdatedBy ;
     };
   }
+  
+  
+
+
+
+
+  
+
   
 
   clearFilters() {

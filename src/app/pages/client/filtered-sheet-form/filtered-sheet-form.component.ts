@@ -43,7 +43,9 @@ export class FilteredSheetFormComponent {
     "Punjabi", 
     "Assamese", 
     "Bengali", 
-    "Hindi"
+    "Hindi",
+    "Kannada",
+    "Telugu"
   ]; // replace with actual statuses
   proficiencyLevels = [
     'A1',
@@ -76,7 +78,9 @@ export class FilteredSheetFormComponent {
     "Punjabi", 
     "Assamese", 
     "Bengali", 
-    "Hindi"
+    "Hindi",
+    "Kannada",
+    "Telugu"
   ];
   filteredLanguages: string[] = [];
 
