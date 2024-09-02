@@ -78,7 +78,7 @@ export class InterestedSheetComponent {
   jobStatuses = ['Working', 'Job Seeking', 'Teacher'];
   qualifications = ['SSC', 'HSC', 'Under Graduate', 'Post Graduate', 'PHD'];
   modes = ['WFH', 'WHO', 'Hybrid'];
-  feedbacks = ['Not Intrested - CTC Not Matching', 'Not Intrested - Relocation Issue', 'Not Intrested - Notice Period', 'Not Intrested - Cooling Down Period', 'Not Intrested - Call Not Recieved', 'Not Intrested - Under Qualified"'];
+  feedbacks = ['Interested','Not Intrested - CTC Not Matching', 'Not Intrested - Relocation Issue', 'Not Intrested - Notice Period', 'Not Intrested - Cooling Down Period', 'Not Intrested - Call Not Recieved', 'Not Intrested - Under Qualified", "Not Intrested - already associated with org", "Currently not looking for a job"'];
   noticePeriods = ['15', '30', '60', '90', '90+'];
   sources = ['Linkedin', 'Naukri', 'Meta', 'Google', 'Instagram', 'Website', 'App', 'Email', 'Reference'];
   exps = ['0-1', '1-2', '2-4', '4-8', '8-12', '12+'];

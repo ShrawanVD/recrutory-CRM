@@ -74,7 +74,7 @@ export class FilteredSheetComponent {
   jobStatuses = ['Working', 'Job Seeking', 'Teacher'];
   qualifications = ['SSC', 'HSC', 'Diploma', 'Advance Diploma', 'Under Graduate', 'Post Graduate', 'PHD', 'BA (Language)', 'MA (Language)'];
   modes = ['WFH', 'WFO', 'Hybrid', 'Both'];
-  feedbacks = ['Interested','Not Intrested - CTC Not Matching', 'Not Intrested - Relocation Issue', 'Not Intrested - Notice Period', 'Not Intrested - Cooling Down Period', 'Not Intrested - Call Not Recieved', 'Not Intrested - Under Qualified"'];
+  feedbacks = ['Interested','Not Intrested - CTC Not Matching', 'Not Intrested - Relocation Issue', 'Not Intrested - Notice Period', 'Not Intrested - Cooling Down Period', 'Not Intrested - Call Not Recieved', 'Not Intrested - Under Qualified", "Not Intrested - already associated with org", "Currently not looking for a job"'];
   noticePeriods = ['Immediate', '15 Days', '1 Month', '2 Months', '3 Months'];
   sources = ['LinkedIn', 'Naukri', 'Meta', 'Google', 'Instagram', 'Website', 'App', 'Email', 'Reference'];
   // exps = ['0-1', '1-2', '2-4', '4-8', '8-12', '12+'];

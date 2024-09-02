@@ -105,7 +105,7 @@ export class MasterSheetComponent implements OnInit {
   jobStatuses = ['Working', 'Job Seeking', 'Teacher'];
   qualifications = ['SSC', 'HSC', 'Diploma', 'Advance Diploma', 'Under Graduate', 'Post Graduate', 'PHD', 'BA (Language)', 'MA (Language)'];
   modes = ['WFH', 'WFO', 'Hybrid', 'Both'];
-  feedbacks = ['Interested','Not Intrested - CTC Not Matching', 'Not Intrested - Relocation Issue', 'Not Intrested - Notice Period', 'Not Intrested - Cooling Down Period', 'Not Intrested - Call Not Recieved', 'Not Intrested - Under Qualified"'];
+  feedbacks = ['Interested','Not Intrested - CTC Not Matching', 'Not Intrested - Relocation Issue', 'Not Intrested - Notice Period', 'Not Intrested - Cooling Down Period', 'Not Intrested - Call Not Recieved', 'Not Intrested - Under Qualified", "Not Intrested - already associated with org", "Currently not looking for a job"'];
   noticePeriods = ['Immediate', '15 Days', '1 Month', '2 Months', '3 Months'];
   sources = ['LinkedIn', 'Naukri', 'Meta', 'Google', 'Instagram', 'Website', 'App', 'Email', 'Reference'];
   // exps = ['0-1', '1-2', '2-4', '4-8', '8-12', '12+'];
@@ -414,7 +414,14 @@ export class MasterSheetComponent implements OnInit {
         });
   
         this.dataSource = new MatTableDataSource(filteredData);
-        this.dataSource.filterPredicate = this.createFilter();
+        // this.dataSource.filterPredicate = this.createFilter();
+        this.dataSource.filterPredicate = (data: any, filter: string) => {
+          const filterValue = filter ? filter.trim().toLowerCase() : '';
+          const propertyValue = data.property ? data.property.toString().trim().toLowerCase() : '';
+        
+          return propertyValue.includes(filterValue);
+        };
+        
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
       },
@@ -423,51 +430,36 @@ export class MasterSheetComponent implements OnInit {
       }
     });
   }
-  
-  
 
+  
+  
   
 
   applyDropdownFilter(value: string, column: string) {
+    console.log("value is: " + value);
     if (column === 'exp') {
       this.applyExperienceFilter(value);
     } else {
       this.filterValues[column] = value;
       this.dataSource.filter = JSON.stringify(this.filterValues);
+
+      console.log("the datasource filter is: " + this.dataSource.filter);
   
       if (this.dataSource.paginator) {
         this.dataSource.paginator.firstPage();
       }
     }
   }
-  
-  applyExperienceFilter(range: string) {
-    if (!range) {
-      delete this.filterValues['exp']; // Clear the experience filter if "None" is selected
-    } else if (range === 'Fresher') {
-      this.filterValues['exp'] = (entry: Lead) => entry.exp === 'Fresher';
-    } else {
-      const [min, max] = range.split(' - ').map(val => parseFloat(val));
-      const upperLimit = isNaN(max) ? Infinity : max;
-  
-      this.filterValues['exp'] = (entry: Lead) => {
-        const experienceValue = parseFloat(entry.exp);
-        return (entry.exp === 'Fresher') || (experienceValue >= min && experienceValue <= upperLimit);
-      };
-    }
-  
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-  
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-  
 
+  
+  
+  
 
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+
+    console.log("apply filter: filtervalue is: " + filterValue);
   
     // If the input is empty, clear the filter to show all data
     if (!filterValue) {
@@ -489,61 +481,150 @@ export class MasterSheetComponent implements OnInit {
   }
 
 
+  // applyExperienceFilter(range: string) {
+  //   if (!range || range === 'None') {
+  //     delete this.filterValues['exp']; // Clear the experience filter when "None" is selected
+  //   } else if (range === 'Fresher') {
+  //     this.filterValues['exp'] = (entry: Lead) => entry.exp === 'Fresher';
+  //   } else {
+  //     const [min, max] = range.split(' - ').map(val => parseFloat(val));
+  //     const upperLimit = isNaN(max) ? Infinity : max;
+  
+  //     this.filterValues['exp'] = (entry: Lead) => {
+  //       const experienceValue = parseFloat(entry.exp);
+  //       return experienceValue >= min && experienceValue <= upperLimit;
+  //     };
+  //   }
+  
+  //   // Trigger the filter update
+  //   this.dataSource.filter = JSON.stringify(this.filterValues);
+  
+  //   if (this.dataSource.paginator) {
+  //     this.dataSource.paginator.firstPage();
+  //   }
+  // }
+  
+  
+  // createFilter(): (data: any, filter: string) => boolean {
+  //   return (data: any, filter: string): boolean => {
+  //     if (!filter) return true; // If no filter, show all data
+  
+  //     const searchTerm = this.filterValues.nameOrNumberOrEmail || '';
+  //     const term = searchTerm.toString().toLowerCase();
+  
+  //     // Global search term matching
+  //     const matchesName = data.name ? data.name.toString().toLowerCase().includes(term) : false;
+  //     const matchesPhone = data.phone ? data.phone.toString().toLowerCase().includes(term) : false;
+  //     const matchesEmail = data.email ? data.email.toString().toLowerCase().includes(term) : false;
+  //     const matchesCreatedBy = data.createdBy ? data.createdBy.toString().toLowerCase().includes(term) : false;
+  //     const matchesLastUpdatedBy = data.lastUpdatedBy ? data.lastUpdatedBy.toString().toLowerCase().includes(term) : false;
+  //     const globalMatch = matchesName || matchesPhone || matchesEmail || matchesCreatedBy || matchesLastUpdatedBy;
+  
+  //     // Column-specific filtering
+  //     let columnMatch = true;
+  //     for (const column in this.filterValues) {
+  //       if (column === 'nameOrNumberOrEmail') continue; // Skip global search term
+  
+  //       const filterValue = this.filterValues[column];
+  
+  //       if (typeof filterValue === 'function') {
+  //         // Call function filter (e.g., experience filter)
+  //         columnMatch = columnMatch && filterValue(data);
+  //       } else {
+  //         // String-based column filtering
+  //         const columnData = data[column] ? data[column].toString().toLowerCase() : '';
+  //         const filterStr = filterValue.toString().toLowerCase();
+  //         columnMatch = columnMatch && columnData.includes(filterStr);
+  //       }
+  
+  //       if (!columnMatch) break; // Stop if one column filter doesn't match
+  //     }
+  
+  //     return globalMatch && columnMatch;
+  //   };
+  // }
+  
+  
+  
+  
+  
+
+  applyExperienceFilter(range: string) {
+    if (!range) {
+      delete this.filterValues['exp']; // Clear the experience filter if "None" is selected
+    } else if (range === 'Fresher') {
+      this.filterValues['exp'] = (entry: Lead) => entry.exp === 'Fresher';
+    } else {
+      const [min, max] = range.split(' - ').map(val => parseFloat(val));
+      const upperLimit = isNaN(max) ? Infinity : max;
+  
+      this.filterValues['exp'] = (entry: Lead) => {
+        const experienceValue = parseFloat(entry.exp);
+        return (entry.exp === 'Fresher') || (experienceValue >= min && experienceValue <= upperLimit);
+      };
+    }
+  
+    this.dataSource.filter = JSON.stringify(this.filterValues);
+  
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+
+
+
   createFilter(): (data: any, filter: string) => boolean {
     return (data: any, filter: string): boolean => {
       if (!filter) {
-        // If the filter string is empty, return true to show all items
         return true;
       }
   
-      let searchTerms: any;
+      let filterValues: any;
       try {
-        // Parse filter string, which should be in JSON format
-        searchTerms = JSON.parse(filter);
+        filterValues = JSON.parse(filter);
       } catch (error) {
-        // If parsing fails, log the error and return false to exclude the item
         console.error("Invalid filter format:", filter);
         return false;
       }
   
-      // Log parsed search terms for debugging
-  
-      const searchTerm = searchTerms.nameOrNumberOrEmail;
-  
-      // Convert the search term to lowercase for case-insensitive comparison
+      // Extract search term for general filtering (name, phone, email, etc.)
+      const searchTerm = filterValues.nameOrNumberOrEmail || '';
       const term = searchTerm.toString().toLowerCase();
-
-      // // Check if the data matches the 'process name' field
-      // const matchesProcessName = data.clientProcessName ? data.clientProcessName.toString().toLowerCase().includes(term) : false;
   
-      // Check if the data matches the 'name' field
+      // Check if the data matches the search term (global search across multiple fields)
       const matchesName = data.name ? data.name.toString().toLowerCase().includes(term) : false;
-  
-      // Check if the data matches the 'phone' field
       const matchesPhone = data.phone ? data.phone.toString().toLowerCase().includes(term) : false;
-  
-      // Check if the data matches the 'email' field
       const matchesEmail = data.email ? data.email.toString().toLowerCase().includes(term) : false;
-
-      // Check if the data matches the 'created by' field
       const matchesCreatedBy = data.createdBy ? data.createdBy.toString().toLowerCase().includes(term) : false;
-
-      // Check if the data matches the 'last updated by' field
       const matchesLastUpdatedBy = data.lastUpdatedBy ? data.lastUpdatedBy.toString().toLowerCase().includes(term) : false;
+      const globalMatch = matchesName || matchesPhone || matchesEmail || matchesCreatedBy || matchesLastUpdatedBy;
   
-      // Match if the search term is found in 'name', 'phone', or 'email'
-      return matchesName || matchesPhone || matchesEmail || matchesCreatedBy || matchesLastUpdatedBy ;
+      // Column-based filtering (specific field filtering)
+      let columnMatch = true;
+      for (const column in filterValues) {
+        if (column === 'nameOrNumberOrEmail') continue; // Skip global search term
+  
+        const filterValue = filterValues[column].toString().toLowerCase();
+        const columnData = data[column] ? data[column].toString().toLowerCase() : '';
+  
+        // Apply filter for the specific column
+        columnMatch = columnMatch && columnData.includes(filterValue);
+  
+        if (!columnMatch) {
+          break; // No need to continue if one column filter doesn't match
+        }
+      }
+  
+      // Return true only if both the global search term and column-specific filters match
+      return globalMatch && columnMatch;
     };
   }
   
   
 
-
-
-
   
-
-  
+   
 
   clearFilters() {
     this.filterValues = {};
