@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { LoginService } from 'src/app/services/login/login.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
@@ -63,7 +64,8 @@ export class ProcessSheetComponent implements OnInit {
     private clientService: CilentService,
     private _snackBar: MatSnackBar,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private loginService: LoginService
   ) { }
 
   ngOnInit(): void {
@@ -314,7 +316,11 @@ export class ProcessSheetComponent implements OnInit {
     return localStorage.getItem('role');
   }
 
-  isAdmin(): boolean {
-    return this.getRole() === 'Admin';
+  isLead(){
+    return this.loginService.isTeamLead();
+  }
+
+  isRecruiter(){
+    return this.loginService.isRecruiter();
   }
 }

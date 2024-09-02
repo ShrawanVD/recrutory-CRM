@@ -173,7 +173,7 @@
                   <mat-icon>edit</mat-icon>
                 </button>
     
-                <button mat-icon-button color="warn" (click)="deleteEntry(lead._id)" *ngIf="isAdmin()">
+                <button mat-icon-button color="warn" (click)="deleteEntry(lead._id)" *ngIf="!isLead() && !isRecruiter()">
                   <mat-icon>delete</mat-icon>
                 </button>
               </td>
