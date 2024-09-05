@@ -16,7 +16,8 @@ export class LoginService {
   
   isUserLoggedIn = new BehaviorSubject<boolean>(false);
   
-  url = 'https://recrutory-crm-backend-iwf1.onrender.com/api';
+  url = "http://localhost:4000/api" 
+  // url = 'https://recrutory-crm-backend-iwf1.onrender.com/api';
 
   constructor(public http: HttpClient, private router: Router) { }
 

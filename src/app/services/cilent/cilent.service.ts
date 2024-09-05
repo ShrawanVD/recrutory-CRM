@@ -6,8 +6,8 @@ import { Injectable } from '@angular/core';
 })
 export class CilentService {
 
-  url = "https://recrutory-crm-backend-iwf1.onrender.com"
-  //  url = "http://localhost:4000"
+  // url = "https://recrutory-crm-backend-iwf1.onrender.com"
+   url = "http://localhost:4000"
 
   constructor(private http: HttpClient) { }
 

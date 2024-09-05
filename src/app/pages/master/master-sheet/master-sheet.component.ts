@@ -100,8 +100,8 @@ export class MasterSheetComponent implements OnInit {
 
   
 
-  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Mandarin', 'Nepalese', 'Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Marathi', 'Kannada']; // replace with actual statuses
-  proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5', 'HSK6', 'N1', 'N2', 'N3', 'N4', 'N5', 'Native', 'Non-Native'];
+  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Korean' ,'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Mandarin', 'Nepalese', 'Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Marathi', 'Kannada']; // replace with actual statuses
+  proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5', 'HSK6', 'N1', 'N2', 'N3', 'N4', 'N5', 'TOPIK', 'Native', 'Non-Native'];
   jobStatuses = ['Working', 'Job Seeking', 'Teacher'];
   qualifications = ['SSC', 'HSC', 'Diploma', 'Advance Diploma', 'Under Graduate', 'Post Graduate', 'PHD', 'BA (Language)', 'MA (Language)'];
   modes = ['WFH', 'WFO', 'Hybrid', 'Both'];
@@ -109,7 +109,7 @@ export class MasterSheetComponent implements OnInit {
   noticePeriods = ['Immediate', '15 Days', '1 Month', '2 Months', '3 Months'];
   sources = ['LinkedIn', 'Naukri', 'Meta', 'Google', 'Instagram', 'Website', 'App', 'Email', 'Reference'];
   // exps = ['0-1', '1-2', '2-4', '4-8', '8-12', '12+'];
-  experienceRanges = ['Fresher', '0 - 1', '1 - 3', '3 - 6', '6 - 10', '10+'];
+  experienceRanges = ['Fresher', '0-1', '1-3', '3-6', '6-10', '10+'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -382,63 +382,19 @@ export class MasterSheetComponent implements OnInit {
 
   filterLang(value: any) {
     this.selectedLanguage = value;
-    this.filterLangProf();
+    this.applyCombinedFilters();
   }
 
   filterProfi(selectedProficiencyLevels: string[]) {
     this.proficiencyLevelsString = selectedProficiencyLevels.join(',');
-    this.filterLangProf()
+    this.applyCombinedFilters()
   }
-
-  // apply filter for lang and proficiency
-  filterLangProf() {
-    this.leadService.langFilter(this.selectedLanguage, this.proficiencyLevelsString).subscribe({
-      next: (res: any) => {
-        let filteredData = res;
-  
-        // Apply existing local filters to the data received from the API
-        Object.keys(this.filterValues).forEach(key => {
-          if (this.filterValues[key]) {
-            filteredData = filteredData.filter((item: any) =>
-              item[key] && item[key].toString().toLowerCase().includes(this.filterValues[key].toLowerCase())
-            );
-          }
-        });
-  
-        // Sort the data to place the latest entry at the top
-        filteredData = filteredData.sort((a: any, b: any) => {
-          // Assuming your entries have a `createdAt` or `id` field to determine order
-          // return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-          // Alternatively, if using an incrementing `id`, you can use:
-          return b._id - a._id;
-        });
-  
-        this.dataSource = new MatTableDataSource(filteredData);
-        // this.dataSource.filterPredicate = this.createFilter();
-        this.dataSource.filterPredicate = (data: any, filter: string) => {
-          const filterValue = filter ? filter.trim().toLowerCase() : '';
-          const propertyValue = data.property ? data.property.toString().trim().toLowerCase() : '';
-        
-          return propertyValue.includes(filterValue);
-        };
-        
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    });
-  }
-
-  
-  
-  
 
   applyDropdownFilter(value: string, column: string) {
     console.log("value is: " + value);
     if (column === 'exp') {
-      this.applyExperienceFilter(value);
+      this.selectedexp = value;
+      this.applyCombinedFilters();
     } else {
       this.filterValues[column] = value;
       this.dataSource.filter = JSON.stringify(this.filterValues);
@@ -451,6 +407,80 @@ export class MasterSheetComponent implements OnInit {
     }
   }
 
+
+
+// combined filters for language and exp columns (backend api calls)
+  applyCombinedFilters() {
+    // Call the service to apply the combined filters (language, proficiency levels, and experience)
+    this.leadService.filterCandidates(this.selectedLanguage, this.proficiencyLevelsString, this.selectedexp).subscribe({
+      next: (res: any) => {
+        let filteredData = res;
+  
+        // Apply existing local filters to the data received from the API
+        Object.keys(this.filterValues).forEach(key => {
+          if (this.filterValues[key]) {
+            filteredData = filteredData.filter((item: any) =>
+              item[key] && item[key].toString().toLowerCase().includes(this.filterValues[key].toLowerCase())
+            );
+          }
+        });
+  
+        // Update the dataSource with the filtered data
+        this.dataSource.data = filteredData;
+  
+        // Reset to the first page after filtering
+        if (this.dataSource.paginator) {
+          this.dataSource.paginator.firstPage();
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+  
+  
+
+  // apply filter for lang and proficiency
+  // filterLangProf() {
+  //   this.leadService.langFilter(this.selectedLanguage, this.proficiencyLevelsString).subscribe({
+  //     next: (res: any) => {
+  //       let filteredData = res;
+  
+  //       // Apply existing local filters to the data received from the API
+  //       Object.keys(this.filterValues).forEach(key => {
+  //         if (this.filterValues[key]) {
+  //           filteredData = filteredData.filter((item: any) =>
+  //             item[key] && item[key].toString().toLowerCase().includes(this.filterValues[key].toLowerCase())
+  //           );
+  //         }
+  //       });
+  
+  //       // Sort the data to place the latest entry at the top
+  //       filteredData = filteredData.sort((a: any, b: any) => {
+  //         // Assuming your entries have a `createdAt` or `id` field to determine order
+  //         // return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  //         // Alternatively, if using an incrementing `id`, you can use:
+  //         return b._id - a._id;
+  //       });
+  
+  //       this.dataSource = new MatTableDataSource(filteredData);
+  //       // this.dataSource.filterPredicate = this.createFilter();
+  //       this.dataSource.filterPredicate = (data: any, filter: string) => {
+  //         const filterValue = filter ? filter.trim().toLowerCase() : '';
+  //         const propertyValue = data.property ? data.property.toString().trim().toLowerCase() : '';
+        
+  //         return propertyValue.includes(filterValue);
+  //       };
+        
+  //       this.dataSource.sort = this.sort;
+  //       this.dataSource.paginator = this.paginator;
+  //     },
+  //     error: (err) => {
+  //       console.log(err);
+  //     }
+  //   });
+  // }
   
   
   
@@ -481,95 +511,36 @@ export class MasterSheetComponent implements OnInit {
   }
 
 
+
   // applyExperienceFilter(range: string) {
-  //   if (!range || range === 'None') {
-  //     delete this.filterValues['exp']; // Clear the experience filter when "None" is selected
-  //   } else if (range === 'Fresher') {
-  //     this.filterValues['exp'] = (entry: Lead) => entry.exp === 'Fresher';
-  //   } else {
-  //     const [min, max] = range.split(' - ').map(val => parseFloat(val));
-  //     const upperLimit = isNaN(max) ? Infinity : max;
+  //   this.leadService.expFilter(range).subscribe({
+  //     next: (res: any) => {
+  //       let filteredData = res;
   
-  //     this.filterValues['exp'] = (entry: Lead) => {
-  //       const experienceValue = parseFloat(entry.exp);
-  //       return experienceValue >= min && experienceValue <= upperLimit;
-  //     };
-  //   }
+  //       // Apply existing local filters to the data received from the API
+  //       Object.keys(this.filterValues).forEach(key => {
+  //         if (this.filterValues[key]) {
+  //           filteredData = filteredData.filter((item: any) =>
+  //             item[key] && item[key].toString().toLowerCase().includes(this.filterValues[key].toLowerCase())
+  //           );
+  //         }
+  //       });
   
-  //   // Trigger the filter update
-  //   this.dataSource.filter = JSON.stringify(this.filterValues);
+  //       // Update the dataSource with the filtered data
+  //       this.dataSource.data = filteredData;
   
-  //   if (this.dataSource.paginator) {
-  //     this.dataSource.paginator.firstPage();
-  //   }
-  // }
-  
-  
-  // createFilter(): (data: any, filter: string) => boolean {
-  //   return (data: any, filter: string): boolean => {
-  //     if (!filter) return true; // If no filter, show all data
-  
-  //     const searchTerm = this.filterValues.nameOrNumberOrEmail || '';
-  //     const term = searchTerm.toString().toLowerCase();
-  
-  //     // Global search term matching
-  //     const matchesName = data.name ? data.name.toString().toLowerCase().includes(term) : false;
-  //     const matchesPhone = data.phone ? data.phone.toString().toLowerCase().includes(term) : false;
-  //     const matchesEmail = data.email ? data.email.toString().toLowerCase().includes(term) : false;
-  //     const matchesCreatedBy = data.createdBy ? data.createdBy.toString().toLowerCase().includes(term) : false;
-  //     const matchesLastUpdatedBy = data.lastUpdatedBy ? data.lastUpdatedBy.toString().toLowerCase().includes(term) : false;
-  //     const globalMatch = matchesName || matchesPhone || matchesEmail || matchesCreatedBy || matchesLastUpdatedBy;
-  
-  //     // Column-specific filtering
-  //     let columnMatch = true;
-  //     for (const column in this.filterValues) {
-  //       if (column === 'nameOrNumberOrEmail') continue; // Skip global search term
-  
-  //       const filterValue = this.filterValues[column];
-  
-  //       if (typeof filterValue === 'function') {
-  //         // Call function filter (e.g., experience filter)
-  //         columnMatch = columnMatch && filterValue(data);
-  //       } else {
-  //         // String-based column filtering
-  //         const columnData = data[column] ? data[column].toString().toLowerCase() : '';
-  //         const filterStr = filterValue.toString().toLowerCase();
-  //         columnMatch = columnMatch && columnData.includes(filterStr);
+  //       // Reset to the first page after filtering
+  //       if (this.dataSource.paginator) {
+  //         this.dataSource.paginator.firstPage();
   //       }
-  
-  //       if (!columnMatch) break; // Stop if one column filter doesn't match
+  //     },
+  //     error: (err) => {
+  //       console.log(err);
   //     }
-  
-  //     return globalMatch && columnMatch;
-  //   };
+  //   });
   // }
-  
-  
-  
-  
   
 
-  applyExperienceFilter(range: string) {
-    if (!range) {
-      delete this.filterValues['exp']; // Clear the experience filter if "None" is selected
-    } else if (range === 'Fresher') {
-      this.filterValues['exp'] = (entry: Lead) => entry.exp === 'Fresher';
-    } else {
-      const [min, max] = range.split(' - ').map(val => parseFloat(val));
-      const upperLimit = isNaN(max) ? Infinity : max;
-  
-      this.filterValues['exp'] = (entry: Lead) => {
-        const experienceValue = parseFloat(entry.exp);
-        return (entry.exp === 'Fresher') || (experienceValue >= min && experienceValue <= upperLimit);
-      };
-    }
-  
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-  
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
 
 
 

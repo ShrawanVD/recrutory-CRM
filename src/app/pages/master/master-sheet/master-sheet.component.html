@@ -115,14 +115,6 @@
         </mat-select>
       </mat-form-field>
             
-      <!-- <mat-form-field appearance="fill" class="filterDropDown">
-        <mat-label>Experience</mat-label>
-        <mat-select [(value)]="selectedexp" (selectionChange)="applyDropdownFilter($event.value, 'exp')">
-          <mat-option [value]="null">None</mat-option>
-          <mat-option *ngFor="let exp of exps" [value]="exp">{{ exp
-            }}</mat-option>
-        </mat-select>
-      </mat-form-field> -->
       <button mat-raised-button style="background: #02465b;color: white;" (click)="clearFilters()"
         class="filterDropDown">Clear Filters</button>
     </div>

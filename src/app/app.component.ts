@@ -1,23 +1,31 @@
-import { Component } from '@angular/core';
-
-// interface SideNavToggle {
-//   screenWidth: number;
-//   collapsed: boolean;
-// }
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { AuthService } from './auth.service';
+import { Router, NavigationEnd } from '@angular/router'; 
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  // title = 'sidenav';
+export class AppComponent implements OnInit, OnDestroy {
 
-  // isSideNavCollapsed = false;
-  // screenWidth = 0;
+  constructor(private authService: AuthService, private router: Router) {}
 
-  // onToggleSideNav(data: SideNavToggle): void {
-  //   this.screenWidth = data.screenWidth;
-  //   this.isSideNavCollapsed = data.collapsed;
-  // }
+  ngOnInit(): void {
+    // Listen to router events to stop/start the token check based on the current route
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        if (event.url === '/login') {
+          this.authService.stopTokenExpiryCheck(); // Stop checking on login page
+        } else {
+          this.authService.startTokenExpiryCheck(); // Start checking on other pages
+        }
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    // Stop the interval when the component is destroyed to avoid memory leaks
+    this.authService.stopTokenExpiryCheck();
+  }
 }

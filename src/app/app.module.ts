@@ -20,7 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -52,6 +52,7 @@ import { AddMembersComponent } from './pages/addMembers/add-members/add-members.
 import { AddMemberFormComponent } from './pages/addMembers/add-member-form/add-member-form.component';
 import { ProcessJobDescComponent } from './pages/client/process-sheet/process-job-desc/process-job-desc.component';
 import { ImportDialogeBoxComponent } from './pages/master/import-dialoge-box/import-dialoge-box.component';
+import { AuthInterceptor } from './auth-interceptor';
 
 
 @NgModule({
@@ -108,7 +109,13 @@ import { ImportDialogeBoxComponent } from './pages/master/import-dialoge-box/imp
     MatMenuModule,
     MatNativeDateModule
   ],
-  providers: [],
+    providers: [
+      {
+        provide: HTTP_INTERCEPTORS,
+        useClass: AuthInterceptor,
+        multi: true
+      }
+    ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

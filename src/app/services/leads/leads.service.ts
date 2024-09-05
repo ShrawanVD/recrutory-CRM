@@ -8,9 +8,8 @@ import { Observable } from 'rxjs';
 
 export class LeadsService {
 
-  url = "https://recrutory-crm-backend-iwf1.onrender.com"
-  // url = "http://localhost:4000"
-
+  // url = "https://recrutory-crm-backend-iwf1.onrender.com"
+  url = "http://localhost:4000" 
 
   constructor(public http:HttpClient) { }
 
@@ -45,19 +44,43 @@ export class LeadsService {
     return this.http.put(`${this.url}/api/master/candidates/${id}`, data, {headers});
   }
 
-  langFilter(lang:any,proficiencyLevels: any){
-    if(lang && !proficiencyLevels){
-      return this.http.get(`${this.url}/api/master/langfilter?lang=${lang}`);
+  // combined filters for language and exp columns (backend api calls)
+  filterCandidates(lang: any, proficiencyLevels: any, exp: any) {
+    let params: any = {};
+  
+    if (lang) {
+      params.lang = lang;
     }
-    else if(!lang && proficiencyLevels){
-      return this.http.get(`${this.url}/api/master/langfilter?proficiencyLevel=${proficiencyLevels}`);
+    if (proficiencyLevels) {
+      params.proficiencyLevel = proficiencyLevels;
     }
-    else{
-      return this.http.get(`${this.url}/api/master/langfilter?lang=${lang}&proficiencyLevel=${proficiencyLevels}`);
+    if (exp) {
+      params.exp = encodeURIComponent(exp);
     }
+  
+    return this.http.get(`${this.url}/api/master/filterCandidates`, { params });
   }
+  
+
+  // langFilter(lang:any,proficiencyLevels: any){
+  //   if(lang && !proficiencyLevels){
+  //     return this.http.get(`${this.url}/api/master/langfilter?lang=${lang}`);
+  //   }
+  //   else if(!lang && proficiencyLevels){
+  //     return this.http.get(`${this.url}/api/master/langfilter?proficiencyLevel=${proficiencyLevels}`);
+  //   }
+  //   else{
+  //     return this.http.get(`${this.url}/api/master/langfilter?lang=${lang}&proficiencyLevel=${proficiencyLevels}`);
+  //   }
+  // }
+
+  // expFilter(exp: any){
+  //   return this.http.get(`${this.url}/api/master/expFilter?exp=${encodeURIComponent(exp)}`);
+  // }
 
   // updating recruiter
+  
+  
   updateLead(lead:any): Observable<any> {
     return this.http.put<any>(`${this.url}/api/crm/leads/${lead.id}`, lead);
   }

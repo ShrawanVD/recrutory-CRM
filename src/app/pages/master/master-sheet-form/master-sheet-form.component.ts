@@ -38,16 +38,16 @@ export class MasterSheetFormComponent implements OnInit {
     "Bahasa Malaysia", 
     "Malay", 
     "Tagalog", 
-    "Tamil", 
-    "Malayalam", 
-    "Gujarati", 
-    "Oriya", 
-    "Punjabi", 
-    "Assamese", 
-    "Bengali", 
-    "Hindi",
-    "Kannada",
-    "Telugu"
+    // "Tamil", 
+    // "Malayalam", 
+    // "Gujarati", 
+    // "Oriya", 
+    // "Punjabi", 
+    // "Assamese", 
+    // "Bengali", 
+    // "Hindi",
+    // "Kannada",
+    // "Telugu"
   ]; // replace with actual statuses
   proficiencyLevels = [
     'A1',
@@ -127,10 +127,7 @@ export class MasterSheetFormComponent implements OnInit {
     });
   }
 
-
   ngOnInit(): void {
-
-  
     // Clear the languages array and initialize it with a blank form group
     this.languages.clear();
   
@@ -141,14 +138,13 @@ export class MasterSheetFormComponent implements OnInit {
         this.languages.push(languageGroup);
   
         // Initialize filteredLanguages based on lType
-        this.updateLanguages(lang.lType, index);
+        this.updateLanguages(lang.lType, index);  // Correct initialization for the edit scenario
   
         this.initLanguageTypeChange(index);
       });
     } else {
       // Initialize with a single blank form group
       this.languages.push(this.createLanguageGroup());
-  
       // Ensure that we initialize language type change listeners
       this.initLanguageTypeChange(0);
     }
@@ -156,17 +152,25 @@ export class MasterSheetFormComponent implements OnInit {
     console.log('Languages Form Array After Initialization:', this.languages.value);
   }
   
-  
-  
-  
   // Function to initialize valueChanges for a specific language group index
   initLanguageTypeChange(index: number) {
-    this.updateLanguages(this.languages.at(index).get('lType')?.value, index);
-  
+    // Add value change listener for lType
     this.languages.at(index).get('lType')?.valueChanges.subscribe((value) => {
       this.updateLanguages(value, index);
     });
+  
+    // Update filtered languages immediately upon initialization
+    const selectedType = this.languages.at(index).get('lType')?.value;
+    if (selectedType) {
+      this.updateLanguages(selectedType, index);
+    }
   }
+
+  // Ensure this part is inside your component class
+get languages(): FormArray {
+  return this.leadForm.get('language') as FormArray;  // Ensure 'language' is the correct control name
+}
+
   
   updateLanguages(selectedType: string, index: number) {
     const languageGroup = this.languages.at(index);
@@ -179,6 +183,7 @@ export class MasterSheetFormComponent implements OnInit {
     const langControl = languageGroup.get('lang');
     const filteredLanguagesControl = languageGroup.get('filteredLanguages');
   
+    // Update filtered languages based on selectedType
     if (selectedType === 'Foreign') {
       filteredLanguagesControl?.setValue(this.foreignLanguages);
     } else if (selectedType === 'Regional') {
@@ -187,12 +192,14 @@ export class MasterSheetFormComponent implements OnInit {
       filteredLanguagesControl?.setValue([]);
     }
   
+    // If the current lang value is not in the new filtered languages, reset it
+    if (!filteredLanguagesControl?.value.includes(langControl?.value)) {
+      langControl?.setValue('');
+    }
+  
     langControl?.updateValueAndValidity();
     console.log('Filtered Languages for index', index, ':', filteredLanguagesControl?.value);
   }
-  
-  
-  
   
   // Function to create a new language form group
   createLanguageGroup(): FormGroup {
@@ -200,35 +207,130 @@ export class MasterSheetFormComponent implements OnInit {
       lType: ['', Validators.required],
       lang: ['', Validators.required],
       proficiencyLevel: [''],
-      filteredLanguages: [[]],  // Add a control to store filtered languages
+      filteredLanguages: [[]],  // Control to store filtered languages
     });
-  }
-  
-  
-  
-  
-  get languages(): FormArray {
-    return this.leadForm.get('language') as FormArray;
   }
   
   addLanguage() {
     console.log('Adding New Language Group');
     const languageGroup = this.createLanguageGroup();
   
-    // Set default value to 'Foreign' and initialize filteredLanguages
-    languageGroup.get('lType')?.setValue('Foreign');
+    // No default lType value, waits for user selection
     this.languages.push(languageGroup);
   
-    // Now, update languages for the new group at the last index
     const newIndex = this.languages.length - 1;
-    this.updateLanguages('Foreign', newIndex);
+    this.initLanguageTypeChange(newIndex);  // Proper initialization for new language set
   
     console.log('Languages Form Array After Addition:', this.languages.value);
-
+  
     this._snackBar.open('New language set added successfully!', 'Close', {
       duration: 1000, // duration in milliseconds
     });
   }
+  
+
+
+  // ngOnInit(): void {
+
+  
+  //   // Clear the languages array and initialize it with a blank form group
+  //   this.languages.clear();
+  
+  //   if (this.data && Array.isArray(this.data.language)) {
+  //     this.data.language.forEach((lang: any, index: number) => {
+  //       const languageGroup = this.createLanguageGroup();
+  //       languageGroup.patchValue(lang);
+  //       this.languages.push(languageGroup);
+  
+  //       // Initialize filteredLanguages based on lType
+  //       this.updateLanguages(lang.lType, index);
+  
+  //       this.initLanguageTypeChange(index);
+  //     });
+  //   } else {
+  //     // Initialize with a single blank form group
+  //     this.languages.push(this.createLanguageGroup());
+  
+  //     // Ensure that we initialize language type change listeners
+  //     this.initLanguageTypeChange(0);
+  //   }
+  
+  //   console.log('Languages Form Array After Initialization:', this.languages.value);
+  // }
+  
+  
+  
+  
+  // // Function to initialize valueChanges for a specific language group index
+  // initLanguageTypeChange(index: number) {
+  //   this.updateLanguages(this.languages.at(index).get('lType')?.value, index);
+  
+  //   this.languages.at(index).get('lType')?.valueChanges.subscribe((value) => {
+  //     this.updateLanguages(value, index);
+  //   });
+  // }
+  
+  // updateLanguages(selectedType: string, index: number) {
+  //   const languageGroup = this.languages.at(index);
+  
+  //   if (!languageGroup) {
+  //     console.error(`Language group at index ${index} does not exist`);
+  //     return;
+  //   }
+  
+  //   const langControl = languageGroup.get('lang');
+  //   const filteredLanguagesControl = languageGroup.get('filteredLanguages');
+  
+  //   if (selectedType === 'Foreign') {
+  //     filteredLanguagesControl?.setValue(this.foreignLanguages);
+  //   } else if (selectedType === 'Regional') {
+  //     filteredLanguagesControl?.setValue(this.regionalLanguages);
+  //   } else {
+  //     filteredLanguagesControl?.setValue([]);
+  //   }
+  
+  //   langControl?.updateValueAndValidity();
+  //   console.log('Filtered Languages for index', index, ':', filteredLanguagesControl?.value);
+  // }
+  
+  
+  
+  
+  // // Function to create a new language form group
+  // createLanguageGroup(): FormGroup {
+  //   return this._formBuilder.group({
+  //     lType: ['', Validators.required],
+  //     lang: ['', Validators.required],
+  //     proficiencyLevel: [''],
+  //     filteredLanguages: [[]],  // Add a control to store filtered languages
+  //   });
+  // }
+  
+  
+  
+  
+  // get languages(): FormArray {
+  //   return this.leadForm.get('language') as FormArray;
+  // }
+  
+  // addLanguage() {
+  //   console.log('Adding New Language Group');
+  //   const languageGroup = this.createLanguageGroup();
+  
+  //   // Set default value to 'Foreign' and initialize filteredLanguages
+  //   languageGroup.get('lType')?.setValue('Foreign');
+  //   this.languages.push(languageGroup);
+  
+  //   // Now, update languages for the new group at the last index
+  //   const newIndex = this.languages.length - 1;
+  //   this.updateLanguages('Foreign', newIndex);
+  
+  //   console.log('Languages Form Array After Addition:', this.languages.value);
+
+  //   this._snackBar.open('New language set added successfully!', 'Close', {
+  //     duration: 1000, // duration in milliseconds
+  //   });
+  // }
   
   
 
