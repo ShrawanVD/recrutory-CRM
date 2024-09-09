@@ -100,15 +100,24 @@ export class MasterSheetComponent implements OnInit {
 
   
 
-  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Korean' ,'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Mandarin', 'Nepalese', 'Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Marathi', 'Kannada']; // replace with actual statuses
-  proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5', 'HSK6', 'N1', 'N2', 'N3', 'N4', 'N5', 'TOPIK', 'Native', 'Non-Native'];
+  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Korean' ,'Nepali','Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Mandarin', 'Nepalese', 'Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Marathi', 'Kannada']; // replace with actual statuses
+  // proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5', 'HSK6', 'N1', 'N2', 'N3', 'N4', 'N5', 'TOPIK-I L1','TOPIK-I L2', 'TOPIK-II L1','TOPIK-II L2', 'TOPIK-II L3', 'TOPIK-II L4', 'Native', 'Non-Native'];
+  proficiencyGroups = [
+    { name: 'Basic', levels: ['A1', 'A2'] },
+    { name: 'Intermediate', levels: ['B1', 'B2'] },
+    { name: 'Advanced', levels: ['C1', 'C2'] },
+    { name: 'HSK Levels', levels: ['HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5', 'HSK6'] },
+    { name: 'JLPT Levels', levels: ['N1', 'N2', 'N3', 'N4', 'N5'] },
+    { name: 'TOPIK Levels', levels: ['TOPIK-I L1','TOPIK-I L2', 'TOPIK-II L1','TOPIK-II L2', 'TOPIK-II L3', 'TOPIK-II L4'] },
+    { name: 'Other', levels: ['Native', 'Non-Native'] }
+  ];
+  
   jobStatuses = ['Working', 'Job Seeking', 'Teacher'];
   qualifications = ['SSC', 'HSC', 'Diploma', 'Advance Diploma', 'Under Graduate', 'Post Graduate', 'PHD', 'BA (Language)', 'MA (Language)'];
   modes = ['WFH', 'WFO', 'Hybrid', 'Both'];
-  feedbacks = ['Interested','Not Intrested - CTC Not Matching', 'Not Intrested - Relocation Issue', 'Not Intrested - Notice Period', 'Not Intrested - Cooling Down Period', 'Not Intrested - Call Not Recieved', 'Not Intrested - Under Qualified", "Not Intrested - already associated with org", "Currently not looking for a job"'];
-  noticePeriods = ['Immediate', '15 Days', '1 Month', '2 Months', '3 Months'];
-  sources = ['LinkedIn', 'Naukri', 'Meta', 'Google', 'Instagram', 'Website', 'App', 'Email', 'Reference'];
-  // exps = ['0-1', '1-2', '2-4', '4-8', '8-12', '12+'];
+  feedbacks = ['Interested','CTC Not Matching', 'Relocation Issue', 'Notice Period', 'Cooling Down Period', 'Call Not Recieved', 'Under Qualified', 'already associated with org', 'Currently not looking for a job', 'Rejected'];
+  noticePeriods = ['Immediate', '15 Days', '1 Month', '2 Months', '3 Months','3+ Months'];
+  sources = ['LinkedIn', 'Naukri', 'Meta', 'Google', 'Instagram', 'Website', 'App', 'Email', 'Reference','Other'];
   experienceRanges = ['Fresher', '0-1', '1-3', '3-6', '6-10', '10+'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;

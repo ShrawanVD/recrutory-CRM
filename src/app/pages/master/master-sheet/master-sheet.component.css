@@ -195,3 +195,24 @@ td:nth-child(22) {
   min-width: 240px;
   width: 240px;
 }
+
+
+
+/* ----------------- beautification of filters dropdowns ------------------------ */
+.filterDropDown {
+  width: 300px; /* Adjust the width as needed */
+  margin: 0 8px 16px 0; /* Add some margin for spacing */
+}
+
+.mat-select-panel {
+  max-height: 200px; /* Set a max height for the dropdown list */
+  overflow-y: auto; /* Enable scrolling */
+}
+
+.mat-option {
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+
+.mat-select-panel .mat-optgroup-label {
+  font-weight: bold; /* Make the group label stand out */
+}

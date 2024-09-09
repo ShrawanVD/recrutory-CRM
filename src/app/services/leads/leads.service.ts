@@ -8,8 +8,8 @@ import { Observable } from 'rxjs';
 
 export class LeadsService {
 
-  // url = "https://recrutory-crm-backend-iwf1.onrender.com"
-  url = "http://localhost:4000" 
+  url = "https://recrutory-crm-backend-iwf1.onrender.com"
+  // url = "http://localhost:4000" 
 
   constructor(public http:HttpClient) { }
 

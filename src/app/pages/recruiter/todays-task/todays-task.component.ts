@@ -79,7 +79,15 @@ dateControl = new FormControl();
   selectedexp: string | null = null;
 
   languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Chinese', 'Nepalese', 'Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Marathi']; // replace with actual statuses
-  proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'HSK1', 'HSK2', 'HSK3','HSK4', 'HSK5', 'HSK6', 'N1', 'N2', 'N3', 'N4', 'N5', 'Native' , 'Non-Native'];
+  proficiencyGroups = [
+    { name: 'Basic', levels: ['A1', 'A2'] },
+    { name: 'Intermediate', levels: ['B1', 'B2'] },
+    { name: 'Advanced', levels: ['C1', 'C2'] },
+    { name: 'HSK Levels', levels: ['HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5', 'HSK6'] },
+    { name: 'JLPT Levels', levels: ['N1', 'N2', 'N3', 'N4', 'N5'] },
+    { name: 'TOPIK Levels', levels: ['TOPIK-I L1','TOPIK-I L2', 'TOPIK-II L1','TOPIK-II L2', 'TOPIK-II L3', 'TOPIK-II L4'] },
+    { name: 'Other', levels: ['Native', 'Non-Native'] }
+  ];
   jobStatuses = ['Working', 'Job Seeking', 'Teacher'];
   qualifications = ['SSC', 'HSC', 'Under Graduate', 'Post Graduate', 'PHD'];
   modes = ['WFH', 'WHO', 'Hybrid'];

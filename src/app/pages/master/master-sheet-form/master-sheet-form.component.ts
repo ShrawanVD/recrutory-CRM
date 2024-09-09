@@ -29,6 +29,8 @@ export class MasterSheetFormComponent implements OnInit {
     "English", 
     "Dutch", 
     "Portuguese", 
+    'Korean',
+    'Nepali',
     "Italian", 
     "Japanese", 
     "Mandarin", 
@@ -67,8 +69,12 @@ export class MasterSheetFormComponent implements OnInit {
     'N3',
     'N4',
     'N5',
-    'TOPIK I',
-    'TOPIK II',
+    'TOPIK-I L1',
+    'TOPIK-I L2',
+    'TOPIK-II L1',
+    'TOPIK-II L2',
+    'TOPIK-II L3',
+    'TOPIK-II L4',
     'Native',
     'Non-Native',
   ];
@@ -104,24 +110,24 @@ export class MasterSheetFormComponent implements OnInit {
       // lType: [data?.lType || '', Validators.required],
       language: this._formBuilder.array([this.createLanguageGroup()]),
       // proficiencyLevel: [data?.proficiencyLevel || '', Validators.required],
-      jbStatus: [data?.jbStatus || '', Validators.required],
+      jbStatus: [data?.jbStatus || ''],
       qualification: [data?.qualification || '', Validators.required],
-      industry: [data?.industry || '', Validators.required],
-      domain: [data?.domain || '', Validators.required],
-      exp: [data?.exp || '', Validators.required],
-      cLocation: [data?.cLocation || '', Validators.required],
-      pLocation: [data?.pLocation || '', Validators.required],
-      currentCTC: [data?.currentCTC || '', Validators.required],
-      expectedCTC: [data?.expectedCTC || '', Validators.required],
-      noticePeriod: [data?.noticePeriod || '', Validators.required],
-      wfh: [data?.wfh || '', Validators.required],
+      industry: [data?.industry || ''],
+      domain: [data?.domain || ''],
+      exp: [data?.exp || ''],
+      cLocation: [data?.cLocation || ''],
+      pLocation: [data?.pLocation || ''],
+      currentCTC: [data?.currentCTC || ''],
+      expectedCTC: [data?.expectedCTC || ''],
+      noticePeriod: [data?.noticePeriod || ''],
+      wfh: [data?.wfh || ''],
       resumeLink: [data?.resumeLink || '', Validators.required],
       linkedinLink: [data?.linkedinLink || ''],
       feedback: [data?.feedback || '', Validators.required],
       remark: [data?.remark || ''],
       company: [data?.company || ''],
-      voiceNonVoice: [data?.voiceNonVoice || '', Validators.required],
-      source: [data?.source || '', Validators.required],
+      voiceNonVoice: [data?.voiceNonVoice || ''],
+      source: [data?.source || ''],
       createdBy: [null],
       lastUpdatedBy: [null],
     });
@@ -229,111 +235,6 @@ get languages(): FormArray {
   }
   
 
-
-  // ngOnInit(): void {
-
-  
-  //   // Clear the languages array and initialize it with a blank form group
-  //   this.languages.clear();
-  
-  //   if (this.data && Array.isArray(this.data.language)) {
-  //     this.data.language.forEach((lang: any, index: number) => {
-  //       const languageGroup = this.createLanguageGroup();
-  //       languageGroup.patchValue(lang);
-  //       this.languages.push(languageGroup);
-  
-  //       // Initialize filteredLanguages based on lType
-  //       this.updateLanguages(lang.lType, index);
-  
-  //       this.initLanguageTypeChange(index);
-  //     });
-  //   } else {
-  //     // Initialize with a single blank form group
-  //     this.languages.push(this.createLanguageGroup());
-  
-  //     // Ensure that we initialize language type change listeners
-  //     this.initLanguageTypeChange(0);
-  //   }
-  
-  //   console.log('Languages Form Array After Initialization:', this.languages.value);
-  // }
-  
-  
-  
-  
-  // // Function to initialize valueChanges for a specific language group index
-  // initLanguageTypeChange(index: number) {
-  //   this.updateLanguages(this.languages.at(index).get('lType')?.value, index);
-  
-  //   this.languages.at(index).get('lType')?.valueChanges.subscribe((value) => {
-  //     this.updateLanguages(value, index);
-  //   });
-  // }
-  
-  // updateLanguages(selectedType: string, index: number) {
-  //   const languageGroup = this.languages.at(index);
-  
-  //   if (!languageGroup) {
-  //     console.error(`Language group at index ${index} does not exist`);
-  //     return;
-  //   }
-  
-  //   const langControl = languageGroup.get('lang');
-  //   const filteredLanguagesControl = languageGroup.get('filteredLanguages');
-  
-  //   if (selectedType === 'Foreign') {
-  //     filteredLanguagesControl?.setValue(this.foreignLanguages);
-  //   } else if (selectedType === 'Regional') {
-  //     filteredLanguagesControl?.setValue(this.regionalLanguages);
-  //   } else {
-  //     filteredLanguagesControl?.setValue([]);
-  //   }
-  
-  //   langControl?.updateValueAndValidity();
-  //   console.log('Filtered Languages for index', index, ':', filteredLanguagesControl?.value);
-  // }
-  
-  
-  
-  
-  // // Function to create a new language form group
-  // createLanguageGroup(): FormGroup {
-  //   return this._formBuilder.group({
-  //     lType: ['', Validators.required],
-  //     lang: ['', Validators.required],
-  //     proficiencyLevel: [''],
-  //     filteredLanguages: [[]],  // Add a control to store filtered languages
-  //   });
-  // }
-  
-  
-  
-  
-  // get languages(): FormArray {
-  //   return this.leadForm.get('language') as FormArray;
-  // }
-  
-  // addLanguage() {
-  //   console.log('Adding New Language Group');
-  //   const languageGroup = this.createLanguageGroup();
-  
-  //   // Set default value to 'Foreign' and initialize filteredLanguages
-  //   languageGroup.get('lType')?.setValue('Foreign');
-  //   this.languages.push(languageGroup);
-  
-  //   // Now, update languages for the new group at the last index
-  //   const newIndex = this.languages.length - 1;
-  //   this.updateLanguages('Foreign', newIndex);
-  
-  //   console.log('Languages Form Array After Addition:', this.languages.value);
-
-  //   this._snackBar.open('New language set added successfully!', 'Close', {
-  //     duration: 1000, // duration in milliseconds
-  //   });
-  // }
-  
-  
-
   
   // Function to remove a language form group by index
   removeLanguage(index: number) {
@@ -429,53 +330,4 @@ get languages(): FormArray {
     }
   }
   
-  // submitLead() {
-  //   console.log(this.leadForm.value);
-  //   // Check if the form is valid
-  //   if (this.leadForm.valid) {
-  //     // Update existing lead
-  //     if (this.data?._id) {
-  //       this.leadService
-  //         .updateLeadById(this.data._id, this.leadForm.value)
-  //         .subscribe({
-  //           next: (val) => {
-  //             this._snackBar.open('Lead updated successfully', 'Close', {
-  //               duration: 3000,
-  //             });
-  //             this._dialogRef.close(true);
-  //           },
-  //           error: (err) => {
-  //             console.error(err);
-  //             this._snackBar.open('Failed to update lead', 'Close', {
-  //               duration: 3000,
-  //             });
-  //           },
-  //         });
-  //     } else {
-  //       // Create new lead
-  //       this.leadService.createLead(this.leadForm.value).subscribe({
-  //         next: (val: any) => {
-  //           this._snackBar.open('Form Submitted Successfully', 'Close', {
-  //             duration: 3000,
-  //           });
-  //           this._dialogRef.close(true);
-  //         },
-  //         error: (err: any) => {
-  //           console.error('Failed to submit form:', err);
-  //           this._snackBar.open(
-  //             'Failed to submit form: ',
-  //             'Close',
-  //             {
-  //               duration: 3000,
-  //             }
-  //           );
-  //         },
-  //       });
-  //     }
-  //   } else {
-  //     this._snackBar.open('Please fill the form', 'Close', {
-  //       duration: 3000,
-  //     });
-  //   }
-  // }
 }

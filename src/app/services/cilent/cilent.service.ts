@@ -6,8 +6,8 @@ import { Injectable } from '@angular/core';
 })
 export class CilentService {
 
-  // url = "https://recrutory-crm-backend-iwf1.onrender.com"
-   url = "http://localhost:4000"
+  url = "https://recrutory-crm-backend-iwf1.onrender.com"
+  //  url = "http://localhost:4000"
 
   constructor(private http: HttpClient) { }
 
@@ -83,17 +83,66 @@ export class CilentService {
   }
 
   // filter for lang and prof in filter sheet
-  filterSheetlangFilter(clientId: any,processId: any,lang: any,proficiencyLevels: any){
-    if(lang && !proficiencyLevels){
-      return this.http.get(`${this.url}/api/client/clients/${clientId}/process/${processId}/filterLangFilter?lang=${lang}`);
+  filteredSheetFilter(clientId: any, processId: any, lang: any, proficiencyLevels: any, exp: any) {
+    // Construct the URL path using route parameters
+    let url = `${this.url}/api/client/filteredCandidatesFilter`;
+  
+    // Append the parameters in the URL path
+    if (clientId && processId && lang && proficiencyLevels && exp) {
+      url += `/${clientId}/${processId}/${lang}/${proficiencyLevels}/${exp}`;
+    } else if (clientId && processId && lang && proficiencyLevels) {
+      url += `/${clientId}/${processId}/${lang}/${proficiencyLevels}/`;
+    } else if (clientId && processId && lang) {
+      url += `/${clientId}/${processId}/${lang}/`;
+    } else if (clientId && processId) {
+      url += `/${clientId}/${processId}/`;
+    } else if (clientId) {
+      url += `/${clientId}/`;
     }
-    else if(!lang && proficiencyLevels){
-      return this.http.get(`${this.url}/api/client/clients/${clientId}/process/${processId}/filterLangFilter?proficiencyLevel=${proficiencyLevels}`);
-    }
-    else{
-      return this.http.get(`${this.url}/api/client/clients/${clientId}/process/${processId}/filterLangFilter?lang=${lang}&proficiencyLevel=${proficiencyLevels}`);
-    }
+  
+    // Make HTTP GET request
+    return this.http.get(url);
   }
+  
+  // filteredSheetFilter(clientId: any, processId: any, lang: any, proficiencyLevels: any, exp: any){
+
+  //   let params: any = {};
+
+  //   if(clientId){
+  //     params.clientId = clientId
+  //   }
+
+  //   if(processId){
+  //     params.processId = processId
+  //   }
+
+  //   if(lang){
+  //     params.lang = lang
+  //   }
+
+  //   if(proficiencyLevels){
+  //     params.proficiencyLevels = proficiencyLevels
+  //   }
+
+  //   if(exp){
+  //     params.exp = exp
+  //   }
+
+  //   return this.http.get(`${this.url}/api/client/filteredCandidatesFilter`)
+
+  // }
+
+  // filterSheetlangFilter(clientId: any,processId: any,lang: any,proficiencyLevels: any){
+  //   if(lang && !proficiencyLevels){
+  //     return this.http.get(`${this.url}/api/client/clients/${clientId}/process/${processId}/filterLangFilter?lang=${lang}`);
+  //   }
+  //   else if(!lang && proficiencyLevels){
+  //     return this.http.get(`${this.url}/api/client/clients/${clientId}/process/${processId}/filterLangFilter?proficiencyLevel=${proficiencyLevels}`);
+  //   }
+  //   else{
+  //     return this.http.get(`${this.url}/api/client/clients/${clientId}/process/${processId}/filterLangFilter?lang=${lang}&proficiencyLevel=${proficiencyLevels}`);
+  //   }
+  // }
 
   // filter for lang and prof in interested candidate
   interestedlangFilter(clientId: any,processId: any,lang:any,proficiencyLevels: any){

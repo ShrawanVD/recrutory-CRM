@@ -35,12 +35,28 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field appearance="fill" class="filterDropDown">
-            <mat-label>Proficiency</mat-label>
+            <!-- <mat-label>Proficiency</mat-label>
             <mat-select [(value)]="selectedProficiencyLevels" (selectionChange)="filterProfi($event.value)" multiple>
               <mat-option *ngFor="let proficiencyLevel of proficiencyLevels" [value]="proficiencyLevel">
                 {{ proficiencyLevel }}
               </mat-option>
-            </mat-select>
+            </mat-select> -->
+            <mat-label>Proficiency</mat-label>
+        <mat-select
+          [(value)]="selectedProficiencyLevels"
+          (selectionChange)="filterProfi($event.value)"
+          multiple
+        >
+          <!-- Group options by their categories -->
+          <mat-optgroup
+            *ngFor="let group of proficiencyGroups"
+            [label]="group.name"
+          >
+            <mat-option *ngFor="let level of group.levels" [value]="level">{{
+              level
+            }}</mat-option>
+          </mat-optgroup>
+        </mat-select>
           </mat-form-field>
         <mat-form-field appearance="fill" class="filterDropDown">
           <mat-label>Job Status</mat-label>

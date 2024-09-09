@@ -1,7 +1,12 @@
 <div class="card topp">
   <div class="card-head">
     <h1 style="font-weight: bold">Master Sheet</h1>
-    <input type="file" #fileInput style="display: none" (change)="onFileChange($event)" />
+    <input
+      type="file"
+      #fileInput
+      style="display: none"
+      (change)="onFileChange($event)"
+    />
     <div>
       <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>info</mat-icon>
@@ -16,7 +21,6 @@
   </div>
   <div class="card-body">
     <div class="filterSearchBar">
-
       <!-- <div>
         <input type="file" (change)="onFileChangess($event)"  style="margin-right: -80px;" placeholder=" upload"/>
         <button style="background: #02465b; color: white; margin-left: 10px; margin-right:10px" mat-raised-button
@@ -24,146 +28,296 @@
           IMPORT
         </button>
       </div> -->
-      <button style="background: #02465b; color: white; padding: 10px" mat-raised-button (click)="openFilterDiv()">
+      <button
+        style="background: #02465b; color: white; padding: 10px"
+        mat-raised-button
+        (click)="openFilterDiv()"
+      >
         FILTER
       </button>
-      <button style="background: #02465b; color: white; margin-left: 10px; padding: 10px" mat-raised-button
-        (click)="openAddEditEmpForm()">
+      <button
+        style="
+          background: #02465b;
+          color: white;
+          margin-left: 10px;
+          padding: 10px;
+        "
+        mat-raised-button
+        (click)="openAddEditEmpForm()"
+      >
         CREATE A NEW LEAD
       </button>
-      <button style="background: #4caf50; color: white; margin-left: 10px; margin-right:5px" mat-raised-button
-        (click)="exportExcel()">
+      <button
+        style="
+          background: #4caf50;
+          color: white;
+          margin-left: 10px;
+          margin-right: 5px;
+        "
+        mat-raised-button
+        (click)="exportExcel()"
+      >
         EXPORT
       </button>
-      <button style="background: #4caf50; color: white; margin-left: 5px; margin-right:10px; padding: auto 20px" mat-button (click)="openDialog()">IMPORT</button>
+      <button
+        style="
+          background: #4caf50;
+          color: white;
+          margin-left: 5px;
+          margin-right: 10px;
+          padding: auto 20px;
+        "
+        mat-button
+        (click)="openDialog()"
+      >
+        IMPORT
+      </button>
       <mat-form-field>
         <mat-label>Search</mat-label>
-        <input style="width: 200px; padding-left: 0.6rem;" matInput (keyup)="applyFilter($event)" #input />
+        <input
+          style="width: 200px; padding-left: 0.6rem"
+          matInput
+          (keyup)="applyFilter($event)"
+          #input
+        />
       </mat-form-field>
     </div>
 
     <div class="filters" *ngIf="openFilters">
       <mat-form-field appearance="fill" class="filterDropDown">
         <mat-label>Languages</mat-label>
-        <mat-select [(value)]="selectedLanguage" (selectionChange)="filterLang($event.value)">
+        <mat-select
+          [(value)]="selectedLanguage"
+          (selectionChange)="filterLang($event.value)"
+        >
           <mat-option [value]="null">None</mat-option>
-          <mat-option *ngFor="let language of languages" [value]="language">{{ language }}</mat-option>
+          <mat-option *ngFor="let language of languages" [value]="language">{{
+            language
+          }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill" class="filterDropDown">
-        <mat-label>Proficiency</mat-label>
+        <!-- <mat-label>Proficiency</mat-label>
         <mat-select [(value)]="selectedProficiencyLevels" (selectionChange)="filterProfi($event.value)" multiple>
           <mat-option *ngFor="let proficiencyLevel of proficiencyLevels" [value]="proficiencyLevel">
             {{ proficiencyLevel }}
           </mat-option>
+        </mat-select> -->
+        <mat-label>Proficiency</mat-label>
+        <mat-select
+          [(value)]="selectedProficiencyLevels"
+          (selectionChange)="filterProfi($event.value)"
+          multiple
+        >
+          <!-- Group options by their categories -->
+          <mat-optgroup
+            *ngFor="let group of proficiencyGroups"
+            [label]="group.name"
+          >
+            <mat-option *ngFor="let level of group.levels" [value]="level">{{
+              level
+            }}</mat-option>
+          </mat-optgroup>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill" class="filterDropDown">
         <mat-label>Job Status</mat-label>
-        <mat-select [(value)]="selectedJobStatus" (selectionChange)="applyDropdownFilter($event.value, 'jbStatus')">
+        <mat-select
+          [(value)]="selectedJobStatus"
+          (selectionChange)="applyDropdownFilter($event.value, 'jbStatus')"
+        >
           <mat-option [value]="null">None</mat-option>
-          <mat-option *ngFor="let status of jobStatuses" [value]="status">{{ status }}</mat-option>
+          <mat-option *ngFor="let status of jobStatuses" [value]="status">{{
+            status
+          }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill" class="filterDropDown">
         <mat-label>Qualification</mat-label>
-        <mat-select [(value)]="selectedQualification"
-          (selectionChange)="applyDropdownFilter($event.value, 'qualification')">
+        <mat-select
+          [(value)]="selectedQualification"
+          (selectionChange)="applyDropdownFilter($event.value, 'qualification')"
+        >
           <mat-option [value]="null">None</mat-option>
-          <mat-option *ngFor="let qualification of qualifications" [value]="qualification">{{ qualification
-            }}</mat-option>
+          <mat-option
+            *ngFor="let qualification of qualifications"
+            [value]="qualification"
+            >{{ qualification }}</mat-option
+          >
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill" class="filterDropDown">
         <mat-label>Mode</mat-label>
-        <mat-select [(value)]="selectedmode" (selectionChange)="applyDropdownFilter($event.value, 'wfh')">
+        <mat-select
+          [(value)]="selectedmode"
+          (selectionChange)="applyDropdownFilter($event.value, 'wfh')"
+        >
           <mat-option [value]="null">None</mat-option>
-          <mat-option *ngFor="let mode of modes" [value]="mode">{{ mode
-            }}</mat-option>
+          <mat-option *ngFor="let mode of modes" [value]="mode">{{
+            mode
+          }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill" class="filterDropDown">
         <mat-label>Feedback</mat-label>
-        <mat-select [(value)]="selectedfeedback" (selectionChange)="applyDropdownFilter($event.value, 'feedback')">
+        <mat-select
+          [(value)]="selectedfeedback"
+          (selectionChange)="applyDropdownFilter($event.value, 'feedback')"
+        >
           <mat-option [value]="null">None</mat-option>
-          <mat-option *ngFor="let feedback of feedbacks" [value]="feedback">{{ feedback
-            }}</mat-option>
+          <mat-option *ngFor="let feedback of feedbacks" [value]="feedback">{{
+            feedback
+          }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill" class="filterDropDown">
         <mat-label>Notice Period</mat-label>
-        <mat-select [(value)]="selectednoticePeriod"
-          (selectionChange)="applyDropdownFilter($event.value, 'noticePeriod')">
+        <mat-select
+          [(value)]="selectednoticePeriod"
+          (selectionChange)="applyDropdownFilter($event.value, 'noticePeriod')"
+        >
           <mat-option [value]="null">None</mat-option>
-          <mat-option *ngFor="let noticePeriod of noticePeriods" [value]="noticePeriod">{{ noticePeriod
-            }}</mat-option>
+          <mat-option
+            *ngFor="let noticePeriod of noticePeriods"
+            [value]="noticePeriod"
+            >{{ noticePeriod }}</mat-option
+          >
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill" class="filterDropDown">
         <mat-label>Source</mat-label>
-        <mat-select [(value)]="selectedsource" (selectionChange)="applyDropdownFilter($event.value, 'source')">
+        <mat-select
+          [(value)]="selectedsource"
+          (selectionChange)="applyDropdownFilter($event.value, 'source')"
+        >
           <mat-option [value]="null">None</mat-option>
-          <mat-option *ngFor="let source of sources" [value]="source">{{ source
-            }}</mat-option>
+          <mat-option *ngFor="let source of sources" [value]="source">{{
+            source
+          }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill" class="filterDropDown">
         <mat-label>Experience (in Years) </mat-label>
-        <mat-select [(value)]="selectedexp" (selectionChange)="applyDropdownFilter($event.value, 'exp')">
+        <mat-select
+          [(value)]="selectedexp"
+          (selectionChange)="applyDropdownFilter($event.value, 'exp')"
+        >
           <mat-option [value]="null">None</mat-option>
-          <mat-option *ngFor="let exp of experienceRanges" [value]="exp">{{ exp }}</mat-option>
+          <mat-option *ngFor="let exp of experienceRanges" [value]="exp">{{
+            exp
+          }}</mat-option>
         </mat-select>
       </mat-form-field>
-            
-      <button mat-raised-button style="background: #02465b;color: white;" (click)="clearFilters()"
-        class="filterDropDown">Clear Filters</button>
+
+      <button
+        mat-raised-button
+        style="background: #02465b; color: white"
+        (click)="clearFilters()"
+        class="filterDropDown"
+      >
+        Clear Filters
+      </button>
     </div>
 
-    <div class="table-container" style="overflow-x: auto; overflow-y: auto; max-height: 550px">
+    <div
+      class="table-container"
+      style="overflow-x: auto; overflow-y: auto; max-height: 550px"
+    >
       <table matSort mat-table [dataSource]="dataSource" matSort>
-
         <ng-container matColumnDef="select">
-          <th mat-header-cell *matHeaderCellDef class="selectHeader" style="background: #02465b;color: white;">
-            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
-              [indeterminate]="selection.hasValue() && !isAllSelected()">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="selectHeader"
+            style="background: #02465b; color: white"
+          >
+            <mat-checkbox
+              (change)="$event ? masterToggle() : null"
+              [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()"
+            >
             </mat-checkbox>
           </th>
           <td mat-cell *matCellDef="let row" class="selectCell">
-            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? toggleSelection(row) : null"
-              [checked]="selection.isSelected(row)">
+            <mat-checkbox
+              (click)="$event.stopPropagation()"
+              (change)="$event ? toggleSelection(row) : null"
+              [checked]="selection.isSelected(row)"
+            >
             </mat-checkbox>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="SrNo">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header
-            style="background: #02465b;color: white; min-width: fit-content">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white; min-width: fit-content"
+          >
             SrNo
           </th>
-          <td mat-cell *matCellDef="let element; let i = index" [ngClass]="{'red-text': element.isProcessAssigned}">
+          <td
+            mat-cell
+            *matCellDef="let element; let i = index"
+            [ngClass]="{ 'red-text': element.isProcessAssigned }"
+          >
             {{ getSrNo(i) }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Name
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.name }}</td>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.name }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Email
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.email }}</td>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.email }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="phone">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Phone
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.phone }}</td>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.phone }}
+          </td>
         </ng-container>
 
         <!-- <ng-container matColumnDef="status">
@@ -174,27 +328,49 @@
           </ng-container> -->
 
         <ng-container matColumnDef="language">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b; color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Language Details
           </th>
           <td mat-cell *matCellDef="let lead">
-            <div *ngIf="lead.language" [ngClass]="{'red-text': lead.isProcessAssigned}">
+            <div
+              *ngIf="lead.language"
+              [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+            >
               <ng-container *ngFor="let lang of lead.language">
-                <div>{{ lang.lType }} - {{ lang.lang }} - {{ lang.proficiencyLevel }}</div>
+                <div>
+                  {{ lang.lType }} - {{ lang.lang }} -
+                  {{ lang.proficiencyLevel }}
+                </div>
               </ng-container>
             </div>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="assignProcess">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b; color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Assign Process
           </th>
           <td mat-cell *matCellDef="let lead">
-            <mat-form-field style="margin-top: 1rem;">
+            <mat-form-field style="margin-top: 1rem">
               <mat-label>Assign Process</mat-label>
-              <mat-select [disabled]="lead.isProcessAssigned" (selectionChange)="updateAssignProcess($event.value)">
-                <mat-option *ngFor="let process of assignProcesslist" [value]="process">
+              <mat-select
+                [disabled]="lead.isProcessAssigned"
+                (selectionChange)="updateAssignProcess($event.value)"
+              >
+                <mat-option
+                  *ngFor="let process of assignProcesslist"
+                  [value]="process"
+                >
                   {{ process }}
                 </mat-option>
               </mat-select>
@@ -203,97 +379,226 @@
         </ng-container>
 
         <ng-container matColumnDef="jbStatus">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Job Status
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.jbStatus }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="qualification">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
-            Qualification
-          </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.qualification }}
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.jbStatus }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="industry"> 
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+        <ng-container matColumnDef="qualification">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
+            Qualification
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.qualification }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="industry">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Industry
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.industry }}</td>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.industry }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="domain">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Profile
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.domain }}</td>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.domain }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="exp">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Experience
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.exp }}</td>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.exp }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="cLocation">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Current Location
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.cLocation }}</td>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.cLocation }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="pLocation">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Preferred Location
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.pLocation }}</td>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.pLocation }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="currentCTC">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Current CTC (in Lakhs)
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.currentCTC }}
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.currentCTC }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="expectedCTC">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Expected CTC (in Lakhs)
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.expectedCTC }}
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.expectedCTC }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="noticePeriod">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Notice Period (in days)
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.noticePeriod }}
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.noticePeriod }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="wfh">            
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+        <ng-container matColumnDef="wfh">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Mode
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.wfh }}</td>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.wfh }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="resumeLink">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Resume
           </th>
           <td mat-cell *matCellDef="let lead">
-            <a [href]="lead.resumeLink" target="_blank">{{lead.name}}_resume</a>
+            <a [href]="lead.resumeLink" target="_blank"
+              >{{ lead.name }}_resume</a
+            >
           </td>
         </ng-container>
 
         <ng-container matColumnDef="linkedinLink">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             LinkedIn Profile
           </th>
           <td mat-cell *matCellDef="let lead">
@@ -302,67 +607,157 @@
         </ng-container>
 
         <ng-container matColumnDef="feedback">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Feedback
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.feedback }}</td>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.feedback }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="remark">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Remark
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.remark }}</td>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.remark }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="company">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Organisation
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.company }}</td>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.company }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="voiceNonVoice">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b; color: white;">Voice/Non-
-            voice
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
+            Voice/Non- voice
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.voiceNonVoice }}
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.voiceNonVoice }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="source">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Source
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.source }}</td>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.source }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="createdBy">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Created By
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.createdBy }}</td>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.createdBy }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="lastUpdatedBy">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b;color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Last Updated By
           </th>
-          <td mat-cell *matCellDef="let lead" [ngClass]="{'red-text': lead.isProcessAssigned}">{{ lead.lastUpdatedBy }}</td>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.lastUpdatedBy }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b; color: white;">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
             Action
           </th>
           <td mat-cell *matCellDef="let lead">
             <!-- edit button -->
-            <button mat-icon-button color="primary" (click)="openEditForm(lead)">
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openEditForm(lead)"
+            >
               <mat-icon>edit</mat-icon>
             </button>
 
             <!-- delete button -->
-            <button mat-icon-button color="warn" (click)="deleteEntry(lead._id)" *ngIf="isAdmin()">
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="deleteEntry(lead._id)"
+              *ngIf="isAdmin()"
+            >
               <mat-icon>delete</mat-icon>
             </button>
           </td>
@@ -373,14 +768,16 @@
 
         <!-- Row shown when there is no matching data. -->
         <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" colspan="26" style="padding: 1rem;">
+          <td class="mat-cell" colspan="26" style="padding: 1rem">
             OOOPs, No Matching Record Found ....
           </td>
         </tr>
       </table>
-
     </div>
 
-    <mat-paginator [pageSizeOptions]="[50, 100, 150]" showFirstLastButtons></mat-paginator>
+    <mat-paginator
+      [pageSizeOptions]="[50, 100, 150]"
+      showFirstLastButtons
+    ></mat-paginator>
   </div>
 </div>

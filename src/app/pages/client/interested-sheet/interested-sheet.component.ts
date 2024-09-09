@@ -73,16 +73,16 @@ export class InterestedSheetComponent {
   selectedexp: string | null = null;
   selectedRound: string | null = null;
 
-  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Chinese', 'Nepalese', 'Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Marathi']; // replace with actual statuses
-  proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'HSK1', 'HSK2', 'HSK3','HSK4', 'HSK5', 'HSK6', 'N1', 'N2', 'N3', 'N4', 'N5', 'Native' , 'Non-Native'];
+  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Korean' ,'Nepali','Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Mandarin', 'Nepalese', 'Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Marathi', 'Kannada']; // replace with actual statuses
+  proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5', 'HSK6', 'N1', 'N2', 'N3', 'N4', 'N5', 'TOPIK-I L1','TOPIK-I L2', 'TOPIK-II L1','TOPIK-II L2', 'TOPIK-II L3', 'TOPIK-II L4', 'Native', 'Non-Native'];
   jobStatuses = ['Working', 'Job Seeking', 'Teacher'];
-  qualifications = ['SSC', 'HSC', 'Under Graduate', 'Post Graduate', 'PHD'];
-  modes = ['WFH', 'WHO', 'Hybrid'];
-  feedbacks = ['Interested','Not Intrested - CTC Not Matching', 'Not Intrested - Relocation Issue', 'Not Intrested - Notice Period', 'Not Intrested - Cooling Down Period', 'Not Intrested - Call Not Recieved', 'Not Intrested - Under Qualified", "Not Intrested - already associated with org", "Currently not looking for a job"'];
-  noticePeriods = ['15', '30', '60', '90', '90+'];
-  sources = ['Linkedin', 'Naukri', 'Meta', 'Google', 'Instagram', 'Website', 'App', 'Email', 'Reference'];
-  exps = ['0-1', '1-2', '2-4', '4-8', '8-12', '12+'];
-  round = ['Round 1','Round 2','Round 3','Round 4','Selected'];
+  qualifications = ['SSC', 'HSC', 'Diploma', 'Advance Diploma', 'Under Graduate', 'Post Graduate', 'PHD', 'BA (Language)', 'MA (Language)'];
+  modes = ['WFH', 'WFO', 'Hybrid', 'Both'];
+  feedbacks = ['Interested','CTC Not Matching', 'Relocation Issue', 'Notice Period', 'Cooling Down Period', 'Call Not Recieved', 'Under Qualified', 'already associated with org', 'Currently not looking for a job', 'Rejected'];
+  noticePeriods = ['Immediate', '15 Days', '1 Month', '2 Months', '3 Months','3+ Months'];
+  sources = ['LinkedIn', 'Naukri', 'Meta', 'Google', 'Instagram', 'Website', 'App', 'Email', 'Reference','Other'];
+  experienceRanges = ['Fresher', '0-1', '1-3', '3-6', '6-10', '10+'];
+  round = ['HR', 'OPS', 'Client', 'Selected', 'Rejected'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -111,6 +111,7 @@ export class InterestedSheetComponent {
     this.clientId = this.route.snapshot.paramMap.get('id');
     this.processId = this.route.snapshot.paramMap.get('processId');
     this.getCuriotoryLeads();
+    this.clearFilters();
   }
 
   getCuriotoryLeads() {
@@ -131,52 +132,26 @@ export class InterestedSheetComponent {
     this.openFilters = !this.openFilters;
   }
 
-  filterLang(value: any){
+  filterLang(value: any) {
     this.selectedLanguage = value;
-    this.filterLangProf();
+    this.applyCombinedFilters();
   }
 
   filterProfi(selectedProficiencyLevels: string[]) {
     this.proficiencyLevelsString = selectedProficiencyLevels.join(',');
-    this.filterLangProf()
+    this.applyCombinedFilters()
   }
-
-  // apply filter for lang and proficiency
-  filterLangProf() {
-    this.clientService.interestedlangFilter(this.clientId,this.processId,this.selectedLanguage, this.proficiencyLevelsString).subscribe({
-      next: (res: any) => {
-        let filteredData = res;
-
-        // Apply existing local filters to the data received from the API
-        Object.keys(this.filterValues).forEach(key => {
-          if (this.filterValues[key]) {
-            filteredData = filteredData.filter((item: any) => 
-              item[key] && item[key].toString().toLowerCase().includes(this.filterValues[key].toLowerCase())
-            );
-          }
-        });
-  
-        this.dataSource = new MatTableDataSource(filteredData);
-        this.dataSource.filterPredicate = this.createFilter();
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    });
-  }
-
-  // filter for interested candidate
 
   applyDropdownFilter(value: string, column: string) {
-    this.filterValues[column] = value;
-  
-    // Check if language or proficiency filter is applied
-    if (column === 'language' || column === 'proficiencyLevel') {
-      this.filterLangProf();
+    console.log("value is: " + value);
+    if (column === 'exp') {
+      this.selectedexp = value;
+      this.applyCombinedFilters();
     } else {
+      this.filterValues[column] = value;
       this.dataSource.filter = JSON.stringify(this.filterValues);
+
+      console.log("the datasource filter is: " + this.dataSource.filter);
   
       if (this.dataSource.paginator) {
         this.dataSource.paginator.firstPage();
@@ -184,8 +159,43 @@ export class InterestedSheetComponent {
     }
   }
 
+
+
+// combined filters for language and exp columns (backend api calls)
+  applyCombinedFilters() {
+    // Call the service to apply the combined filters (language, proficiency levels, and experience)
+    this.leadService.filterCandidates(this.selectedLanguage, this.proficiencyLevelsString, this.selectedexp).subscribe({
+      next: (res: any) => {
+        let filteredData = res;
+  
+        // Apply existing local filters to the data received from the API
+        Object.keys(this.filterValues).forEach(key => {
+          if (this.filterValues[key]) {
+            filteredData = filteredData.filter((item: any) =>
+              item[key] && item[key].toString().toLowerCase().includes(this.filterValues[key].toLowerCase())
+            );
+          }
+        });
+  
+        // Update the dataSource with the filtered data
+        this.dataSource.data = filteredData;
+  
+        // Reset to the first page after filtering
+        if (this.dataSource.paginator) {
+          this.dataSource.paginator.firstPage();
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+
+    console.log("apply filter: filtervalue is: " + filterValue);
   
     // If the input is empty, clear the filter to show all data
     if (!filterValue) {
@@ -210,47 +220,54 @@ export class InterestedSheetComponent {
   createFilter(): (data: any, filter: string) => boolean {
     return (data: any, filter: string): boolean => {
       if (!filter) {
-        // If the filter string is empty, return true to show all items
         return true;
       }
   
-      let searchTerms: any;
+      let filterValues: any;
       try {
-        // Parse filter string, which should be in JSON format
-        searchTerms = JSON.parse(filter);
+        filterValues = JSON.parse(filter);
       } catch (error) {
-        // If parsing fails, log the error and return false to exclude the item
         console.error("Invalid filter format:", filter);
         return false;
       }
   
-      // Log parsed search terms for debugging
-  
-      const searchTerm = searchTerms.nameOrNumberOrEmail;
-  
-      // Convert the search term to lowercase for case-insensitive comparison
+      // Extract search term for general filtering (name, phone, email, etc.)
+      const searchTerm = filterValues.nameOrNumberOrEmail || '';
       const term = searchTerm.toString().toLowerCase();
   
-      // Check if the data matches the 'name' field
+      // Check if the data matches the search term (global search across multiple fields)
       const matchesName = data.name ? data.name.toString().toLowerCase().includes(term) : false;
-  
-      // Check if the data matches the 'phone' field
       const matchesPhone = data.phone ? data.phone.toString().toLowerCase().includes(term) : false;
-  
-      // Check if the data matches the 'email' field
       const matchesEmail = data.email ? data.email.toString().toLowerCase().includes(term) : false;
-
-      // Check if the data matches the 'created by' field
-      // const matchesCreatedBy = data.createdBy ? data.createdBy.toString().toLowerCase().includes(term) : false;
-
-      // // Check if the data matches the 'last updated by' field
-      // const matchesLastUpdatedBy = data.lastUpdatedBy ? data.lastUpdatedBy.toString().toLowerCase().includes(term) : false;
+      const matchesCreatedBy = data.createdBy ? data.createdBy.toString().toLowerCase().includes(term) : false;
+      const matchesLastUpdatedBy = data.lastUpdatedBy ? data.lastUpdatedBy.toString().toLowerCase().includes(term) : false;
+      const globalMatch = matchesName || matchesPhone || matchesEmail || matchesCreatedBy || matchesLastUpdatedBy;
   
-      // Match if the search term is found in 'name', 'phone', or 'email'
-      // return matchesName || matchesPhone || matchesEmail || matchesCreatedBy || matchesLastUpdatedBy ;
-      return matchesName || matchesPhone || matchesEmail ;
+      // Column-based filtering (specific field filtering)
+      let columnMatch = true;
+      for (const column in filterValues) {
+        if (column === 'nameOrNumberOrEmail') continue; // Skip global search term
+  
+        const filterValue = filterValues[column].toString().toLowerCase();
+        const columnData = data[column] ? data[column].toString().toLowerCase() : '';
+  
+        // Apply filter for the specific column
+        columnMatch = columnMatch && columnData.includes(filterValue);
+  
+        if (!columnMatch) {
+          break; // No need to continue if one column filter doesn't match
+        }
+      }
+  
+      // Return true only if both the global search term and column-specific filters match
+      return globalMatch && columnMatch;
     };
   }
+  
+  
+
+  
+   
 
   clearFilters() {
     this.filterValues = {};

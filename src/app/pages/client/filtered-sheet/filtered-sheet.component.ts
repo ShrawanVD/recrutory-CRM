@@ -12,7 +12,7 @@ import { LoginService } from 'src/app/services/login/login.service';
 @Component({
   selector: 'app-filtered-sheet',
   templateUrl: './filtered-sheet.component.html',
-  styleUrls: ['./filtered-sheet.component.scss']
+  styleUrls: ['./filtered-sheet.component.scss'],
 })
 export class FilteredSheetComponent {
   processId: string | null = null;
@@ -59,7 +59,7 @@ export class FilteredSheetComponent {
 
   dataSource!: MatTableDataSource<any>;
 
-  selectedLanguage: any = "";
+  selectedLanguage: any = '';
   selectedProficiencyLevels: any[] = [];
   selectedJobStatus: string | null = null;
   selectedQualification: string | null = null;
@@ -69,17 +69,23 @@ export class FilteredSheetComponent {
   selectedsource: string | null = null;
   selectedexp: string | null = null;
 
-  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Mandarin', 'Nepalese', 'Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Marathi', 'Kannada']; // replace with actual statuses
-  proficiencyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5', 'HSK6', 'N1', 'N2', 'N3', 'N4', 'N5', 'Native', 'Non-Native'];
+  languages = ['French', 'German', 'Spanish', 'English', 'Arabic', 'Japanese', 'Korean' ,'Nepali','Italian', 'Spanish', 'Bahasa', 'Vietnamese', 'Mandarin', 'Nepalese', 'Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Marathi', 'Kannada']; // replace with actual statuses
+  proficiencyGroups = [
+    { name: 'Basic', levels: ['A1', 'A2'] },
+    { name: 'Intermediate', levels: ['B1', 'B2'] },
+    { name: 'Advanced', levels: ['C1', 'C2'] },
+    { name: 'HSK Levels', levels: ['HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5', 'HSK6'] },
+    { name: 'JLPT Levels', levels: ['N1', 'N2', 'N3', 'N4', 'N5'] },
+    { name: 'TOPIK Levels', levels: ['TOPIK-I L1','TOPIK-I L2', 'TOPIK-II L1','TOPIK-II L2', 'TOPIK-II L3', 'TOPIK-II L4'] },
+    { name: 'Other', levels: ['Native', 'Non-Native'] }
+  ];
   jobStatuses = ['Working', 'Job Seeking', 'Teacher'];
   qualifications = ['SSC', 'HSC', 'Diploma', 'Advance Diploma', 'Under Graduate', 'Post Graduate', 'PHD', 'BA (Language)', 'MA (Language)'];
   modes = ['WFH', 'WFO', 'Hybrid', 'Both'];
-  feedbacks = ['Interested','Not Intrested - CTC Not Matching', 'Not Intrested - Relocation Issue', 'Not Intrested - Notice Period', 'Not Intrested - Cooling Down Period', 'Not Intrested - Call Not Recieved', 'Not Intrested - Under Qualified", "Not Intrested - already associated with org", "Currently not looking for a job"'];
-  noticePeriods = ['Immediate', '15 Days', '1 Month', '2 Months', '3 Months'];
-  sources = ['LinkedIn', 'Naukri', 'Meta', 'Google', 'Instagram', 'Website', 'App', 'Email', 'Reference'];
-  // exps = ['0-1', '1-2', '2-4', '4-8', '8-12', '12+'];
-  experienceRanges = ['Fresher', '0 - 1', '1 - 3', '3 - 6', '6 - 10', '10+'];
-
+  feedbacks = ['Interested','CTC Not Matching', 'Relocation Issue', 'Notice Period', 'Cooling Down Period', 'Call Not Recieved', 'Under Qualified', 'already associated with org', 'Currently not looking for a job', 'Rejected'];
+  noticePeriods = ['Immediate', '15 Days', '1 Month', '2 Months', '3 Months','3+ Months'];
+  sources = ['LinkedIn', 'Naukri', 'Meta', 'Google', 'Instagram', 'Website', 'App', 'Email', 'Reference','Other'];
+  experienceRanges = ['Fresher', '0-1', '1-3', '3-6', '6-10', '10+'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -92,10 +98,12 @@ export class FilteredSheetComponent {
     private route: ActivatedRoute,
     private leadService: LeadsService,
     private loginService: LoginService
-  ) { }
+  ) {}
   // for creating lead
   openAddEditEmpForm() {
-    const dialogRef = this._dialog.open(FilteredSheetFormComponent, { disableClose: true });
+    const dialogRef = this._dialog.open(FilteredSheetFormComponent, {
+      disableClose: true,
+    });
     dialogRef.afterClosed().subscribe({
       next: (val) => {
         if (val) {
@@ -108,7 +116,7 @@ export class FilteredSheetComponent {
   ngOnInit(): void {
     this.clientId = this.route.snapshot.paramMap.get('id');
     this.processId = this.route.snapshot.paramMap.get('processId');
-    this.isTeamLead = this.loginService.isTeamLead()
+    this.isTeamLead = this.loginService.isTeamLead();
     this.adminRole = this.loginService.isAdmin();
     console.log(this.isTeamLead);
     this.getCuriotoryLeads();
@@ -134,14 +142,14 @@ export class FilteredSheetComponent {
       },
       error: (err) => {
         console.log(err);
-      }
-    })
+      },
+    });
   }
   getRecruiterIds(): string[] {
     return Object.keys(this.recruiters);
   }
 
-  // code for handling select 
+  // code for handling select
   isAllSelected() {
     const numSelected = this.selectedRows.length;
     const numRows = this.dataSource.data.length;
@@ -156,7 +164,7 @@ export class FilteredSheetComponent {
     if (this.isAllSelected()) {
       this.selectedRows = [];
     } else {
-      this.selectedRows = this.dataSource.data.map(row => row._id);
+      this.selectedRows = this.dataSource.data.map((row) => row._id);
     }
   }
 
@@ -172,49 +180,65 @@ export class FilteredSheetComponent {
   // filter for interested candidate
   filterLang(value: any) {
     this.selectedLanguage = value;
-    this.filterLangProf();
+    this.applyCombinedFilters();
   }
 
   filterProfi(selectedProficiencyLevels: string[]) {
     this.proficiencyLevelsString = selectedProficiencyLevels.join(',');
-    this.filterLangProf()
+    this.applyCombinedFilters();
   }
 
-  // apply filter for lang and proficiency
-  filterLangProf() {
-    this.clientService.filterSheetlangFilter(this.clientId,this.processId,this.selectedLanguage, this.proficiencyLevelsString).subscribe({
-      next: (res: any) => {
-        let filteredData = res;
+  applyCombinedFilters() {
+    this.clientService
+      .filteredSheetFilter(
+        this.clientId,
+        this.processId,
+        this.selectedLanguage,
+        this.proficiencyLevelsString,
+        this.selectedexp
+      )
+      .subscribe({
+        next: (res: any) => {
+          let filteredData = res;
 
-        // Apply existing local filters to the data received from the API
-        Object.keys(this.filterValues).forEach(key => {
-          if (this.filterValues[key]) {
-            filteredData = filteredData.filter((item: any) =>
-              item[key] && item[key].toString().toLowerCase().includes(this.filterValues[key].toLowerCase())
-            );
+          // Apply existing local filters to the data received from the API
+          Object.keys(this.filterValues).forEach((key) => {
+            if (this.filterValues[key]) {
+              filteredData = filteredData.filter(
+                (item: any) =>
+                  item[key] &&
+                  item[key]
+                    .toString()
+                    .toLowerCase()
+                    .includes(this.filterValues[key].toLowerCase())
+              );
+            }
+          });
+
+          // Update the dataSource with the filtered data
+          this.dataSource.data = filteredData;
+
+          // Reset to the first page after filtering
+          if (this.dataSource.paginator) {
+            this.dataSource.paginator.firstPage();
           }
-        });
-
-        this.dataSource = new MatTableDataSource(filteredData);
-        this.dataSource.filterPredicate = this.createFilter();
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    });
+        },
+        error: (err) => {
+          console.log(err);
+        },
+      });
   }
-
 
   applyDropdownFilter(value: string, column: string) {
-    this.filterValues[column] = value;
-
-    // Check if language or proficiency filter is applied
-    if (column === 'language' || column === 'proficiencyLevel') {
-      this.filterLangProf();
+    console.log('value is: ' + value);
+    if (column === 'exp') {
+      this.selectedexp = value;
+      this.applyCombinedFilters();
     } else {
+      this.filterValues[column] = value;
       this.dataSource.filter = JSON.stringify(this.filterValues);
+
+      console.log('the datasource filter is: ' + this.dataSource.filter);
 
       if (this.dataSource.paginator) {
         this.dataSource.paginator.firstPage();
@@ -222,78 +246,97 @@ export class FilteredSheetComponent {
     }
   }
 
-
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-  
+    const filterValue = (event.target as HTMLInputElement).value
+      .trim()
+      .toLowerCase();
+
     // If the input is empty, clear the filter to show all data
     if (!filterValue) {
       this.dataSource.filter = ''; // Clear the filter to show all data
     } else {
       // Create a filter object for multiple fields (name, phone, email)
       const filterObject = { nameOrNumberOrEmail: filterValue };
-  
+
       // Log the filter value and object for debugging
-      console.log("Applying filter:", filterValue);
-      console.log("Filter object:", filterObject);
-  
+      console.log('Applying filter:', filterValue);
+      console.log('Filter object:', filterObject);
+
       this.dataSource.filter = JSON.stringify(filterObject);
     }
-  
+
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
 
-
   createFilter(): (data: any, filter: string) => boolean {
     return (data: any, filter: string): boolean => {
       if (!filter) {
-        // If the filter string is empty, return true to show all items
         return true;
       }
-  
-      let searchTerms: any;
+
+      let filterValues: any;
       try {
-        // Parse filter string, which should be in JSON format
-        searchTerms = JSON.parse(filter);
+        filterValues = JSON.parse(filter);
       } catch (error) {
-        // If parsing fails, log the error and return false to exclude the item
-        console.error("Invalid filter format:", filter);
+        console.error('Invalid filter format:', filter);
         return false;
       }
-  
-      // Log parsed search terms for debugging
-  
-      const searchTerm = searchTerms.nameOrNumberOrEmail;
-  
-      // Convert the search term to lowercase for case-insensitive comparison
+
+      // Extract search term for general filtering (name, phone, email, etc.)
+      const searchTerm = filterValues.nameOrNumberOrEmail || '';
       const term = searchTerm.toString().toLowerCase();
-  
-      // Check if the data matches the 'name' field
-      const matchesName = data.name ? data.name.toString().toLowerCase().includes(term) : false;
-  
-      // Check if the data matches the 'phone' field
-      const matchesPhone = data.phone ? data.phone.toString().toLowerCase().includes(term) : false;
-  
-      // Check if the data matches the 'email' field
-      const matchesEmail = data.email ? data.email.toString().toLowerCase().includes(term) : false;
 
-      // Check if the data matches the 'created by' field
-      const matchesCreatedBy = data.createdBy ? data.createdBy.toString().toLowerCase().includes(term) : false;
+      // Check if the data matches the search term (global search across multiple fields)
+      const matchesName = data.name
+        ? data.name.toString().toLowerCase().includes(term)
+        : false;
+      const matchesPhone = data.phone
+        ? data.phone.toString().toLowerCase().includes(term)
+        : false;
+      const matchesEmail = data.email
+        ? data.email.toString().toLowerCase().includes(term)
+        : false;
+      const matchesCreatedBy = data.createdBy
+        ? data.createdBy.toString().toLowerCase().includes(term)
+        : false;
+      const matchesLastUpdatedBy = data.lastUpdatedBy
+        ? data.lastUpdatedBy.toString().toLowerCase().includes(term)
+        : false;
+      const globalMatch =
+        matchesName ||
+        matchesPhone ||
+        matchesEmail ||
+        matchesCreatedBy ||
+        matchesLastUpdatedBy;
 
-      // Check if the data matches the 'last updated by' field
-      const matchesLastUpdatedBy = data.lastUpdatedBy ? data.lastUpdatedBy.toString().toLowerCase().includes(term) : false;
-  
-      // Match if the search term is found in 'name', 'phone', or 'email'
-      return matchesName || matchesPhone || matchesEmail || matchesCreatedBy || matchesLastUpdatedBy ;
+      // Column-based filtering (specific field filtering)
+      let columnMatch = true;
+      for (const column in filterValues) {
+        if (column === 'nameOrNumberOrEmail') continue; // Skip global search term
+
+        const filterValue = filterValues[column].toString().toLowerCase();
+        const columnData = data[column]
+          ? data[column].toString().toLowerCase()
+          : '';
+
+        // Apply filter for the specific column
+        columnMatch = columnMatch && columnData.includes(filterValue);
+
+        if (!columnMatch) {
+          break; // No need to continue if one column filter doesn't match
+        }
+      }
+
+      // Return true only if both the global search term and column-specific filters match
+      return globalMatch && columnMatch;
     };
   }
 
-  
   clearFilters() {
     this.filterValues = {};
-    this.dataSource.filter = "";
+    this.dataSource.filter = '';
     this.selectedLanguage = null;
     this.selectedProficiencyLevels = [];
     this.selectedJobStatus = null;
@@ -313,9 +356,9 @@ export class FilteredSheetComponent {
       data: {
         ...data,
         clientId: this.clientId,
-        processId: this.processId
+        processId: this.processId,
       },
-      disableClose: true
+      disableClose: true,
     });
 
     dialogRef.afterClosed().subscribe({
@@ -326,7 +369,6 @@ export class FilteredSheetComponent {
       },
     });
   }
-
 
   updateInterested(lead: any, status: boolean): void {
     lead.interested = status;
@@ -342,38 +384,55 @@ export class FilteredSheetComponent {
     const payload = {
       ids: this.selectedRows,
       recruiterId: lead.assignedRecruiter,
-      newAssignedRecruiter: this.recruiters[lead.assignedRecruiter]
+      newAssignedRecruiter: this.recruiters[lead.assignedRecruiter],
     };
     if (payload.ids.length == 0) {
-      alert("Please select the checkbox to assign recruiter");
+      alert('Please select the checkbox to assign recruiter');
       this.getCuriotoryLeads();
     } else {
-      const confirmAssignRecruiter = window.confirm(`Do you want to assign these candidates to ${this.recruiters[lead.assignedRecruiter]}, Please Comfirm`)
+      const confirmAssignRecruiter = window.confirm(
+        `Do you want to assign these candidates to ${
+          this.recruiters[lead.assignedRecruiter]
+        }, Please Comfirm`
+      );
       if (confirmAssignRecruiter) {
-        this.clientService.updateMultipleRecruiter(this.clientId, this.processId, payload).subscribe({
-          next: (res: any) => {
-            if (res.alreadyAssignedCandidates && res.alreadyAssignedCandidates.length > 0) {
-              this._snackBar.open(`Some candidates are already assign to ${this.recruiters[lead.assignedRecruiter]}`, 'Close', {
+        this.clientService
+          .updateMultipleRecruiter(this.clientId, this.processId, payload)
+          .subscribe({
+            next: (res: any) => {
+              if (
+                res.alreadyAssignedCandidates &&
+                res.alreadyAssignedCandidates.length > 0
+              ) {
+                this._snackBar.open(
+                  `Some candidates are already assign to ${
+                    this.recruiters[lead.assignedRecruiter]
+                  }`,
+                  'Close',
+                  {
+                    duration: 4000,
+                  }
+                );
+              } else {
+                this._snackBar.open(
+                  'Recriuter Assigned Successfully',
+                  'Close',
+                  {
+                    duration: 4000,
+                  }
+                );
+              }
+              this.getCuriotoryLeads();
+            },
+            error: (err) => {
+              console.log(err);
+              this._snackBar.open(`some error has been occured`, 'Close', {
                 duration: 4000,
               });
-            }
-            else {
-              this._snackBar.open('Recriuter Assigned Successfully', 'Close', {
-                duration: 4000,
-              });
-            }
-            this.getCuriotoryLeads();
-          },
-          error: (err) => {
-            console.log(err);
-            this._snackBar.open(`some error has been occured`, 'Close', {
-              duration: 4000,
-            });
-          }
-        })
+            },
+          });
       }
     }
-
   }
 
   // open interested candidates
@@ -381,32 +440,32 @@ export class FilteredSheetComponent {
     this.router.navigate(['interested'], { relativeTo: this.route });
   }
 
-  deleteEntry(candidateId: any){
+  deleteEntry(candidateId: any) {
     const confirmDelete = window.confirm(
       `Do you want to delete this candidates, Please Confirm`
     );
 
-    if(confirmDelete){
-      this.clientService.deleteFilteredCandidate(this.clientId,this.processId,candidateId).subscribe({
-        next:(res) =>{
-          this._snackBar.open(`Candidate Deleted Successfully`, 'Close', {
-            duration: 4000,
-          });
+    if (confirmDelete) {
+      this.clientService
+        .deleteFilteredCandidate(this.clientId, this.processId, candidateId)
+        .subscribe({
+          next: (res) => {
+            this._snackBar.open(`Candidate Deleted Successfully`, 'Close', {
+              duration: 4000,
+            });
 
-          this.getCuriotoryLeads();
-        },
-        error:(err) =>{
-          console.log(err);
-        }
-      })
+            this.getCuriotoryLeads();
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        });
     }
-    
   }
-    // for getting srno 
-    getSrNo(index: number): number {
-      return index + 1 + (this.paginator.pageIndex * this.paginator.pageSize);
-    }
-
+  // for getting srno
+  getSrNo(index: number): number {
+    return index + 1 + this.paginator.pageIndex * this.paginator.pageSize;
+  }
 
   // open filter div
   openFilterDiv() {
@@ -421,12 +480,13 @@ export class FilteredSheetComponent {
     return this.getRole() === 'Admin';
   }
 
-  isInterestAccess(): boolean{
-    if(this.loginService.isAdmin() || this.loginService.isHr() || this.loginService.isTeamLead())
+  isInterestAccess(): boolean {
+    if (
+      this.loginService.isAdmin() ||
+      this.loginService.isHr() ||
+      this.loginService.isTeamLead()
+    )
       return true;
-    else
-      return false;
+    else return false;
   }
-
-
 }
