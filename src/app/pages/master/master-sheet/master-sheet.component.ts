@@ -38,7 +38,8 @@ interface Lead {
   voiceNonVoice: string;
   source: string;
   createdBy: string;
-  lastUpdatedBy: string
+  createdById: any;
+  lastUpdatedById: any
 }
 
 @Component({
@@ -61,6 +62,7 @@ export class MasterSheetComponent implements OnInit {
     'phone',
     'language',
     'assignProcess',
+    'processName',
     'jbStatus',
     'qualification',
     'industry',
@@ -576,9 +578,10 @@ export class MasterSheetComponent implements OnInit {
       const matchesName = data.name ? data.name.toString().toLowerCase().includes(term) : false;
       const matchesPhone = data.phone ? data.phone.toString().toLowerCase().includes(term) : false;
       const matchesEmail = data.email ? data.email.toString().toLowerCase().includes(term) : false;
+      const matchesRemark = data.remark ? data.remark.toString().toLowerCase().includes(term) : false;
       const matchesCreatedBy = data.createdBy ? data.createdBy.toString().toLowerCase().includes(term) : false;
       const matchesLastUpdatedBy = data.lastUpdatedBy ? data.lastUpdatedBy.toString().toLowerCase().includes(term) : false;
-      const globalMatch = matchesName || matchesPhone || matchesEmail || matchesCreatedBy || matchesLastUpdatedBy;
+      const globalMatch = matchesName || matchesPhone || matchesEmail || matchesRemark || matchesCreatedBy || matchesLastUpdatedBy;
   
       // Column-based filtering (specific field filtering)
       let columnMatch = true;

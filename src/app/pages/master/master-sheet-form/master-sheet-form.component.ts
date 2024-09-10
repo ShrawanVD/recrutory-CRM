@@ -255,6 +255,7 @@ get languages(): FormArray {
     console.log(this.leadForm.value);
     // Check if the form is valid
     if (this.leadForm.valid) {
+
       // Update existing lead
       if (this.data?._id) {
 
@@ -264,6 +265,7 @@ get languages(): FormArray {
 
         this.leadForm.patchValue({
           lastUpdatedBy: this.lastUpdatedBy,
+          lastUpdatedById: this.lastUpdatedById,
         });
 
 
@@ -289,6 +291,7 @@ get languages(): FormArray {
           },
         });
       } else {
+
         // Create new lead
 
 
@@ -298,6 +301,7 @@ get languages(): FormArray {
 
         this.leadForm.patchValue({
           createdBy: this.createdBy,
+          createdById: this.createdById
         });
 
 
