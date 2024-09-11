@@ -306,7 +306,10 @@
             <td mat-cell *matCellDef="let lead">
               <mat-form-field style="margin-top: 1rem;">
                 <mat-label>Status</mat-label>
-                <mat-select [(value)]="lead.status" (selectionChange)="updateRound(lead)">
+                <mat-select 
+                [disabled] = " lead.status === 'Rejected' || lead.status === 'selected' "
+                [(value)]="lead.status" 
+                (selectionChange)="updateRound(lead)">
                   <mat-option value="HR">HR</mat-option>
                   <mat-option value="OPS">OPS</mat-option>
                   <mat-option value="Client">Client</mat-option>
@@ -316,6 +319,8 @@
               </mat-form-field>
             </td>
           </ng-container>
+
+          <!-- April Marble Dial Rose gold Watch -->
   
           <!-- <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header style="background: #02465b; color: white;">

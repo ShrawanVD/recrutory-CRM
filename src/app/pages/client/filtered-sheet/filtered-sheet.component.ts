@@ -123,10 +123,28 @@ export class FilteredSheetComponent {
     this.getRecruitersList();
   }
 
+  // getCuriotoryLeads() {
+  //   this.clientService.getProcessById(this.clientId, this.processId).subscribe({
+  //     next: (res: any) => {
+  //       const filterSheet = res.interestedCandidates.filter(
+  //         (candidate) => candidate.status !== "selected" || candidate.status !== "Rejected" 
+  //       );
+  //       this.dataSource = new MatTableDataSource(filterSheet);
+  //       this.dataSource.filterPredicate = this.createFilter();
+  //       this.dataSource.sort = this.sort;
+  //       this.dataSource.paginator = this.paginator;
+  //     },
+  //     error: console.log,
+  //   });
+  // }
+
   getCuriotoryLeads() {
     this.clientService.getProcessById(this.clientId, this.processId).subscribe({
       next: (res: any) => {
-        this.dataSource = new MatTableDataSource(res.interestedCandidates);
+        const filterSheet = res.interestedCandidates.filter(
+          (candidate: { status: string }) => candidate.status !== "selected" && candidate.status !== "Rejected"
+        );
+        this.dataSource = new MatTableDataSource(filterSheet);
         this.dataSource.filterPredicate = this.createFilter();
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -134,6 +152,7 @@ export class FilteredSheetComponent {
       error: console.log,
     });
   }
+  
 
   getRecruitersList(): void {
     this.clientService.getRecruiter('Recruiter').subscribe({
@@ -484,7 +503,8 @@ export class FilteredSheetComponent {
     if (
       this.loginService.isAdmin() ||
       this.loginService.isHr() ||
-      this.loginService.isTeamLead()
+      this.loginService.isTeamLead() ||
+      this.loginService.isRecruiter()
     )
       return true;
     else return false;
