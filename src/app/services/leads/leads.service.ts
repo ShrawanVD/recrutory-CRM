@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -23,9 +23,9 @@ export class LeadsService {
     return this.http.get(`${this.url}/api/master/candidates/${id}`);
   }
 
-  // createLead(data:any){
-  //   return this.http.post(`${this.url}/api/master/candidates`,data);
-  // }
+  getReporting(id: any){
+    return this.http.get(`${this.url}/api/master/reporting/${id}`);  // Make GET request with the id in the URL
+  }
 
   createLead(data: any) {
     const token = localStorage.getItem('token'); // Get the token from localStorage (or wherever it is stored)
@@ -90,7 +90,10 @@ export class LeadsService {
     return this.http.get(`${this.url}/api/client/process-options`);
   }
 
-  //adding candidate in process
+  // Adding multiple candidates to a process
+  // addProcessMultipleCandidate(data: { ids: string[], newAssignProcess: string, assignedRecruiter: string, assignedRecruiterId: string }) {
+  //   return this.http.post(`${this.url}/api/master/candidates/assign-process`, data);
+  // }
   addProcessMultipleCandidate(data: any){
     return this.http.post(`${this.url}/api/master/candidates/assign-process`,data);
   }

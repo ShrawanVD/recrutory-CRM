@@ -11,7 +11,8 @@ export const navbarData = [
   },
   {
     routeLink: 'todays-task',
-    icon: 'fas fa-tasks',
+    icon: 'fas fa-calendar-week',
+    // icon: 'fas fa-list-ol',
     label: `Today's-Task`,
     isRecruiter: true
   },
@@ -27,8 +28,15 @@ export const navbarData = [
     isAdmin: true
   },
   {
+    routeLink: 'reporting',
+    icon: 'fas fa-clipboard-list', // changed 'fal' to 'fas'
+    label: 'Daily Reporting',
+    isRecruiter: true,
+  },
+  {
     routeLink: 'settings',
     icon: 'fas fa-cog', // changed 'fal' to 'fas'
     label: 'Settings'
-  }
+  },
+
 ];

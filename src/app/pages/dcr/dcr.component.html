@@ -1,0 +1,267 @@
+<div class="card topp">
+  <div class="card-head">
+    <div class="navv">
+      <h1 style="font-weight: bold">Daily Reporting</h1>
+
+      <!-- Total Calls and Connected Calls Display -->
+      <div class="call-stats">
+        <br />
+        <p><strong>Dialed Calls:</strong> {{ getTotalCalls() }}</p>
+        <p><strong>Connected Calls:</strong> {{ getTotalConnectedCalls() }}</p>
+        <p><strong>Interested:</strong> {{ getTotalInterested() }}</p>
+        <p><strong>Registrations Pending:</strong> {{ getTotalPending() }}</p>
+      </div>
+    </div>
+
+
+    <!-- filters -->
+    <div class="filters">
+      <!-- date filter -->
+      <!-- <button
+      style="
+        background: #4caf50;
+        color: white;
+      "
+      mat-raised-button
+      (click)="export()"
+    >
+      EXPORT
+    </button> -->
+
+      <!-- connection status -->
+      <!-- <mat-form-field appearance="fill" class="filterDropDown">
+        <mat-label>Connection Status</mat-label>
+        <mat-select
+          [(value)]="selectedConnection"
+          (selectionChange)="applyDropdownFilter($event.value, 'feedback')"
+        >
+          <mat-option [value]="null">None</mat-option>
+          <mat-option
+            *ngFor="let connection of connection"
+            [value]="connection"
+            >{{ connection }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        style="background: #02465b; color: white; "
+        class="btn"
+        (click)="clearFilters()"
+      >
+        Clear Filters
+      </button> -->
+    </div>
+  </div>
+
+  <div class="card-body">
+    <!-- filter nav bar -->
+    <!-- <div class="filterSearchBar">
+      <button
+        style="background: #02465b; color: white; padding: 10px"
+        mat-raised-button
+        (click)="openFilterDiv()"
+      >
+        FILTER
+      </button>
+      
+      <mat-form-field>
+        <mat-label>Search</mat-label>
+        <input
+          style="width: 200px; padding-left: 0.6rem"
+          matInput
+          (keyup)="applyFilter($event)"
+          #input
+        />
+      </mat-form-field>
+
+    </div> -->
+
+    <!-- filters -->
+    <!-- <div class="filters" >
+      <mat-form-field appearance="fill" class="filterDropDown">
+        <mat-label>Connection Status</mat-label>
+        <mat-select
+          [(value)]="selectedConnection"
+          (selectionChange)="applyDropdownFilter($event.value, 'feedback')"
+        >
+          <mat-option [value]="null">None</mat-option>
+          <mat-option *ngFor="let connection of connection" [value]="connection">{{
+            connection
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        style="background: #02465b; color: white"
+        
+        class="filterDropDown"
+      >
+        Clear Filters
+      </button>
+    </div> -->
+
+    <!-- table -->
+    <div
+      class="table-container"
+      style="overflow-x: auto; overflow-y: auto; max-height: 550px"
+    >
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <!-- Assign Process Column -->
+        <ng-container matColumnDef="assignProcess">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            style="background: #02465b; color: white"
+          >
+            Process
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.assignProcess }}
+          </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            style="background: #02465b; color: white"
+          >
+            Name
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        </ng-container>
+
+        <!-- Language Column -->
+        <ng-container matColumnDef="language">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            style="background: #02465b; color: white"
+          >
+            Language Details
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <div *ngIf="element.language">
+              <ng-container *ngFor="let lang of element.language">
+                <div>
+                  {{ lang.lType }} - {{ lang.lang }} -
+                  {{ lang.proficiencyLevel }}
+                </div>
+              </ng-container>
+            </div>
+          </td>
+        </ng-container>
+
+
+
+
+        <!-- Phone Column -->
+        <ng-container matColumnDef="phone">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            style="background: #02465b; color: white"
+          >
+            Phone
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.phone }}</td>
+        </ng-container>
+
+        <!-- cLocation Column -->
+        <ng-container matColumnDef="cLocation">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            style="background: #02465b; color: white"
+          >
+            Current Location
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.cLocation }}</td>
+        </ng-container>
+
+        <!-- Feedback Column -->
+        <ng-container matColumnDef="feedback">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            style="background: #02465b; color: white"
+          >
+            Connected Status
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{
+              element.feedback === "Call Not Recieved"
+                ? "CNR"
+                : element.feedback === "Interested"
+                ? "Interested"
+                : "Connected"
+            }}
+          </td>
+        </ng-container>
+
+        <!-- RegStatus Column -->
+        <ng-container matColumnDef="regStatus">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            style="background: #02465b; color: white"
+          >
+            Registration Status
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.regStatus }}</td>
+        </ng-container>
+
+        <!-- RegID Column -->
+        <ng-container matColumnDef="regId">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            style="background: #02465b; color: white"
+          >
+            Reg ID
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.regId }}</td>
+        </ng-container>
+
+        <!-- IA Score Column -->
+        <ng-container matColumnDef="iaScore">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            style="background: #02465b; color: white"
+          >
+            IA Score
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.iaScore }}</td>
+        </ng-container>
+
+        <!-- Resume Link Column -->
+        <ng-container matColumnDef="resumeLink">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            style="background: #02465b; color: white"
+          >
+            Resume
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <a [href]="element.resumeLink" target="_blank">{{ element.name }}_resume</a>
+          </td>
+        </ng-container>
+
+        <!-- Header and Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      [pageSizeOptions]="[50, 100, 150]"
+      showFirstLastButtons
+    ></mat-paginator>
+  </div>
+</div>

@@ -39,7 +39,15 @@ interface Lead {
   source: string;
   createdBy: string;
   createdById: any;
-  lastUpdatedById: any
+  lastUpdatedById: any;
+  regId: string;
+  empId: string;
+  aadhar: string;
+  dob: Date;
+  father: any;
+
+  regStatus: string;
+  iaScore: string;
 }
 
 @Component({
@@ -83,6 +91,14 @@ export class MasterSheetComponent implements OnInit {
     'source',
     'createdBy',
     'lastUpdatedBy',
+
+    'regId',
+    'empId',
+    'aadhar',
+    'dob',
+    'father',
+
+
     'action',
   ];
 
@@ -304,40 +320,98 @@ export class MasterSheetComponent implements OnInit {
 
   // updating multiple  process at a time
   updateAssignProcess(assignProcess: string): void {
-    if (this.selectedRows.length === 0) {
-      alert("Please select the checkbox to assign process");
-      return;
-    }
-
-    const payload = {
-      ids: this.selectedRows,
-      newAssignProcess: assignProcess
-    };
-
-    const assignProcessAlert = window.confirm(
-      `Do you want to assign these candidates to this ${assignProcess}, Please Confirm`
-    );
-
-    if (assignProcessAlert) {
-      this.leadService.addProcessMultipleCandidate(payload).subscribe({
-        next: (res: any) => {
-          if (res.duplicateCandidates && res.duplicateCandidates.length > 0) {
-            this._snackBar.open(`Some candidates are already assigned to ${assignProcess} process`, 'Close', {
-              duration: 4000,
-            });
-          } else {
-            this._snackBar.open(`Candidates are assigned to ${assignProcess} process`, 'Close', {
-              duration: 4000,
-            });
-          }
-          this.getCuriotoryLeads();
-        },
-        error: (err) => {
-          console.log("API not working", err);
-        }
-      });
-    }
+  if (this.selectedRows.length === 0) {
+    alert("Please select the checkbox to assign process");
+    return;
   }
+
+  // Get the logged-in recruiter details
+  const recruiterId = this.loginService.getRecruiterId();
+  const recruiterUsername = this.loginService.getUsername();
+
+  const payload = {
+    ids: this.selectedRows,
+    newAssignProcess: assignProcess,
+    assignedRecruiter: recruiterUsername,
+    assignedRecruiterId: recruiterId
+  };
+
+  // Check if any of the selected candidates have feedback not set to "Interested"
+  // const nonInterestedCandidates = this.selectedRows.filter(
+  //   (lead) => lead.feedback !== "Interested"
+  // );
+
+  // if (nonInterestedCandidates.length > 0) {
+  //   this._snackBar.open(
+  //     "Some candidates do not have 'Interested' feedback. Please update their feedback to 'Interested' before assigning a process.",
+  //     'Close',
+  //     {
+  //       duration: 5000,
+  //     }
+  //   );
+  //   return;  // Stop the process assignment if feedback isn't "Interested"
+  // }
+
+  const assignProcessAlert = window.confirm(
+    `Do you want to assign these candidates to this ${assignProcess}? Please Confirm.`
+  );
+
+  if (assignProcessAlert) {
+    this.leadService.addProcessMultipleCandidate(payload).subscribe({
+      next: (res: any) => {
+        if (res.duplicateCandidates && res.duplicateCandidates.length > 0) {
+          this._snackBar.open(`Some candidates are already assigned to ${assignProcess} process`, 'Close', {
+            duration: 4000,
+          });
+        } else {
+          this._snackBar.open(`Candidates are assigned to ${assignProcess} process`, 'Close', {
+            duration: 4000,
+          });
+        }
+        this.getCuriotoryLeads();
+      },
+      error: (err) => {
+        console.log("API not working", err);
+      }
+    });
+  }
+}
+
+  // updateAssignProcess(assignProcess: string): void {
+  //   if (this.selectedRows.length === 0) {
+  //     alert("Please select the checkbox to assign process");
+  //     return;
+  //   }
+
+  //   const payload = {
+  //     ids: this.selectedRows,
+  //     newAssignProcess: assignProcess
+  //   };
+
+  //   const assignProcessAlert = window.confirm(
+  //     `Do you want to assign these candidates to this ${assignProcess}, Please Confirm`
+  //   );
+
+  //   if (assignProcessAlert) {
+  //     this.leadService.addProcessMultipleCandidate(payload).subscribe({
+  //       next: (res: any) => {
+  //         if (res.duplicateCandidates && res.duplicateCandidates.length > 0) {
+  //           this._snackBar.open(`Some candidates are already assigned to ${assignProcess} process`, 'Close', {
+  //             duration: 4000,
+  //           });
+  //         } else {
+  //           this._snackBar.open(`Candidates are assigned to ${assignProcess} process`, 'Close', {
+  //             duration: 4000,
+  //           });
+  //         }
+  //         this.getCuriotoryLeads();
+  //       },
+  //       error: (err) => {
+  //         console.log("API not working", err);
+  //       }
+  //     });
+  //   }
+  // }
 
   // for selecting the multiple option  
 
@@ -421,7 +495,7 @@ export class MasterSheetComponent implements OnInit {
 
 
 // combined filters for language and exp columns (backend api calls)
-  applyCombinedFilters() {
+applyCombinedFilters() {
     // Call the service to apply the combined filters (language, proficiency levels, and experience)
     this.leadService.filterCandidates(this.selectedLanguage, this.proficiencyLevelsString, this.selectedexp).subscribe({
       next: (res: any) => {
@@ -448,7 +522,7 @@ export class MasterSheetComponent implements OnInit {
         console.log(err);
       }
     });
-  }
+}
   
   
 

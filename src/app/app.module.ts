@@ -53,6 +53,7 @@ import { AddMemberFormComponent } from './pages/addMembers/add-member-form/add-m
 import { ProcessJobDescComponent } from './pages/client/process-sheet/process-job-desc/process-job-desc.component';
 import { ImportDialogeBoxComponent } from './pages/master/import-dialoge-box/import-dialoge-box.component';
 import { AuthInterceptor } from './auth-interceptor';
+import { DcrComponent } from './pages/dcr/dcr.component';
 
 
 @NgModule({
@@ -82,6 +83,7 @@ import { AuthInterceptor } from './auth-interceptor';
     AddMemberFormComponent,
     ProcessJobDescComponent,
     ImportDialogeBoxComponent,
+    DcrComponent,
   ],
   imports: [
     BrowserModule,

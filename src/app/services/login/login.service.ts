@@ -34,6 +34,8 @@ export class LoginService {
     );
   }
 
+  
+
   profile() {
     let headers = new HttpHeaders().set(
       'Authorization',

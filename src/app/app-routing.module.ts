@@ -12,6 +12,7 @@ import { FinalSelectedSheetComponent } from './pages/selected/final-selected-she
 import { InterestedSheetComponent } from './pages/client/interested-sheet/interested-sheet.component';
 import { TodaysTaskComponent } from './pages/recruiter/todays-task/todays-task.component';
 import { AddMembersComponent } from './pages/addMembers/add-members/add-members.component';
+import { DcrComponent } from './pages/dcr/dcr.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -27,6 +28,7 @@ const routes: Routes = [
       { path: 'selected', component: FinalSelectedSheetComponent },
       { path: 'todays-task', component: TodaysTaskComponent },
       { path: 'add-member', component: AddMembersComponent },
+      { path: 'reporting', component: DcrComponent },
 
     ],
     canActivate: [AuthGuard]

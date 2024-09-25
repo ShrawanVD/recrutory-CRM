@@ -20,6 +20,7 @@
     </div>
   </div>
   <div class="card-body">
+    
     <div class="filterSearchBar">
       <!-- <div>
         <input type="file" (change)="onFileChangess($event)"  style="margin-right: -80px;" placeholder=" upload"/>
@@ -356,12 +357,12 @@
             mat-header-cell
             *matHeaderCellDef
             mat-sort-header
-            style="background: #02465b; color: white;"
+            style="background: #02465b; color: white"
           >
             Assign Process
           </th>
           <td mat-cell *matCellDef="let lead">
-            <mat-form-field style="margin-top: 1rem; width: 100%;" >
+            <mat-form-field style="margin-top: 1rem; width: 100%">
               <mat-label>Assign Process</mat-label>
               <mat-select
                 [disabled]="lead.isProcessAssigned"
@@ -370,7 +371,7 @@
                 <mat-option
                   *ngFor="let process of assignProcesslist"
                   [value]="process"
-                  style="margin-top: 0.3rem;"
+                  style="margin-top: 0.3rem"
                 >
                   {{ process }}
                 </mat-option>
@@ -748,6 +749,96 @@
             [ngClass]="{ 'red-text': lead.isProcessAssigned }"
           >
             {{ lead.lastUpdatedBy }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="regId">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
+            Registration ID
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.regId }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="empId">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
+            Employee ID
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.empId }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="aadhar">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
+            Aadhar No.
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.aadhar }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dob">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
+            Date of Birth
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.dob | date : "dd-MM-yyyy" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="father">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="background: #02465b; color: white"
+          >
+            Father's Name
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let lead"
+            [ngClass]="{ 'red-text': lead.isProcessAssigned }"
+          >
+            {{ lead.father }}
           </td>
         </ng-container>
 

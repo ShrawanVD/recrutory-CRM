@@ -4,6 +4,7 @@ import { LeadsService } from '../../../services/leads/leads.service';
 import { LoginService } from 'src/app/services/login/login.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-master-sheet-form',
@@ -130,6 +131,13 @@ export class MasterSheetFormComponent implements OnInit {
       source: [data?.source || ''],
       createdBy: [null],
       lastUpdatedBy: [null],
+
+      father: [data?.father || ''],
+      // dob:[{ value: data?.dob, disabled: true }],
+      dob: [data?.dob || ''],
+      regId: [data?.regId || ''],
+      empId: [data?.empId || ''],
+      aadhar: [data?.aadhar || ''],
     });
   }
 
@@ -269,6 +277,12 @@ get languages(): FormArray {
         });
 
 
+    // // Check if DOB exists and format it to DD/MM/YYYY
+    // let formValue = this.leadForm.value;
+    // if (formValue.dob) {
+    //   formValue.dob = formatDate(formValue.dob, 'dd/MM/yyyy', 'en-US');
+    // }
+
         this.leadService.updateLeadById(this.data._id, this.leadForm.value).subscribe({
           next: (val) => {
             this._snackBar.open('Lead updated successfully', 'Close', {
@@ -303,6 +317,12 @@ get languages(): FormArray {
           createdBy: this.createdBy,
           createdById: this.createdById
         });
+
+      //   // Check if DOB exists and format it to DD/MM/YYYY
+      // let formValue = this.leadForm.value;
+      // if (formValue.dob) {
+      //   formValue.dob = formatDate(formValue.dob, 'dd/MM/yyyy', 'en-US');
+      // }
 
 
         this.leadService.createLead(this.leadForm.value).subscribe({
